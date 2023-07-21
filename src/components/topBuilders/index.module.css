@@ -1,0 +1,55 @@
+.ourTopBuilders {
+  padding: 10px 0px !important;
+  display: flex;
+  font-size: 3rem;
+  margin-bottom: 24px;
+  font-weight: 500;
+  justify-content: center;
+}
+.headingRow{
+  width: 100%;
+}
+.outerDiv {
+  width: 30%;
+}
+.carouselOuter{
+  margin: 0px 50px;
+}
+.outerCardCol {
+  background-color:var(--color-primary-with-opacity) !important;
+  border-radius: 10px;
+  padding: 0px 20px;
+}
+.innerRow1 {
+  margin-top: 20px !important;
+}
+.innerRow1Col1 {
+  width: 150px !important;
+}
+.cardImg {
+  border-radius: 10px;
+}
+.innerRow2 {
+  margin-top: 10px;
+}
+.innerRowHeading {
+  font-size: 20px;
+}
+.innerRowData {
+  font-size: 12px;
+}
+.innerRow5 {
+  margin: 20px 0px !important;
+}
+.allCards {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.oneCard {
+  width: 385px;
+  /* height: 363px; */
+  margin-right: 40px;
+  padding-left: 22px;
+  border-radius: 10px;
+}

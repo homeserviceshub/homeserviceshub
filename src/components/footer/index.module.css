@@ -1,0 +1,38 @@
+.footerArea {
+  background-color: #222222;
+  padding-top: 120px;
+  padding-bottom: 120px;
+}
+.footerTitle {
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: 500;
+  font-family: "Oswald", sans-serif;
+  color: #fff;
+  margin-bottom: 28px;
+}
+
+.footerPara {
+  max-width: 285px;
+  color: #727272ba;
+}
+.numbers {
+  display: block;
+  color: var(--color-primary);
+  font-size: 24px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  margin-bottom: 10px;
+  text-decoration: none !important;
+}
+.numbers:hover,
+.numbers:focus {
+  text-decoration: none;
+  outline: none;
+  color: var(--color-primary) !important;
+}
+.bottomDiv{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

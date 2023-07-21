@@ -1,0 +1,22 @@
+.main {
+  background: linear-gradient(
+      45deg,
+      var(--color-primary-with-opacity-30),
+      rgba(0, 0, 0, 0.75)
+    ),
+    url("/public/photos/areYouAce.jpg");
+  z-index: -1;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+.innerDiv {
+  padding: 30px;
+  text-align: center;
+  color: white;
+}
+.btnDiv {
+  width: 15%;
+  margin: auto;
+  margin-top: 25px !important;
+}

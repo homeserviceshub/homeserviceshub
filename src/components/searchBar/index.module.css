@@ -1,0 +1,14 @@
+.outerDiv{
+    position: relative;
+}
+.searchField{
+    padding: 8px 15px !important;
+    font-size: 1.2rem !important;
+} 
+.searchIcon{
+    position: absolute;
+    color: #00000038;
+    top: 13px;
+    right: 30px;
+    font-size: 22px;
+}

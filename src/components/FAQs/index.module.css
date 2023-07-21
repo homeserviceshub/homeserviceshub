@@ -1,0 +1,9 @@
+.heading {
+  font-size: 3rem;
+  margin: 30px auto;
+  justify-content: center;
+}
+.Container {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}

@@ -1,0 +1,245 @@
+.customContainer {
+  background-color: #eaeaea;
+  padding-bottom: 20px;
+}
+.backGround {
+  background-color: white;
+  position: sticky !important;
+  top: 80px;
+  z-index: 2;
+  border-top: 1px solid var(--color-primary);
+}
+.containerX {
+  margin: 0px auto;
+}
+.containerY {
+  margin-bottom: 0px;
+}
+
+.companyProfileBackgroundPhoto {
+  /* background: radial-gradient(
+      circle,
+      rgba(0, 0, 0, 0.2) 0%,
+      rgba(0, 0, 0, 0.6) 100%
+    ),
+    url("/public/photos/companyBackgroundPhoto.jpg"); */
+
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: cover !important;
+  color: white;
+}
+.complanyProfilePhotoRow {
+  padding: 20px 0px;
+}
+.companyProfilePhoto {
+  display: flex;
+  align-items: center;
+  padding: 0px;
+  margin: auto;
+  border-radius: 12px;
+  justify-content: center;
+}
+.profileImg {
+  width: 200px;
+  height: 200px;
+  border-radius: 12px;
+}
+.profileMainCol {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  margin-bottom: 21px;
+}
+.companyName {
+  font-size: 3rem;
+  font-weight: 800;
+}
+
+.profileCol {
+  font-size: 1.5rem;
+}
+.profilebtns {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  gap: 15px;
+  padding: 50px;
+}
+.borders {
+  border-radius: 6px;
+  background-color: white;
+  margin: 10px;
+}
+.overview {
+  padding: 0px;
+}
+
+.overviewCol {
+  font-weight: 500;
+  height: 160px;
+  padding: 20px;
+  position: relative;
+}
+.overviewCol2 {
+  padding: 20px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  margin: 10px 0px;
+}
+.ratingCol {
+  padding: 31px 20px;
+  font-size: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  line-height: 2.5rem;
+  position: relative;
+}
+.details {
+  padding: 15px 20px;
+  margin-left: 20px;
+  margin-right: 0px;
+  position: relative;
+}
+.detailsHeading {
+  margin: 0px;
+}
+.detail {
+  padding-bottom: 10px;
+}
+.ratingDiv11 {
+  font-size: 20px;
+  font-weight: 700;
+}
+.ratingDiv21 {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+}
+.ratingDiv211 {
+  font-size: 1rem;
+  font-weight: 500;
+  width: 160px;
+}
+.ratingDiv12 {
+  font-size: 4rem;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.ratingDiv2 {
+  display: flex;
+  flex-direction: column;
+  line-height: 2rem;
+  justify-content: center;
+}
+.ratingDiv212 {
+  font-size: 1rem;
+  font-weight: 700;
+}
+.ratingDiv221 {
+  font-size: 1rem;
+  font-weight: 500;
+  width: 140px;
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+}
+.icon {
+  width: 40px;
+  transition: all 120ms ease-out;
+}
+.icon:hover {
+  z-index: 2;
+  transform: scale(1.2);
+}
+.iconDiv {
+  display: flex;
+  gap: 5px;
+  padding-top: 10px;
+}
+.details {
+  padding: 15px 20px;
+  margin-left: 20px;
+  margin-right: 0px;
+}
+.detailsHeading {
+  margin: 0px;
+}
+.detail {
+  padding-bottom: 10px;
+}
+.ratingDiv11 {
+  font-size: 20px;
+  font-weight: 700;
+}
+.ratingDiv21 {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+}
+.ratingDiv211 {
+  font-size: 1rem;
+  font-weight: 500;
+  width: 160px;
+}
+.ratingDiv12 {
+  font-size: 4rem;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.ratingDiv2 {
+  display: flex;
+  flex-direction: column;
+  line-height: 2rem;
+  justify-content: center;
+}
+.ratingDiv32 {
+  font-size: 3rem;
+}
+.ratingDiv212 {
+  font-size: 1rem;
+  font-weight: 700;
+}
+.ratingDiv221 {
+  font-size: 1rem;
+  font-weight: 500;
+  width: 140px;
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+}
+
+.nameInDetailsInner {
+  font-size: 3rem;
+  font-weight: 500;
+  padding: 0px;
+  color: gray;
+}
+.allDetails {
+  gap: 35px;
+  padding: 10px 18px;
+  background-color: white;
+  border-radius: 6px;
+  margin-top: 10px;
+  position: relative;
+}
+.detailDiv {
+  padding-bottom: 15px;
+}
+.detailHeading {
+  font-size: 1.5rem;
+}
+.editIcon {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  font-size: 1.5rem;
+  display: flex;
+  cursor: pointer;
+  width: auto;
+  padding: 0px;
+}

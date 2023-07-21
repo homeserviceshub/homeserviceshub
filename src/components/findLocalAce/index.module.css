@@ -1,0 +1,29 @@
+.containerX{
+  background-image:linear-gradient(
+    45deg,
+    var(--color-primary-with-opacity),
+    rgba(0, 0, 0, 0.5)
+  ), url("/public/photos/backgroundImg.jpg");
+  
+
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  color: white;
+  padding: 100px 0px;
+}
+.list {
+  padding-top: 10px;
+  padding-bottom: 25px;
+}
+.mainHeading {
+  display: flex;
+  font-size: 3rem;
+  font-weight: 500;
+}
+.smallHeading {
+  padding: 0px 0px 20px;
+  font-weight: 700;
+  font-family: 'Times New Roman', Times, serif;
+  
+}

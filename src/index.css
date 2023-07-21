@@ -1,0 +1,61 @@
+body {
+  margin: 0;
+  font-family: "Times New Roman", Times, serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: "Times New Roman", Times, serif;
+}
+:root {
+  --color-primary: rgb(67 204 147);
+  --color-black: rgb(0, 0, 0);
+  --color-white: rgb(255, 255, 255);
+  --color-primary-with-opacity: rgb(67 204 147/10%);
+  --color-primary-with-opacity-30: rgb(67 204 147/30%);
+  --color-primary-with-opacity-50: rgba(67 204 147/ 50%);
+  --color-primary-with-opacity-75: rgba(67 204 147/ 0.75);
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+a:hover {
+  color: var(--color-primary) !important;
+}
+.rec.rec-arrow-left:hover:enabled,
+.rec.rec-arrow-right:hover:enabled,
+.rec.rec-arrow-left:focus:enabled,
+.rec.rec-arrow-right:focus:enabled {
+  background-color: var(--color-primary);
+}
+.rec.rec-arrow-left,
+.rec.rec-arrow-right {
+  background-color: var(--color-primary-with-opacity);
+}
+.rec.rec-pagination {
+  display: none;
+}
+.container {
+  margin-bottom: 40px;
+  margin-top: 20px;
+}
+
+/*  */
+.splide .splide__pagination {
+  display: none;
+}
+.splide .splide__arrow {
+  background-color: rgb(67 204 147 / 0%);
+}
+.splide .splide__arrow svg {
+  width: 2rem;
+  height: 2rem;
+  /* fill: var(--color-primary); */
+}
+svg {
+  height: 100%;
+}

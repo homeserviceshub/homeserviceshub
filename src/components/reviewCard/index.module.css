@@ -1,0 +1,51 @@
+.dynamicCard {
+  display: flex;
+  flex-direction: row;
+  padding: 20px;
+  margin: 10px 0px;
+  border: none;
+}
+.cardBody {
+  padding: 0px 20px;
+}
+.cardTitle {
+  font-size: 2rem;
+  line-height: 31px;
+  font-weight: 700;
+}
+.cardImg {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+.cardText {
+  line-height: 2rem;
+}
+.readMore {
+  color: var(--color-primary);
+  cursor: pointer;
+}
+.readMore:hover {
+  text-decoration: underline;
+}
+.stars {
+  line-height: 0px;
+  gap: 3px;
+  display: flex;
+  font-size: 1.5rem;
+}
+.writeReview {
+  margin: auto;
+}
+.requestedBtn {
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--color-primary);
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 1rem;
+  color: var(--color-white);
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  cursor: not-allowed !important;
+}

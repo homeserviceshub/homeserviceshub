@@ -1,0 +1,52 @@
+.containerX {
+  max-width: 600px;
+  margin: auto;
+  margin-bottom: 20px;
+}
+.imgDiv {
+  display: flex;
+  justify-content: center;
+}
+.img {
+  border-radius: 50%;
+}
+.infoDiv {
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.info {
+  height: 40px;
+  align-items: center;
+  display: flex;
+  position: relative;
+}
+.btnDiv {
+  margin: auto;
+}
+.outerDiv {
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 24px 10px;
+  position: relative;
+}
+.editing {
+  position: absolute;
+  right: 27px;
+  top: -19px;
+  font-size: 24px;
+  background-color: white;
+  width: 35px;
+  text-align: center;
+  cursor: pointer;
+}
+.infoDivOnEditing {
+  justify-content: end;
+}
+.floatingEye {
+  position: absolute;
+  right: 35px;
+  font-size: 24px;
+  top: 0px;
+}

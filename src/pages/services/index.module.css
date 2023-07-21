@@ -1,0 +1,141 @@
+.customInputField {
+  border: 1px solid rgb(127 127 127);
+  border-radius: 6px;
+  height: 100%;
+  width: 100%;
+  padding: 5px 10px;
+  position: relative;
+  font-size: 1.3rem;
+}
+.customInputField:focus-visible,
+.customInputField:focus {
+  border: 1px solid rgb(95, 183, 130);
+  outline: none;
+  box-shadow: 0 0 2px rgb(95, 183, 130);
+}
+.nearText {
+  align-items: center;
+  display: flex;
+  justify-content: space-around;
+  font-size: 1.3rem;
+}
+.locationSection {
+  padding: 15px 0px;
+}
+.totalResultSection {
+  background-color: white;
+}
+.totalResultSectionCol {
+  padding: 20px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+.mainDynamicSection {
+  padding: 15px 0px;
+}
+.locationSectionOuter {
+  background-color: #f7f7f7;
+}
+.totalResultSectionOuter {
+  background-color: white;
+}
+.mainDynamicSectionOuter {
+  background-color: #f7f7f7;
+}
+.container {
+  margin: 0px auto 0px auto;
+}
+.dynamicHeading {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  padding: 0px;
+}
+.dynamicSectionPhrase {
+  padding-bottom: 40px;
+  padding-left: 0px;
+}
+.dynamicRow {
+  background-color: white;
+  padding: 20px 9px 9px 9px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+.profilePhoto {
+  border-radius: 12px;
+}
+.verifyPhoto {
+  border-radius: 12px;
+}
+.firstBtn {
+  margin-bottom: 20px;
+}
+.categoryList {
+  display: flex;
+  align-items: end;
+  height: 30px;
+  font-size: 0.9rem;
+  gap: 5px;
+}
+.companyName {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.companySmallDetails {
+  font-size: 0.8rem;
+  display: flex;
+  gap: 12px;
+}
+.adDiv {
+  display: flex;
+  justify-content: end;
+  align-items: end;
+}
+.ad {
+  color: #b8b8b8;
+  border: 1px solid #b8b8b8;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+}
+.searchBtn {
+  padding-right: 22px;
+}
+.dropdownBtn {
+  display: flex;
+  width: 100%;
+  margin: 0px 20px;
+  align-items: center;
+  justify-content: center;
+}
+.searchSpan {
+  padding: 8px 15px;
+  border-radius: 6px;
+  background-color: #73cf92;
+  color: white;
+}
+.active {
+  border-bottom: 1px solid black;
+}
+.error {
+  font-size: 2rem;
+  color: #4f4f4f;
+  font-weight: 600;
+  margin-bottom: 10px;
+  padding: 0px;
+}
+.errorSuggestion {
+  padding-bottom: 8rem;
+  padding-left: 0px;
+  font-size: 1.1rem;
+}
+.errorSuggestionHeading {
+  color: #4f4f4f;
+  padding: 0px;
+}
+.errorSuggestionList {
+  padding: 0px 35px;
+}

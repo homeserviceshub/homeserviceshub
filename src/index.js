@@ -1,0 +1,21 @@
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "@splidejs/react-splide/css";
+// // or other themes
+// import "@splidejs/react-splide/css/skyblue";
+// import "@splidejs/react-splide/css/sea-green";
+
+import AppRoutes from "./routes";
+import { Provider } from "react-redux";
+import MyStore from "./store";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <React.StrictMode>
+    <Provider store={MyStore}>
+      <AppRoutes />
+    </Provider>
+  </React.StrictMode>
+);

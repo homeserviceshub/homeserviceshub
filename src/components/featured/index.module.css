@@ -1,0 +1,39 @@
+.bg-none {
+  background: none !important;
+}
+.icon-right {
+  position: relative;
+  left: 15px;
+}
+.icon-left {
+  position: relative;
+  left: 15px;
+}
+.ourTopBuilders {
+  padding: 10px 0px !important;
+  display: flex;
+  font-size: 3rem;
+  margin-bottom: 24px;
+  font-weight: 500;
+  justify-content: center;
+}
+.oneCard {
+  padding: 10px;
+  background-color: rgb(226, 255, 228);
+  border-radius: 10px;
+}
+.outerDiv {
+  width: 30%;
+}
+.img {
+  border-radius: 10px;
+}
+.btnDiv {
+  padding-top: 10px;
+}
+.innerDiv {
+  margin-top: 1rem;
+}
+.title {
+  padding-bottom: 15px;
+}

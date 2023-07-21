@@ -1,0 +1,45 @@
+.categoryDiv {
+  display: flex;
+  justify-content: center;
+  margin: 25px 0px;
+}
+.allOptions {
+  display: flex;
+  margin: 0px 100px;
+}
+.option {
+  text-align: center;
+  padding: 35px 0px;
+  border-radius: 10px;
+  transition: all 300ms linear 0s;
+  margin-bottom: 30px;
+  background-color: var(--color-primary-with-opacity);
+  font-size: 20px;
+  cursor: pointer;
+  /* border: 1px solid #59b979;
+  background: none;
+  color: #59b979;
+  fill: #59b979; */
+}
+.iconDiv {
+  width: 90px;
+  height: 50px;
+  margin: auto auto 10px auto;
+}
+
+.option:hover {
+  box-shadow: 0px 10px 30px 0px rgba(0, 0, 0, 0.1);
+  background-color: var(--color-primary);
+  color: white;
+  fill: white;
+}
+
+.howcanwehelp {
+  display: flex;
+  font-size: 3rem;
+  margin-bottom: 24px;
+  font-weight: 500;
+}
+.dropdown {
+  padding: 10px;
+}

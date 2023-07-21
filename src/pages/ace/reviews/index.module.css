@@ -1,0 +1,227 @@
+.customContainer {
+  background-color: #eaeaea;
+}
+.backGround {
+  background-color: white;
+  position: sticky !important;
+  top: 80px;
+  z-index: 2;
+  border-top: 1px solid var(--color-primary);
+  border-bottom: 1px solid var(--color-primary);
+}
+.containerX {
+  margin: 0px auto;
+}
+.containerY {
+  padding: 0px;
+  margin: 0px auto;
+}
+
+.companyProfileBackgroundPhoto {
+  background: radial-gradient(
+      circle,
+      rgba(0, 0, 0, 0.2) 0%,
+      rgba(0, 0, 0, 0.6) 100%
+    ),
+    url("/public/photos/companyBackgroundPhoto.jpg");
+
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  color: white;
+}
+.complanyProfilePhotoRow {
+  height: 250px;
+}
+.companyProfilePhoto {
+  display: flex;
+  align-items: center;
+  padding: 0px;
+  margin: auto;
+  border-radius: 12px;
+  justify-content: center;
+}
+.profileImg {
+  width: 200px;
+  height: 200px;
+  border-radius: 12px;
+}
+.profileMainCol {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  margin-bottom: 21px;
+}
+.companyName {
+  font-size: 3rem;
+  font-weight: 800;
+}
+
+.profileCol {
+  font-size: 1.5rem;
+}
+.profilebtns {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  gap: 15px;
+  padding: 50px;
+}
+.reviewHeading {
+  font-size: 3rem;
+  font-weight: 500;
+  background-color: white;
+  border-radius: 6px;
+  padding: 10px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.defaultIcons {
+  color: red;
+}
+.writeReview {
+  display: flex;
+  margin: auto 25px auto 0px;
+}
+.borders {
+  border-radius: 6px;
+  background-color: white;
+  margin: 10px;
+}
+.borderX {
+  border-end-start-radius: 6px;
+  border-end-end-radius: 6px;
+}
+.tabs {
+  background-color: white;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: gray;
+  display: flex;
+}
+.tab {
+  padding: 20px 20px 20px 17px;
+}
+.tab:hover {
+  color: white;
+  background-color: var(--color-primary);
+  cursor: pointer;
+}
+.activeTab {
+  color: white;
+  background-color: var(--color-primary);
+}
+.overview {
+  padding: 0px;
+}
+.overviewSection {
+  margin-top: 20px;
+}
+.overviewCol {
+  font-weight: 500;
+  padding: 20px;
+}
+.overviewCol2 {
+  padding: 20px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+.ratingCol {
+  padding: 20px;
+  font-size: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  line-height: 2.5rem;
+}
+.details {
+  padding: 15px 20px;
+  margin-left: 20px;
+  margin-right: 0px;
+}
+.detailsHeading {
+  margin: 0px;
+}
+.detail {
+  padding-bottom: 10px;
+}
+.ratingDiv11 {
+  font-size: 20px;
+  font-weight: 700;
+}
+.ratingDiv21 {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+}
+.ratingDiv211 {
+  font-size: 1rem;
+  font-weight: 500;
+  width: 160px;
+}
+.ratingDiv12 {
+  font-size: 4rem;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.ratingDiv2 {
+  display: flex;
+  flex-direction: column;
+  line-height: 2rem;
+  justify-content: center;
+}
+.ratingDiv32 {
+  font-size: 3rem;
+}
+.ratingDiv212 {
+  font-size: 1rem;
+  font-weight: 700;
+}
+.ratingDiv221 {
+  font-size: 1rem;
+  font-weight: 500;
+  width: 140px;
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+}
+
+.nameInDetailsInner {
+  font-size: 3rem;
+  font-weight: 500;
+  padding: 0px;
+  color: gray;
+}
+.allDetails {
+  color: gray;
+  cursor: default;
+}
+.detailDiv {
+  padding-bottom: 15px;
+}
+.detailHeading {
+  font-size: 1.5rem;
+}
+.icon {
+  width: 40px;
+  transition: all 120ms ease-out;
+}
+.icon:hover {
+  z-index: 2;
+  transform: scale(1.2);
+}
+.iconDiv {
+  display: flex;
+  gap: 5px;
+  padding-top: 10px;
+}
+.scrollLink {
+  text-decoration: none !important ;
+  color: var(--color-primary);
+}
+.scrollLink:hover {
+  color: white !important;
+}

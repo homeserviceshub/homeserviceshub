@@ -1,0 +1,159 @@
+.tiltedCard {
+  width: 250px;
+  height: 300px;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: cover !important;
+}
+
+.allImages {
+  gap: 15px;
+  transform: rotate(30deg);
+  position: absolute;
+  top: -386px;
+  left: 3px;
+}
+
+.firstSection {
+  position: relative;
+  overflow: hidden;
+  height: 500px;
+  background-color: black;
+  margin-bottom: 100px;
+}
+
+.ontoDiv {
+  position: inherit;
+  z-index: 1;
+  color: white;
+  text-align: center;
+  font-size: 3rem;
+  width: 1000px;
+  margin: 100px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.heading {
+  font-size: 5rem;
+  font-weight: 700;
+}
+.firstSectionPara {
+  text-align: left;
+  margin-bottom: 40px;
+  line-height: 40px;
+}
+.firstSectionBtn {
+  width: 30%;
+  display: flex;
+  margin: auto;
+}
+.secondSection {
+  margin: 0px;
+  margin-bottom: 100px;
+  padding: 0px 50px; /* Adjusted padding for responsiveness */
+}
+
+.familyPhoto {
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: cover !important;
+  border-radius: 20px;
+}
+
+.photoOppositeDiv {
+  padding: 135px 50px; /* Adjusted padding for responsiveness */
+}
+
+.oppositeDivHeading {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.oppositeDivDescription {
+  font-size: 1.5rem;
+  padding-top: 20px;
+}
+.thirdSection {
+  overflow: hidden;
+}
+.membersHeading {
+  font-size: 3rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.member {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin: 30px 0px;
+
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+.otherMembers {
+  margin: 0px 70px;
+}
+.img {
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.forthSection {
+  padding: 0px 12px;
+  margin: 100px auto;
+  max-width: 1000px;
+}
+.detail {
+  padding: 0px 12px;
+  display: flex;
+  justify-content: space-between;
+  background-color: #f9f9f9;
+  height: 50px;
+  align-items: center;
+  border-radius: 6px;
+  font-size: 1.5rem;
+  margin: 30px 0px;
+  transition: all 120ms ease-out;
+}
+.detail:hover {
+  transform: scale(1.02);
+}
+.arrowSpan {
+  width: 30px;
+  margin-right: 30px;
+  cursor: pointer;
+}
+
+/* Media query for smaller screens */
+@media screen and (max-width: 768px) {
+  .firstSection {
+    height: 300px;
+  }
+
+  .ontoDiv {
+    margin-top: 100px;
+    margin-left: 100px;
+    font-size: 1.5rem;
+  }
+
+  .secondSection {
+    padding: 0px 20px;
+  }
+
+  .photoOppositeDiv {
+    padding: 80px 20px;
+  }
+
+  .oppositeDivHeading {
+    font-size: 1.5rem;
+  }
+
+  .oppositeDivDescription {
+    font-size: 1rem;
+  }
+}

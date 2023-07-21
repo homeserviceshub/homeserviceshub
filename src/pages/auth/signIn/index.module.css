@@ -1,0 +1,93 @@
+.containerX {
+  background: url(/public/photos/homeimage4.avif);
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: hidden;
+}
+.lineDiv {
+  border: 1px solid #d8d8d8;
+  margin: 20px 0px;
+}
+.containerY {
+  background: #ffffff;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+}
+
+.floatingEye {
+  position: absolute;
+  top: 8px;
+  right: 30px;
+  font-size: 22px;
+  color: #979797;
+  cursor: pointer;
+}
+
+.formDesign input {
+  padding: 12px;
+  margin-bottom: 15px;
+}
+
+.formDesign input:focus {
+  box-shadow: none;
+}
+
+.formDesign h2 {
+  font-family: var(--Poppins);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 50px;
+  color: #000000;
+  margin-top: 20px;
+}
+
+.formDesign .signInLink {
+  /* background: #932093; */
+  width: 100%;
+  background: linear-gradient(
+    180deg,
+    rgb(67 204 147 / 50%) 0%,
+    var(--color-primary) 100%
+  );
+  border-radius: 5px;
+  padding: 12px;
+  color: white !important;
+  font-size: 20px;
+  border: none;
+  margin-bottom: 15px;
+  display: block;
+  position: relative;
+  /* transition: all .4s ease-out; */
+}
+
+.formDesign .signInLink:hover {
+  /* background: #117C42; */
+  background: linear-gradient(180deg, #1eb262 0%, #09592e 100%);
+}
+
+.formDesign .signInLink:focus {
+  box-shadow: none !important;
+}
+
+.signInLoader {
+  font-size: 15px;
+  width: 24px !important;
+  height: 24px !important;
+  text-align: center;
+}
+
+.formDesign a {
+  font-family: var(--Inter);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 29px;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.formDesign a:hover {
+  color: rgb(5, 141, 0) !important;
+}
