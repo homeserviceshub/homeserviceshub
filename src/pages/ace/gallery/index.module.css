@@ -22,40 +22,6 @@
   margin-top: 15px;
 }
 
-/* .fullScreenContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  background-color: rgba(0, 0, 0, 0.9);
-  color: white;
-}
-
-.imageWrapper {
-  width: 80%;
-  max-height: 60vh;
-  overflow: hidden;
-}
-
-.imageWrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.titleWrapper {
-  margin-top: 20px;
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.navigationWrapper {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-top: 20px;
-} */
-
 .closeButton {
   position: absolute;
   top: 15px;

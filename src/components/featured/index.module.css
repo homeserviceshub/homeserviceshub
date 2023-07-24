@@ -1,3 +1,8 @@
+.main {
+  padding: 0px 50px;
+  margin: 0px 80px;
+  min-height: 26rem;
+}
 .bg-none {
   background: none !important;
 }
@@ -9,7 +14,7 @@
   position: relative;
   left: 15px;
 }
-.ourTopBuilders {
+.title {
   padding: 10px 0px !important;
   display: flex;
   font-size: 3rem;
@@ -19,7 +24,7 @@
 }
 .oneCard {
   padding: 10px;
-  background-color: rgb(226, 255, 228);
+  background-color: var(--color-primary-with-opacity) !important;
   border-radius: 10px;
 }
 .outerDiv {
@@ -34,6 +39,12 @@
 .innerDiv {
   margin-top: 1rem;
 }
-.title {
-  padding-bottom: 15px;
+
+.btnDiv {
+  padding-top: 10px;
+}
+@media screen and (max-width: 767px) {
+  .main {
+    margin: 0px;
+  }
 }

@@ -24,7 +24,7 @@
 
 @media (max-width: 960px) {
   .customButton {
-    width: 300px;
+    width: 250px;
     height: 50px;
     display: flex;
     justify-content: center;

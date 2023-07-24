@@ -6,17 +6,17 @@
   font-weight: 500;
   justify-content: center;
 }
-.headingRow{
+.headingRow {
   width: 100%;
 }
 .outerDiv {
   width: 30%;
 }
-.carouselOuter{
-  margin: 0px 50px;
+.carouselOuter {
+  margin: 0px;
 }
 .outerCardCol {
-  background-color:var(--color-primary-with-opacity) !important;
+  background-color: var(--color-primary-with-opacity) !important;
   border-radius: 10px;
   padding: 0px 20px;
 }
