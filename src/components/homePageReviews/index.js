@@ -11,7 +11,7 @@ const HomePageReviews = () => {
           {" "}
           <div className={styles.cardImgDiv}>
             <img
-              src="/photos/member6.jpg"
+              src="/icons/default-profile-picture-male-icon.svg"
               width="100px"
               height="100px"
               className={styles.cardImg}
@@ -34,7 +34,7 @@ const HomePageReviews = () => {
           {" "}
           <div className={styles.cardImgDiv}>
             <img
-              src="/photos/member5.jpg"
+              src="/icons/default-profile-picture-male-icon.svg"
               width="100px"
               height="100px"
               className={styles.cardImg}
@@ -58,7 +58,7 @@ const HomePageReviews = () => {
           {" "}
           <div className={styles.cardImgDiv}>
             <img
-              src="/photos/member4.jpg"
+              src="/icons/default-profile-picture-male-icon.svg"
               width="100px"
               height="100px"
               className={styles.cardImg}
@@ -82,7 +82,7 @@ const HomePageReviews = () => {
           {" "}
           <div className={styles.cardImgDiv}>
             <img
-              src="/photos/member5.jpg"
+              src="/icons/default-profile-picture-male-icon.svg"
               width="100px"
               height="100px"
               className={styles.cardImg}

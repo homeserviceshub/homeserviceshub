@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 const BuildingOptions = ({ options, heading }) => {
   const navigate = useNavigate();
   const handleClick = (value) => {
-    if (value === "All Services") {
+    if (value === "ALL SERVICES") {
       navigate("/services");
     } else {
       navigate("/services/service");
@@ -21,36 +21,18 @@ const BuildingOptions = ({ options, heading }) => {
       </div>
 
       <Row className={styles.rows}>
-        {options.map((item) => {
+        {options.map((item, index) => {
           return (
-            <Col lg={4}>
+            <Col
+              key={index}
+              lg={4}
+              onClick={() => {
+                handleClick(item.title);
+              }}
+            >
               <div className={styles.option}>
-                <div className={styles.iconDiv}>
-                  {/* <IconHomeBuilder /> */}
-                  {/* <img src="/icons/building-icon.svg" style={{ fill: "red" }} /> */}
-                  {item.icon}
-                  {/* {
-                    <svg
-                      id="Layer_1"
-                      data-name="Layer 1"
-                      class="icon"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 122.88 106.35"
-                      // fill="var(--color-primary)"
-                    >
-                      <title>residential-apartments</title>
-                    </svg>
-                  } */}
-                </div>
-                <div
-                  className={styles.serviceItem}
-                  onClick={() => {
-                    handleClick(item.title);
-                    // console.log(item);
-                  }}
-                >
-                  {item.title}
-                </div>
+                <div className={styles.iconDiv}>{item.icon}</div>
+                <div className={styles.serviceItem}>{item.title}</div>
               </div>
             </Col>
           );

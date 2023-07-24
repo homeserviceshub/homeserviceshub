@@ -2,8 +2,10 @@ import React from "react";
 import styles from "./index.module.css";
 import CustomButton from "../customBtn";
 import { Col, Row } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const MainPhoto = () => {
+  const navigate = useNavigate();
   return (
     <div className={styles.div}>
       <div className={styles.divv}></div>
@@ -15,7 +17,14 @@ const MainPhoto = () => {
 
         <h3 className={styles.jshn}>We help to build your dreams</h3>
         <div className={styles.outerButton}>
-          <button className={styles.customButton}>Discover Now</button>
+          <button
+            className={styles.customButton}
+            onClick={() => {
+              navigate("/services");
+            }}
+          >
+            Discover Now
+          </button>
         </div>
       </div>
     </div>

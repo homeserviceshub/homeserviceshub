@@ -67,14 +67,23 @@ const CompanyProfile = () => {
               </Row>
             </Col>
             <Col lg={3} className={styles.profilebtns}>
-              <div className={styles.profilebtn}>
-                <CustomButton text={"ContactUs"} />
-              </div>
-              <div
-                className={styles.profilebtn}
-                onClick={() => navigate("/servicerequest")}
+              <ScrollLink
+                to="overview"
+                smooth={true}
+                duration={500}
+                offset={-150}
               >
-                <CustomButton text={"Request a service"} />
+                <CustomButton
+                  text={"ContactUs"}
+                  onClick={() => setSelectedFilter("overview")}
+                />
+              </ScrollLink>
+
+              <div className={styles.profilebtn}>
+                <CustomButton
+                  text={"Request a service"}
+                  onClick={() => navigate("/servicerequest")}
+                />
               </div>
             </Col>
           </Row>
@@ -179,7 +188,9 @@ const CompanyProfile = () => {
                     <div className={styles.ratingDiv211}>
                       Avenrage Rating{" "}
                       <Help
-                        text={"Stars on the basis of time taken for reply"}
+                        text={
+                          "Stars are awarded based on the ratings given by other customers."
+                        }
                       />
                     </div>
                     <div className={styles.ratingDiv22}>
@@ -194,7 +205,9 @@ const CompanyProfile = () => {
                     <div className={styles.ratingDiv211}>
                       Reputation{" "}
                       <Help
-                        text={"Stars on the basis of time taken for reply"}
+                        text={
+                          "Stars are earned through the reputation built from ratings provided by other customers."
+                        }
                       />
                     </div>
                     <div>
@@ -210,7 +223,9 @@ const CompanyProfile = () => {
                     <div className={styles.ratingDiv211}>
                       Responsiveness
                       <Help
-                        text={"Stars on the basis of time taken for reply"}
+                        text={
+                          "Stars are awarded based on time taken for reply."
+                        }
                       />
                     </div>
                     <div>
@@ -225,9 +240,16 @@ const CompanyProfile = () => {
                 <div className={styles.ratingDiv2}>
                   <div className={styles.ratingDiv21}>
                     <div className={styles.ratingDiv221}>
+                      Availability
+                      <Help text={"The opening timing of the company"} />
+                    </div>
+                    <div className={styles.ratingDiv212}>Mon-Fri</div>
+                  </div>
+                  <div className={styles.ratingDiv21}>
+                    <div className={styles.ratingDiv221}>
                       Projects Done
                       <Help
-                        text={"Stars on the basis of time taken for reply"}
+                        text={"The total number of projects done by company"}
                       />
                     </div>
                     <div className={styles.ratingDiv212}>30</div>
@@ -235,20 +257,9 @@ const CompanyProfile = () => {
                   <div className={styles.ratingDiv21}>
                     <div className={styles.ratingDiv221}>
                       Project Ongoing
-                      <Help
-                        text={"Stars on the basis of time taken for reply"}
-                      />
+                      <Help text={"The total number of ongoing projects"} />
                     </div>
                     <div className={styles.ratingDiv212}>3</div>
-                  </div>
-                  <div className={styles.ratingDiv21}>
-                    <div className={styles.ratingDiv221}>
-                      Availability
-                      <Help
-                        text={"Stars on the basis of time taken for reply"}
-                      />
-                    </div>
-                    <div className={styles.ratingDiv212}>Mon-Fri</div>
                   </div>
                 </div>
               </Col>

@@ -96,7 +96,7 @@ const AceGallery = () => {
         ) : (
           images.map((image, index) => (
             <Col md={4} key={index} className="mb-4">
-              <Card>
+              <Card className={styles.card}>
                 <Card.Img
                   variant="top"
                   src={image.src}

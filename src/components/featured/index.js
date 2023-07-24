@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import { Col, Container, Row } from "react-bootstrap";
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
@@ -7,28 +7,76 @@ import styles from "./index.module.css";
 
 export const Featured = ({ heading }) => {
   const generateSlides = [
-    { index: 1, src: "/photos/member1.avif", alt: "image" },
-    { index: 2, src: "/photos/member2.avif", alt: "image" },
-    { index: 3, src: "/photos/member3.avif", alt: "image" },
-    { index: 4, src: "/photos/member4.jpg", alt: "image" },
-    { index: 5, src: "/photos/member5.jpg", alt: "image" },
-    { index: 6, src: "/photos/member6.jpg", alt: "image" },
-    { index: 7, src: "/photos/member4.jpg", alt: "image" },
+    {
+      index: 1,
+      src: "/icons/default-profile-picture-male-icon.svg",
+      alt: "image",
+    },
+    {
+      index: 2,
+      src: "/icons/default-profile-picture-male-icon.svg",
+      alt: "image",
+    },
+    {
+      index: 3,
+      src: "/icons/default-profile-picture-male-icon.svg",
+      alt: "image",
+    },
+    {
+      index: 4,
+      src: "/icons/default-profile-picture-male-icon.svg",
+      alt: "image",
+    },
+    {
+      index: 5,
+      src: "/icons/default-profile-picture-male-icon.svg",
+      alt: "image",
+    },
+    {
+      index: 6,
+      src: "/icons/default-profile-picture-male-icon.svg",
+      alt: "image",
+    },
+    {
+      index: 7,
+      src: "/icons/default-profile-picture-male-icon.svg",
+      alt: "image",
+    },
   ];
+  const [perPage, setPerPage] = useState(3);
+  // Update perPage value based on the window width
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setPerPage(1);
+      } else {
+        setPerPage(3);
+      }
+    };
+    // Initial setup on component mount
+    handleResize();
+    // Listen for window resize events
+    window.addEventListener("resize", handleResize);
+    // Clean up event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   return (
-    <Container>
+    <>
       <h2 className={styles.title}>{heading}</h2>
 
       <Splide
+        className={styles.main}
         options={{
-          perPage: 3,
-          height: "26rem",
+          perPage: perPage,
+
           rewind: false,
           gap: "1rem",
         }}
       >
-        {generateSlides.map((slide) => (
-          <SplideSlide key={slide.src} className="customSplideSlide">
+        {generateSlides.map((slide, index) => (
+          <SplideSlide key={index} className="customSplideSlide">
             <div className={styles.oneCard}>
               <Row>
                 <Col lg={5}>
@@ -43,7 +91,14 @@ export const Featured = ({ heading }) => {
                   <div>Name</div>
                   <div>Spaciality</div>
                   <div>Address</div>
-                  <div>Stars</div>
+                  <div>
+                    {" "}
+                    <BsStarFill />
+                    <BsStarFill />
+                    <BsStarHalf />
+                    <BsStar />
+                    <BsStar />
+                  </div>
                 </Col>
               </Row>
               <Row className={styles.innerDiv}>
@@ -61,11 +116,11 @@ export const Featured = ({ heading }) => {
                   industary
                 </p>
               </Row>
-              <Row className={styles.btnDiv}>
-                <Col>
+              <Row>
+                <Col className={styles.btnDiv}>
                   <CustomButton text={"Book Appointment"} />
                 </Col>
-                <Col>
+                <Col className={styles.btnDiv}>
                   <CustomButton text={"Profile"} />
                 </Col>
               </Row>
@@ -73,6 +128,6 @@ export const Featured = ({ heading }) => {
           </SplideSlide>
         ))}
       </Splide>
-    </Container>
+    </>
   );
 };
