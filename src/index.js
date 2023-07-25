@@ -9,7 +9,7 @@ import "@splidejs/react-splide/css";
 
 import AppRoutes from "./routes";
 import { Provider } from "react-redux";
-import MyStore from "./store";
+import MyStore from "./redux/store";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

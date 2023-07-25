@@ -28,7 +28,7 @@ function SignIn() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    navigate("/home");
+    navigate("/");
     setIsSubmitting(true);
     // dispatch(
     //   loginAction(email, password, null, () => {

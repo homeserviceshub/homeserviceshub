@@ -4,10 +4,6 @@ import Home from "../pages/home";
 import Layout, { Layout2 } from "../components/layout";
 import Signin from "../pages/auth/signIn";
 import Services from "../pages/services";
-import Architect from "../pages/services/Architect";
-import HouseBuildingServices from "../pages/services/HouseBuilding";
-import HouseRenovationServices from "../pages/services/HouseRenovation";
-import HouseRepairServices from "../pages/services/HouseRepair";
 import Signup from "../pages/auth/signUp";
 import ResetPasword from "../pages/auth/resetPassword";
 import Profile from "../pages/profile";
@@ -23,6 +19,7 @@ import AboutUs from "../pages/aboutUs";
 import Faq from "../pages/faq";
 import Careers from "../pages/careers";
 import ContactUs from "../pages/contactus";
+import Service from "../pages/services/Service";
 
 export default function AppRoutes() {
   return (
@@ -37,7 +34,6 @@ export default function AppRoutes() {
         <Route path="/reset-password" element={<ResetPassword />} /> */}
 
         <Route element={<Layout />}>
-          <Route path="/home" element={<Home />} />
           <Route path="/" element={<Home />} />
           <Route path="/user/profile" element={<Profile />} />
           <Route path="/aboutus" element={<AboutUs />} />
@@ -48,7 +44,7 @@ export default function AppRoutes() {
           <Route path="/services">
             <Route path="/services" element={<Services />} />
 
-            <Route path="/services/service" element={<Architect />} />
+            <Route path="/services/service" element={<Service />} />
           </Route>
           <Route path="/servicerequest" element={<ServiceRequest />} />
           <Route path="/companyprofile" element={<CompanyProfile />} />

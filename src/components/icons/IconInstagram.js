@@ -5,11 +5,11 @@ const IconInstagram = () => {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 333333 333333"
-      shape-rendering="geometricPrecision"
-      text-rendering="geometricPrecision"
-      image-rendering="optimizeQuality"
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      shapeRendering="geometricPrecision"
+      textRendering="geometricPrecision"
+      imageRendering="optimizeQuality"
+      fillRule="evenodd"
+      clipRule="evenodd"
     >
       <defs>
         <linearGradient
@@ -20,11 +20,11 @@ const IconInstagram = () => {
           x2="83152.4"
           y2="25137"
         >
-          <stop offset="0" stop-color="#f58529" />
-          <stop offset=".169" stop-color="#feda77" />
-          <stop offset=".478" stop-color="#dd2a7b" />
-          <stop offset=".78" stop-color="#8134af" />
-          <stop offset="1" stop-color="#515bd4" />
+          <stop offset="0" stopColor="#f58529" />
+          <stop offset=".169" stopColor="#feda77" />
+          <stop offset=".478" stopColor="#dd2a7b" />
+          <stop offset=".78" stopColor="#8134af" />
+          <stop offset="1" stopColor="#515bd4" />
         </linearGradient>
       </defs>
       <path

@@ -3,10 +3,15 @@ import { Col, Container, Dropdown, Row } from "react-bootstrap";
 import styles from "./index.module.css";
 import { useNavigate } from "react-router-dom";
 // import ScreenSlider from "../screenslider";
+import { useDispatch } from "react-redux";
+import { SELECTEDSERVICE } from "../../../redux/actions/action1";
 
 const BuildingOptions = ({ options, heading }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const handleClick = (value) => {
+    dispatch(SELECTEDSERVICE(value));
     if (value === "ALL SERVICES") {
       navigate("/services");
     } else {

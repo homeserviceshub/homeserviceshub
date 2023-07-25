@@ -1,7 +1,7 @@
 .footerArea {
   background-color: #222222;
-  padding-top: 120px;
-  padding-bottom: 120px;
+  padding-top: 100px;
+  padding-bottom: 20px;
 }
 .footerTitle {
   font-size: 20px;
@@ -10,10 +10,10 @@
   font-family: "Oswald", sans-serif;
   color: #fff;
   margin-bottom: 28px;
+  cursor: default;
 }
 
 .footerPara {
-  max-width: 285px;
   color: #727272ba;
 }
 .numbers {
@@ -31,8 +31,29 @@
   outline: none;
   color: var(--color-primary) !important;
 }
-.bottomDiv{
+.bottomDiv {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 50px;
+}
+.link {
+  color: white !important;
+  display: table;
+  text-decoration: none;
+  line-height: 30px;
+}
+.icon {
+  width: 40px;
+  transition: all 120ms ease-out;
+  background-color: white;
+  border-radius: 50%;
+}
+.icon:hover {
+  z-index: 2;
+  transform: scale(1.2);
+}
+.iconDiv {
+  display: flex;
+  gap: 5px;
 }
