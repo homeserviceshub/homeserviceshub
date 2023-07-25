@@ -5,14 +5,20 @@ import styles from "./index.module.css";
 import { BsSearch, BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import CustomeDropdown from "../../components/customDropdown";
 import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-function Architect() {
+function Service() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  const clickedData = useSelector((state) => {
+    return state.reducer1;
+  });
+  console.log(clickedData, "check kr oee");
   const navigate = useNavigate();
   const [selectedFilter, setSelectedFilter] = useState("CategoryName");
 
+  const adList = ["1", "2", "3"];
   const list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
   const handleClick = (e) => {
     console.log(e.target.title);
@@ -28,6 +34,7 @@ function Architect() {
                 type="text"
                 placeholder="e.g. Plumbing, Kitchen"
                 className={styles.customInputField}
+                defaultValue={clickedData}
               />
             </Col>
             <Col lg={1} className={styles.nearText}>
@@ -94,7 +101,7 @@ function Architect() {
                 always dreamed of!
               </Col>
               <Col lg={12}>
-                {list.map((item, index) => {
+                {adList.map((item, index) => {
                   return (
                     <Row className={styles.dynamicRow} key={index}>
                       <Col lg={2}>
@@ -110,11 +117,11 @@ function Architect() {
                         <div className={styles.companyName}>Company Name</div>
                         <div className={styles.companyDetails}>
                           {" "}
-                          <BsStarFill />
-                          <BsStarFill />
-                          <BsStarHalf />
-                          <BsStar />
-                          <BsStar />
+                          <BsStarFill fill={"gold"} />
+                          <BsStarFill fill={"gold"} />
+                          <BsStarHalf fill={"gold"} />
+                          <BsStar fill={"gold"} />
+                          <BsStar fill={"gold"} />
                         </div>
                         <div className={styles.companySmallDetails}>
                           <div className={styles.companyDetails}>
@@ -167,6 +174,76 @@ function Architect() {
                     </Row>
                   );
                 })}
+                {list.map((item, index) => {
+                  return (
+                    <Row className={styles.dynamicRow} key={index}>
+                      <Col lg={2}>
+                        {" "}
+                        <img
+                          src="/photos/member5.jpg"
+                          width={160}
+                          height={130}
+                          className={styles.profilePhoto}
+                        />
+                      </Col>
+                      <Col lg={6}>
+                        <div className={styles.companyName}>Company Name</div>
+                        <div className={styles.companyDetails}>
+                          {" "}
+                          <BsStarFill fill={"gold"} />
+                          <BsStarFill fill={"gold"} />
+                          <BsStarHalf fill={"gold"} />
+                          <BsStar fill={"gold"} />
+                          <BsStar fill={"gold"} />
+                        </div>
+                        <div className={styles.companySmallDetails}>
+                          <div className={styles.companyDetails}>
+                            (65)Reviews
+                          </div>
+                          <div className={styles.companyDetails}>
+                            6+ Year Experience
+                          </div>
+                        </div>
+                        <div className={styles.companyDetails}>
+                          Thank you for your feedback! We greatly appreciate
+                          your satisfaction with our services. We take pride in
+                          delivering quality work and ensuring customer
+                          satisfaction...{" "}
+                          <Link style={{ color: "green" }} to="/companyprofile">
+                            read more
+                          </Link>
+                        </div>
+                      </Col>
+                      <Col lg={2}>
+                        <img
+                          src="/photos/verified.png"
+                          width={100}
+                          height={100}
+                          className={styles.verifyPhoto}
+                        />
+                      </Col>
+                      <Col lg={2}>
+                        <div
+                          onClick={() => navigate("/servicerequest")}
+                          className={styles.firstBtn}
+                        >
+                          <CustomButton text={"Request a service"} />
+                        </div>
+                        <div onClick={() => navigate("/companyprofile")}>
+                          <CustomButton text={"Profile"} />
+                        </div>
+                      </Col>
+                      <Col lg={8} className={styles.categoryList}>
+                        Category- <span>service</span>
+                        <span>service</span>
+                        <span>service</span>
+                        <span>service</span>
+                        <span>service</span>
+                        <span>service</span>
+                      </Col>
+                    </Row>
+                  );
+                })}
               </Col>
             </Row>
           ) : (
@@ -195,4 +272,4 @@ function Architect() {
   );
 }
 
-export default Architect;
+export default Service;
