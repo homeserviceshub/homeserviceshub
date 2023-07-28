@@ -14,7 +14,6 @@ import { Featured } from "../../components/featured";
 import AreYouServiceProvider from "../../components/AreYouAce/AreYouService Provider";
 import FindLocalAce from "../../components/findLocalAce";
 import HomePageReviews from "../../components/homePageReviews";
-import Chatbox from "../../components/chatbox";
 
 function Home() {
   useEffect(() => {
