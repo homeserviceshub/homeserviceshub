@@ -1,0 +1,143 @@
+.containerX {
+  max-width: 600px;
+  margin: 50px auto;
+  border: 1px solid black;
+  border-radius: 6px;
+  padding-top: 20px;
+  position: relative;
+  background-color: white;
+}
+.backgroundColor {
+  background-color: #eaeaea;
+}
+.backGround {
+  background-color: white;
+  position: sticky !important;
+  top: 80px;
+  z-index: 2;
+  border-top: 1px solid var(--color-primary);
+  border-bottom: 1px solid var(--color-primary);
+}
+.containerY {
+  padding: 0px;
+  margin: 0px auto;
+}
+.borderX {
+  border-end-start-radius: 6px;
+  border-end-end-radius: 6px;
+}
+.tabs {
+  background-color: white;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: gray;
+  display: flex;
+  justify-content: space-between;
+}
+.tab {
+  padding: 20px 20px 20px 17px;
+}
+.tab:hover {
+  color: white;
+  background-color: var(--color-primary);
+  cursor: pointer;
+}
+.activeTab {
+  color: white;
+  background-color: var(--color-primary);
+}
+.imgDiv {
+  display: flex;
+  justify-content: center;
+}
+.img {
+  border-radius: 50%;
+}
+.infoDiv {
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.info {
+  height: 40px;
+  align-items: center;
+  display: flex;
+  position: relative;
+}
+.btnDiv {
+  margin: auto;
+}
+.outerDiv {
+  margin: 24px 10px;
+}
+.editing {
+  position: absolute;
+  right: 5px;
+  top: 0px;
+  font-size: 24px;
+  background-color: white;
+  width: 35px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 6px;
+}
+.infoDivOnEditing {
+  justify-content: end;
+}
+.floatingEye {
+  position: absolute;
+  right: 35px;
+  font-size: 24px;
+  top: 0px;
+}
+.reviewHeading {
+  font-size: 3rem;
+  font-weight: 500;
+  background-color: white;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+.categoryList {
+  display: flex;
+  align-items: end;
+  height: 30px;
+  font-size: 0.9rem;
+  gap: 5px;
+}
+.categories {
+  color: var(--color-primary);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.categories:hover {
+  color: green;
+}
+.dynamicRow {
+  background-color: white;
+  padding: 20px 9px 9px 9px;
+  border-radius: 12px;
+  margin: 10px 0px;
+}
+.profilePhoto {
+  border-radius: 12px;
+}
+.companyName {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.companySmallDetails {
+  font-size: 0.8rem;
+  display: flex;
+  gap: 12px;
+}
+.verifyPhoto {
+  border-radius: 12px;
+}
+.firstBtn {
+  margin-bottom: 20px;
+}
+.btnDiv {
+  margin: auto 0px;
+}

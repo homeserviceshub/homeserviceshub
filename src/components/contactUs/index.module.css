@@ -1,0 +1,50 @@
+.heading {
+  font-size: 5rem;
+  font-weight: 700;
+}
+
+.secondSection {
+  margin: 0px;
+  margin-bottom: 100px;
+  padding: 0px 50px; /* Adjusted padding for responsiveness */
+}
+
+.familyPhoto {
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: cover !important;
+  border-radius: 20px;
+}
+
+.photoOppositeDiv {
+  padding: 135px 50px; /* Adjusted padding for responsiveness */
+}
+
+.oppositeDivHeading {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.oppositeDivDescription {
+  font-size: 1.5rem;
+  padding-top: 20px;
+}
+
+/* Media query for smaller screens */
+@media screen and (max-width: 768px) {
+  .secondSection {
+    padding: 0px 20px;
+  }
+
+  .photoOppositeDiv {
+    padding: 80px 20px;
+  }
+
+  .oppositeDivHeading {
+    font-size: 1.5rem;
+  }
+
+  .oppositeDivDescription {
+    font-size: 1rem;
+  }
+}

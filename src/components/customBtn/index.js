@@ -1,15 +1,16 @@
 import React from "react";
 import styles from "./index.module.css";
 
-function CustomButton({ text, onClick, width, onSubmit }) {
+function CustomButton(props) {
   return (
     <button
+      type={props.type}
       className={styles.customButton}
-      onClick={onClick}
-      style={{ width: width }}
-      onSubmit={onSubmit}
+      onClick={props.onClick}
+      style={{ width: props.width }}
+      onSubmit={props.onSubmit}
     >
-      {text}
+      {props.text}
     </button>
   );
 }
