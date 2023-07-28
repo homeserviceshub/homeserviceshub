@@ -139,3 +139,11 @@
 .errorSuggestionList {
   padding: 0px 35px;
 }
+.categories {
+  color: var(--color-primary);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.categories:hover {
+  color: green;
+}

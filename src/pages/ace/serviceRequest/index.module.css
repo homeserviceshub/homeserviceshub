@@ -1,0 +1,106 @@
+.backgroundColor {
+  background-color: #e5e5e5;
+  padding-top: 20px;
+}
+.backGround {
+  background-color: white;
+  position: sticky !important;
+  top: 80px;
+  z-index: 2;
+  border-top: 1px solid var(--color-primary);
+  border-bottom: 1px solid var(--color-primary);
+}
+.containerY {
+  padding: 0px;
+  margin: 0px auto;
+}
+.borderX {
+  border-end-start-radius: 6px;
+  border-end-end-radius: 6px;
+}
+.tabs {
+  background-color: white;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: gray;
+  display: flex;
+}
+.tab {
+  padding: 20px 20px 20px 17px;
+}
+.tab:hover {
+  color: white;
+  background-color: var(--color-primary);
+  cursor: pointer;
+}
+.activeTab {
+  color: white;
+  background-color: var(--color-primary);
+}
+.allRequests {
+  margin-top: 20px;
+}
+.dynamicRow {
+  background-color: white;
+  padding: 20px 9px 9px 9px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+.profilePhoto {
+  border-radius: 12px;
+}
+.verifyPhoto {
+  border-radius: 12px;
+}
+.firstBtn {
+  margin-bottom: 20px;
+}
+.categoryList {
+  display: flex;
+  align-items: end;
+  height: 30px;
+  font-size: 0.9rem;
+  gap: 5px;
+}
+.companyName {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+.companySmallDetails {
+  font-size: 0.8rem;
+  display: flex;
+  gap: 12px;
+}
+.title {
+  font-size: 3rem;
+  font-weight: 500;
+}
+.discription {
+  font-size: 1.2rem;
+  line-height: 24px;
+  padding: 10px 0px;
+}
+.data {
+  padding: 10px 0px;
+  font-size: 1.2rem;
+}
+.btns {
+  display: flex;
+  justify-content: end;
+  gap: 20px;
+}
+.map {
+  margin: auto 0px;
+}
+.requestedBtn {
+  width: 150px;
+  height: 100%;
+  border: 1px solid var(--color-primary);
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 1rem;
+  color: var(--color-white);
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  cursor: default !important;
+}

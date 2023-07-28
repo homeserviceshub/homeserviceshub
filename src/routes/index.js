@@ -7,7 +7,7 @@ import Services from "../pages/services";
 import Signup from "../pages/auth/signUp";
 import ResetPasword from "../pages/auth/resetPassword";
 import Profile from "../pages/profile";
-import ServiceRequest from "../pages/serviceRequest";
+import ServiceRequest from "../pages/ace/serviceRequest";
 import CompanyProfile from "../pages/companyProfile";
 import PageNotFound from "../pages/pageNotFound";
 import AceReviews from "../pages/ace/reviews/reviews";
@@ -20,6 +20,8 @@ import Faq from "../pages/faq";
 import Careers from "../pages/careers";
 import ContactUs from "../pages/contactus";
 import Service from "../pages/services/Service";
+import ServiceRequested from "../pages/requestAservice";
+import RequestaService from "../pages/requestAservice";
 
 export default function AppRoutes() {
   return (
@@ -46,7 +48,7 @@ export default function AppRoutes() {
 
             <Route path="/services/service" element={<Service />} />
           </Route>
-          <Route path="/servicerequest" element={<ServiceRequest />} />
+          <Route path="/servicerequest" element={<RequestaService />} />
           <Route path="/companyprofile" element={<CompanyProfile />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
@@ -55,6 +57,7 @@ export default function AppRoutes() {
             <Route path="/ace/reviews" element={<AceReviews />} />
             <Route path="/ace/profile" element={<AceProfile />} />
             <Route path="/ace/gallery" element={<AceGallery />} />
+            <Route path="/ace/request" element={<ServiceRequest />} />
           </Route>
           <Route path="*" element={<PageNotFound />} />
         </Route>
