@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import styles from "./index.module.css";
 import CustomButton from "../../components/customBtn";
@@ -16,6 +16,9 @@ import IconTwitter from "../../components/icons/IconTwitter";
 import IconYoutube from "../../components/icons/IconYoutube";
 
 const CompanyProfile = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const navigate = useNavigate();
   const stars = ["1", "2", "3", "4", "5"];
   const description = `Agora Design Build expertly handled two renovations flawlessly. They completed both projects on time 
@@ -155,7 +158,7 @@ const CompanyProfile = () => {
         <Row className={styles.overviewSection} id="overview">
           <Col lg={8} className={styles.overview}>
             <Row className={styles.overviewRow}>
-              <Col lg={9} className={`${styles.overviewCol} ${styles.borders}`}>
+              <Col className={`${styles.overviewCol} ${styles.borders}`}>
                 Here is the breif information about out company. hello there we
                 are home builder and we are professional in renovation.We are
                 just a small group of 10 people and looking forward to work with
@@ -165,9 +168,6 @@ const CompanyProfile = () => {
                 good in bathroom reno, kitched reno and basement renovation.
                 Just fill up some details and we will reply you as soon as
                 possible.
-              </Col>
-              <Col className={`${styles.overviewCol2} ${styles.borders}`}>
-                Ace awards
               </Col>
             </Row>
             <Row className={styles.rating}>
@@ -266,6 +266,9 @@ const CompanyProfile = () => {
             </Row>
           </Col>
           <Col className={`${styles.details} ${styles.borders}`}>
+            Ace awards
+          </Col>
+          {/* <Col className={`${styles.details} ${styles.borders}`}>
             <Col lg={12} className={styles.detail}>
               <h3 className={styles.detailsHeading}>Contact Details</h3>
               <div>+91-8054875055</div>
@@ -297,7 +300,7 @@ const CompanyProfile = () => {
                 })}
               </div>
             </Col>
-          </Col>
+          </Col> */}
         </Row>
         <Row id="reviews">
           <Col lg={12} className={styles.reviewHeading}>
@@ -359,10 +362,6 @@ const CompanyProfile = () => {
             <div className={styles.detailDiv}>
               <div className={styles.detailHeading}>Written Contract</div>
               <div className={styles.detailData}>Yes</div>
-            </div>
-            <div className={styles.detailDiv}>
-              <div className={styles.detailHeading}>Website</div>
-              <div className={styles.detailData}>www.myWebsite.com</div>
             </div>
           </Col>
         </Row>

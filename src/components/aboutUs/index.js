@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./index.module.css";
 import { Col, Container, Row } from "react-bootstrap";
 import CustomButton from "../customBtn/index";
@@ -6,6 +6,9 @@ import IconArrow from "../../components/icons/IconArrow";
 import { useNavigate } from "react-router-dom";
 
 const AboutUsComponent = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const navigate = useNavigate();
   const otherLinks = [
     { title: "Contact Us", url: "/contactus" },

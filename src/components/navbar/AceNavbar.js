@@ -1,15 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { aceMenuItems } from "../../Data/DataList";
 import { FaTimes, FaBars } from "react-icons/fa";
 import "./navBar.css";
 import CustomButton from "../customBtn";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const AceNavbar = () => {
   const [dropdown, setDropdown] = useState(false);
   const [changeActive, setChangeActive] = useState("Home");
   const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const remainingTasks = useSelector((state) => {
+    return state.RemainingTasksReducer;
+  });
 
   const handleClick = () => {
     setDropdown(!dropdown);
@@ -17,13 +23,22 @@ const AceNavbar = () => {
   const GotoLogOut = () => {
     navigate("/ace/signin");
   };
-  const GotoProfile = () => {
-    navigate("/ace/profile");
-  };
   const handleActiveRoute = (item) => {
     setChangeActive(item.title);
-    console.log(item.title);
+    if (window.innerWidth <= 768) {
+      setDropdown(false); // Collapse the navbar on mobile devices
+    }
   };
+  useEffect(() => {
+    const currentPath = location.pathname;
+    const activeItem = aceMenuItems.find((item) => item.url === currentPath);
+    if (activeItem) {
+      setChangeActive(activeItem.title);
+    } else {
+      // Handle the case when the route doesn't match any menu item (optional)
+      setChangeActive("");
+    }
+  }, [location.pathname]);
 
   return (
     <nav className="navbar">
@@ -64,6 +79,9 @@ const AceNavbar = () => {
                   ></span>
                   {item.title}
                 </Link>
+                {item.title == "Service Request" && remainingTasks !== 0 && (
+                  <span className="newTasks">{remainingTasks}</span>
+                )}
               </li>
             </div>
           );

@@ -4,13 +4,24 @@ import { FaTimes, FaBars } from "react-icons/fa";
 import "./navBar.css";
 import CustomButton from "../customBtn";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const [dropdown, setDropdown] = useState(false);
   const [changeActive, setChangeActive] = useState("Home");
-  const [loggedIn, setLoggedIn] = useState(false);
+  const checklogin = useSelector((state) => {
+    return state.checkLoginReducer;
+  });
+
+  const [loggedIn, setLoggedIn] = useState(checklogin);
+  console.log(checklogin, "before login");
+  console.log(loggedIn, "user login");
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    setLoggedIn(checklogin);
+  }, [checklogin]);
 
   const handleClick = () => {
     setDropdown(!dropdown);

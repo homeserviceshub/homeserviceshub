@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
+import ContactUsComponent from "../../components/contactUs";
 
 const ContactUs = () => {
-  return <div>ContactUs</div>;
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  return <ContactUsComponent />;
 };
 
 export default ContactUs;
