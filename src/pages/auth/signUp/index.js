@@ -3,6 +3,8 @@ import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { Form, Container, Row, Col, Button, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import styles from "./index.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import { CHECKLOGIN } from "../../../redux/actions/actionCheckLogin";
 
 function Signup() {
   const [credField, setCredField] = useState(false);
@@ -14,7 +16,7 @@ function Signup() {
   const [confirmPassword, setConfirmPassword] = useState(null);
 
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   function Forgetpassword() {
     navigate("/reset-password", {
@@ -24,6 +26,7 @@ function Signup() {
 
   function handleSubmit(e) {
     e.preventDefault();
+    dispatch(CHECKLOGIN(true));
     navigate("/");
     setIsSubmitting(true);
     // dispatch(

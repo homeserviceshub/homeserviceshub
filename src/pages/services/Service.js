@@ -5,7 +5,8 @@ import styles from "./index.module.css";
 import { BsSearch, BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import CustomeDropdown from "../../components/customDropdown";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { SELECTEDSERVICE } from "../../redux/actions/action1";
 
 function Service() {
   useEffect(() => {
@@ -17,7 +18,15 @@ function Service() {
   console.log(clickedData, "check kr oee");
   const navigate = useNavigate();
   const [selectedFilter, setSelectedFilter] = useState("CategoryName");
-
+  const [categories, setCategories] = useState([
+    "Architect",
+    "General Constractor",
+    "Painter",
+    "Project Manager",
+    "Builder",
+    "Demolition",
+  ]);
+  const dispatch = useDispatch();
   const adList = ["1", "2", "3"];
   const list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
   const handleClick = (e) => {
@@ -34,7 +43,7 @@ function Service() {
                 type="text"
                 placeholder="e.g. Plumbing, Kitchen"
                 className={styles.customInputField}
-                defaultValue={clickedData}
+                value={clickedData}
               />
             </Col>
             <Col lg={1} className={styles.nearText}>
@@ -90,7 +99,7 @@ function Service() {
           {selectedFilter === "CategoryName" ? (
             <Row className={styles.mainDynamicSection}>
               <Col lg={12} className={styles.dynamicHeading}>
-                Basement Renovation
+                {clickedData}
               </Col>
               <Col lg={12} className={styles.dynamicSectionPhrase}>
                 It may typically be the last reno to tackle in your home, but a
@@ -161,12 +170,21 @@ function Service() {
                         </div>
                       </Col>
                       <Col lg={8} className={styles.categoryList}>
-                        Category- <span>service</span>
-                        <span>service</span>
-                        <span>service</span>
-                        <span>service</span>
-                        <span>service</span>
-                        <span>service</span>
+                        Category-{" "}
+                        {categories.map((item, index) => {
+                          return (
+                            <span
+                              key={index}
+                              onClick={() => {
+                                window.scrollTo(0, 0);
+                                dispatch(SELECTEDSERVICE(item));
+                              }}
+                              className={styles.categories}
+                            >
+                              {item}
+                            </span>
+                          );
+                        })}
                       </Col>
                       <Col className={styles.adDiv}>
                         <span className={styles.ad}>Ad</span>
@@ -234,12 +252,21 @@ function Service() {
                         </div>
                       </Col>
                       <Col lg={8} className={styles.categoryList}>
-                        Category- <span>service</span>
-                        <span>service</span>
-                        <span>service</span>
-                        <span>service</span>
-                        <span>service</span>
-                        <span>service</span>
+                        Category-{" "}
+                        {categories.map((item, index) => {
+                          return (
+                            <span
+                              key={index}
+                              onClick={() => {
+                                window.scrollTo(0, 0);
+                                dispatch(SELECTEDSERVICE(item));
+                              }}
+                              className={styles.categories}
+                            >
+                              {item}
+                            </span>
+                          );
+                        })}
                       </Col>
                     </Row>
                   );
