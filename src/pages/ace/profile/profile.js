@@ -129,11 +129,7 @@ const AceProfile = () => {
       </div>
 
       <Container className={styles.containerY}>
-        <Row>
-          <Col className={`${styles.overviewCol2} ${styles.borders}`}>
-            Ace awards
-          </Col>
-        </Row>
+        <Row></Row>
         <Row id="overview">
           <Col lg={8} className={styles.overview}>
             <Row className={styles.overviewRow}>
@@ -247,6 +243,9 @@ const AceProfile = () => {
             </Row>
           </Col>
           <Col className={`${styles.details} ${styles.borders}`}>
+            Ace awards
+          </Col>
+          {/* <Col className={`${styles.details} ${styles.borders}`}>
             <Col lg={12} className={styles.detail}>
               <span
                 className={styles.editIcon}
@@ -284,7 +283,7 @@ const AceProfile = () => {
                 })}
               </div>
             </Col>
-          </Col>
+          </Col> */}
         </Row>
         <Row className={styles.allDetails}>
           <span

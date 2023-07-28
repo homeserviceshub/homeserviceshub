@@ -12,14 +12,15 @@ const FindLocalAce = () => {
         </h5>
         <Row className={styles.list}>
           <Col>
-            Chat directly with available pros interested in your project
+            Communicate one-on-one with qualified Ace's interested in your
+            project.
           </Col>
         </Row>
         <Row className={styles.list}>
-          <Col>Discuss project details, costs and timelines</Col>
+          <Col>Discuss all aspects of the project, including pricing and estimated timelines.</Col>
         </Row>
         <Row className={styles.list}>
-          <Col>Compare and hire with confidence</Col>
+          <Col>Confidently select the right expert for your project.</Col>
         </Row>
       </Container>
     </div>

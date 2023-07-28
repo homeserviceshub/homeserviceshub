@@ -1,86 +1,62 @@
 .mainDiv {
-  height: 100%;
   position: relative;
   overflow: hidden;
+  min-height: 700px; /* Adjust this value to control the minimum height of the component */
 }
 
 .picture {
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
-}
-
-.header {
-  font-size: 80px;
-  color: white;
-  text-align: center;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: fit-content;
-  margin: auto;
-}
-.div {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  min-height: 700px;
-  margin-bottom: 20px;
-}
-.divv {
-  background: url("/public/photos/testimage.jpg");
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 121%;
-  bottom: 0;
-  z-index: -1;
+  background-image: url("/public/photos/testimage.jpg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0.8; /* Adjust this value to control the opacity of the background image */
+  z-index: -1;
 }
-.divvv {
-  padding: 300px 0px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  font-size: 5rem;
-  font-weight: 500;
+
+.header {
+  font-size: 5rem; /* Adjust this value for the header font size */
   color: white;
-  margin: auto 0px;
+  text-align: center;
+  position: absolute;
+  top: 50%; /* Center the header vertically */
+  left: 50%; /* Center the header horizontally */
+  transform: translate(-50%, -50%);
 }
-.divvvv {
+
+.headerSpan {
   background: var(--color-primary-with-opacity-30);
   border-radius: 10px;
   line-height: 60px;
   color: var(--color-primary);
-  padding: 4px 4px 10px 4px;
-  margin: auto 10px;
+  margin: 4px;
 }
-.harmn {
-  display: flex;
-  justify-content: center;
+
+.subHeader {
+  font-size: 2rem; /* Adjust this value for the subheader font size */
+  color: white;
+  text-align: center;
+  margin-top: 20px;
 }
-.jshn {
-  display: flex;
-  justify-content: center;
-}
+
 .outerButton {
   display: flex;
   justify-content: center;
-  padding: 0px 100px;
+  margin-top: 40px;
 }
+
 .customButton {
   background-color: transparent;
-  width: 20%;
+  width: auto;
   margin-top: 40px;
   border: 1px solid var(--color-primary);
   color: var(--color-primary);
   border-radius: 6px;
-  padding: 6px 14px;
+  padding: 6px 50px;
   font-size: 1.5rem;
   transition: color 0.15s ease-in-out, background-color 0.45s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
@@ -97,13 +73,14 @@
   outline: 0;
 }
 
-@media (max-width: 960px) {
-  .customButton {
-    width: 300px;
-    height: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: auto;
+/* Add additional media queries for responsiveness */
+@media (max-width: 768px) {
+  .header {
+    font-size: 4rem;
+    width: 20rem;
+  }
+
+  .subHeader {
+    font-size: 1.5rem;
   }
 }
