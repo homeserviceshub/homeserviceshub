@@ -108,7 +108,7 @@ const ServiceRequest = () => {
       const updatedData = [...prevData];
       updatedData[index] = {
         ...updatedData[index],
-        tpEntered: true,
+        otpEntered: true,
         taskCompleted: true,
       };
       return updatedData;
@@ -272,11 +272,14 @@ const ServiceRequest = () => {
                             Task Completed
                           </button>
                         ) : (
-                          <CustomButton
-                            text={"Enter Otp"}
-                            width={"130px"}
-                            onClick={() => setProfileModalShow(true)}
-                          />
+                          <>
+                            <CustomButton text={"Resend Otp"} width={"130px"} />
+                            <CustomButton
+                              text={"Enter Otp"}
+                              width={"130px"}
+                              onClick={() => setProfileModalShow(true)}
+                            />
+                          </>
                         )
                       ) : (
                         <>

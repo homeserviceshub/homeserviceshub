@@ -1,7 +1,7 @@
 import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import Styles from "./index.module.css";
-import Carousel from "react-elastic-carousel";
+// import Carousel from "react-elastic-carousel";  I have deleted this npm package
 import CustomButton from "../customBtn";
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import IconMaleProfile from "../icons/IconDefaultMaleProfile";
@@ -18,7 +18,7 @@ const TopBuilders = () => {
         <Col className={Styles.ourTopBuilders}>Our Top Builders</Col>
       </Row>
       <Row className={Styles.carouselOuter}>
-        <Carousel breakPoints={breakPoints}>
+        {/* <Carousel breakPoints={breakPoints}>
           <Col className={Styles.oneCard}>
             <Row>
               <Col className={Styles.outerCardCol}>
@@ -367,7 +367,7 @@ const TopBuilders = () => {
               </Col>
             </Row>
           </Col>
-        </Carousel>
+        </Carousel> */}
       </Row>
     </>
   );

@@ -498,26 +498,6 @@ function ProjectsModal(props) {
       <Modal.Body>
         <Form noValidate validated={validated}>
           <Row className="mb-3">
-            <Form.Group as={Col} md="6" controlId="validationCustom01">
-              <Form.Label>Projects Done</Form.Label>
-              <Form.Control
-                required
-                type="text"
-                placeholder="Number of Projects Done..."
-                defaultValue=""
-              />
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group as={Col} md="6" controlId="validationCustom02">
-              <Form.Label>Projects Ongoing</Form.Label>
-              <Form.Control
-                required
-                type="text"
-                placeholder="Projects ongoing..."
-                defaultValue=""
-              />
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            </Form.Group>
             <Form.Group as={Col} md="12" controlId="validationCustom02">
               <Form.Label>Availability</Form.Label>
               <Form.Control
