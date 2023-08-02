@@ -19,6 +19,12 @@ function Home() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  useEffect(() => {
+    fetch("http://localhost:8000/homeservices")
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .catch((err) => console.log(err));
+  }, []);
   const trendingServices = [
     {
       title: "HOUSE BUILDING",
