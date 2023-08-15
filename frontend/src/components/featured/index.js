@@ -63,7 +63,7 @@ export const Featured = ({ heading }) => {
     };
   }, []);
   return (
-    <>
+    <div className={styles.containerX}>
       <h2 className={styles.title}>{heading}</h2>
 
       <Splide
@@ -128,6 +128,6 @@ export const Featured = ({ heading }) => {
           </SplideSlide>
         ))}
       </Splide>
-    </>
+    </div>
   );
 };

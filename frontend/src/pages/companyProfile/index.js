@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import styles from "./index.module.css";
 import CustomButton from "../../components/customBtn";
-import { BsSearch, BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
+import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import Help from "../../components/help";
 import ReviewCardComponent from "../../components/reviewCard";
 import CompanyProjects from "../../components/companyProjects";
@@ -42,6 +42,10 @@ const CompanyProfile = () => {
     setSelectedFilter(e.target.title);
   };
 
+  const newReview = () => {
+    navigate("/review/new");
+  };
+
   return (
     <div className={styles.customContainer}>
       <div className={styles.companyProfileBackgroundPhoto}>
@@ -71,14 +75,14 @@ const CompanyProfile = () => {
             </Col>
             <Col lg={3} className={styles.profilebtns}>
               <ScrollLink
-                to="overview"
+                to="reviews"
                 smooth={true}
                 duration={500}
                 offset={-150}
               >
                 <CustomButton
-                  text={"ContactUs"}
-                  onClick={() => setSelectedFilter("overview")}
+                  text={"Write a Review"}
+                  onClick={() => setSelectedFilter("reviews")}
                 />
               </ScrollLink>
 
@@ -306,7 +310,7 @@ const CompanyProfile = () => {
           <Col lg={12} className={styles.reviewHeading}>
             <div>Reviews</div>
             <div className={styles.writeReview}>
-              <CustomButton text={"Write a Review"} />
+              <CustomButton text={"Write a Review"} onClick={newReview} />
             </div>
           </Col>
           {stars.map((item, index) => {

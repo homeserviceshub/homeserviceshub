@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Col, Container, Form, Modal, Row } from "react-bootstrap";
 import CustomButton from "../customBtn";
 import styles from "./index.module.css";
@@ -11,14 +11,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { CHECKLOGIN } from "../../redux/actions/actionCheckLogin";
+import { GetUserData } from "../../redux/actions/actionGetUserData";
+import moment from "moment";
 
 const CustomerProfile = () => {
   const [data, setData] = useState({
-    profilePhoto: "",
-    name: "Harman Sidhu",
-    number: "8054875055",
-    gmail: "bestapplication@gmail.com",
-    password: "HustleTime",
+    profile_photo: "",
+    username: "",
+    number: "",
+    email: "",
+    password: "",
+    joining_date: "",
   });
   const stars = ["1", "2", "3", "4", "5"];
   const list = ["1", "2", "3"];
@@ -37,9 +40,24 @@ const CustomerProfile = () => {
   const [credField, setCredField] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const userId = localStorage.getItem("auth");
+
+  const usersData = useSelector((state) => {
+    return state.userDataReducer;
+  });
+  console.log(usersData.data, "getting Data");
+  useEffect(() => {
+    dispatch(GetUserData(userId));
+  }, [userId, dispatch]);
+
+  useEffect(() => {
+    const newData = { ...data, ...usersData.data };
+    setData(newData);
+    console.log(newData, "combined Data");
+  }, [usersData.data]);
 
   const handlechanges = (formData) => {
-    console.log(formData, "getting Data");
+    console.log(formData, "Form Data");
     setData(formData);
     setProfileModalShow(false);
   };
@@ -54,6 +72,7 @@ const CustomerProfile = () => {
   };
   const logout = () => {
     console.log("logout");
+    localStorage.setItem("auth", null);
     console.log(dispatch(CHECKLOGIN(false)));
     dispatch(CHECKLOGIN(false));
     navigate("/");
@@ -139,9 +158,9 @@ const CustomerProfile = () => {
       <Container id="details" className={styles.containerX}>
         <Row>
           <div className={styles.imgDiv}>
-            {data.profilePhoto ? (
+            {data.profile_photo === null ? (
               <img
-                src={data.profilePhoto}
+                src={data.profile_photo}
                 width={350}
                 height={350}
                 className={styles.img}
@@ -165,13 +184,14 @@ const CustomerProfile = () => {
               <input
                 type="text"
                 className="form-control"
-                value={data.name}
+                value={data.username}
                 onChange={(e) => {
                   setData({
                     ...data,
                     name: e.target.value,
                   });
                 }}
+                disabled
                 autoComplete="off"
               />
             </Col>
@@ -188,6 +208,7 @@ const CustomerProfile = () => {
                     password: e.target.value,
                   });
                 }}
+                disabled
                 autoComplete="off"
               />
               <span
@@ -203,13 +224,14 @@ const CustomerProfile = () => {
               <input
                 type="text"
                 className="form-control"
-                value={data.gmail}
+                value={data.email}
                 onChange={(e) => {
                   setData({
                     ...data,
-                    gmail: e.target.value,
+                    email: e.target.value,
                   });
                 }}
+                disabled
                 autoComplete="off"
               />
             </Col>
@@ -226,6 +248,7 @@ const CustomerProfile = () => {
                     number: e.target.value,
                   });
                 }}
+                disabled
                 autoComplete="off"
               />
             </Col>
@@ -337,13 +360,15 @@ export default CustomerProfile;
 
 function ProfileModal(props) {
   const [validated, setValidated] = useState(false);
+
   const [formData, setFormData] = useState({
     // Initialize the formData state with the current data
-    profilePhoto: "",
-    name: props.data.name,
+    profile_photo: "",
+    username: props.data.username,
     number: props.data.number,
-    gmail: props.data.gmail,
+    email: props.data.email,
     password: props.data.password,
+    joining_date: props.data.joining_date,
   });
 
   const handleFormChange = (event) => {
@@ -360,7 +385,7 @@ function ProfileModal(props) {
     reader.onloadend = () => {
       setFormData({
         ...formData,
-        profilePhoto: reader.result,
+        profile_photo: reader.result,
       });
     };
 
@@ -387,6 +412,7 @@ function ProfileModal(props) {
               <Form.Control
                 type="file"
                 accept="image/*"
+                value={formData.profile_photo}
                 onChange={handleImageChange}
               />
             </Form.Group>
@@ -398,7 +424,7 @@ function ProfileModal(props) {
                 type="text"
                 placeholder="Full name"
                 name="name"
-                value={formData.name}
+                value={formData.username}
                 onChange={handleFormChange}
               />
             </Form.Group>
@@ -408,9 +434,9 @@ function ProfileModal(props) {
               <Form.Label>Email</Form.Label>
               <Form.Control
                 type="email"
-                placeholder="abc@gmail.com"
-                name="gmail"
-                value={formData.gmail}
+                placeholder="abc@email.com"
+                name="email"
+                value={formData.email}
                 onChange={handleFormChange}
               />
             </Form.Group>
@@ -446,7 +472,12 @@ function ProfileModal(props) {
           <Row className="mb-3">
             <Form.Group as={Col} md="12">
               <Form.Label>Joining Data</Form.Label>
-              <Form.Control type="text" placeholder="27 july 2023" disabled />
+              <Form.Control
+                type="text"
+                placeholder=""
+                value={formData.joining_date}
+                disabled
+              />
               <Form.Control.Feedback type="invalid">
                 Please provide a valid address.
               </Form.Control.Feedback>

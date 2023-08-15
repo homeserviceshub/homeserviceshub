@@ -10,12 +10,11 @@ const OurUpdateForm = () => {
         <Row>
           <Col className={styles.mainHeading}>Need Help</Col>
         </Row>
-      </Container>
-      <Container className={styles.main}>
-        <Row>
-          <Col className={styles.heading}>Get in touch with us</Col>
-        </Row>
-        <Form>
+
+        <Form className={styles.main}>
+          <Row>
+            <Col className={styles.heading}>Get in touch with us</Col>
+          </Row>
           <Form.Group className="mb-3" controlId="formBasicName">
             <Form.Label>Full Name</Form.Label>
             <Form.Control type="text" placeholder="Enter Fullname" />
@@ -37,7 +36,7 @@ const OurUpdateForm = () => {
             />
           </Form.Group>
           <Form.Group className={styles.button}>
-            <CustomButton text={"Notify Me"} />
+            <CustomButton text={"Submit"} width={"auto"} />
           </Form.Group>
         </Form>
       </Container>

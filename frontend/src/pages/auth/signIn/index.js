@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./index.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { CHECKLOGIN } from "../../../redux/actions/actionCheckLogin";
+import axios from "axios";
 
 function SignIn() {
   const [credField, setCredField] = useState(false);
@@ -29,9 +30,32 @@ function SignIn() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    dispatch(CHECKLOGIN(true));
-    navigate("/");
     setIsSubmitting(true);
+
+    axios
+      .post("http://localhost:8000/login", {
+        email: email,
+        password: password,
+      })
+      .then((response) => {
+        console.log(response);
+        if (response.data.message) {
+          setTimeout(function () {
+            setIsSubmitting(false);
+          }, 1000);
+          console.log(response.data.message, "yaaaa");
+        } else {
+          console.log(response.data, "gl bngi");
+          localStorage.setItem("auth", response.data[0]._id);
+          dispatch(CHECKLOGIN(true));
+          navigate("/");
+        }
+      })
+      .catch((error) => {
+        console.error("AxiosError:", error);
+        console.log(error);
+      });
+
     // dispatch(
     //   loginAction(email, password, null, () => {
     //     setIsSubmitting(false);

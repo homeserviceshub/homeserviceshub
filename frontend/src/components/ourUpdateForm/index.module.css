@@ -2,16 +2,15 @@
   background-color: rgb(229 255 244);
   border-radius: 20px;
   margin: 20px auto;
+  padding: 20px;
 }
 .heading {
-  /* background-color: #e1e1e1; */
-  border-radius: 20px;
-  margin: 20px 0px;
-  padding-top: 10px;
-  font-size: 20px;
+  padding-bottom: 20px;
+  font-size: 1.5rem;
 }
 .button {
   padding-bottom: 10px;
+  text-align: end;
 }
 .mainHeading {
   font-family: "Oswald", sans-serif;

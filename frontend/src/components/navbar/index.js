@@ -14,8 +14,6 @@ const Navbar = () => {
   });
 
   const [loggedIn, setLoggedIn] = useState(checklogin);
-  console.log(checklogin, "before login");
-  console.log(loggedIn, "user login");
   const navigate = useNavigate();
   const location = useLocation();
 

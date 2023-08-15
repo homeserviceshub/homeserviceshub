@@ -1,0 +1,22 @@
+.selected {
+  color: "red";
+}
+.heading {
+  font-size: 2rem;
+}
+.customMargin {
+  margin: 10px 0px;
+}
+.starRow {
+  display: flex;
+  line-height: 24px;
+}
+.btn {
+  margin-top: 40px;
+  text-align: center;
+}
+.stars {
+  font-size: 35px;
+  cursor: pointer;
+  transition: fill 0.5s ease;
+}

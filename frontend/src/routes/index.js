@@ -22,6 +22,8 @@ import ContactUs from "../pages/contactus";
 import Service from "../pages/services/Service";
 import ServiceRequested from "../pages/requestAservice";
 import RequestaService from "../pages/requestAservice";
+import NewReview from "../pages/newReview";
+import PrivateRoute from "./privateRoute";
 
 export default function AppRoutes() {
   return (
@@ -37,7 +39,9 @@ export default function AppRoutes() {
 
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/user/profile" element={<Profile />} />
+          <Route exact path="/user/profile" element={<PrivateRoute />}>
+            <Route path="/user/profile" element={<Profile />} />
+          </Route>
           <Route path="/aboutus" element={<AboutUs />} />
           <Route path="/faq" element={<Faq />} />
           <Route path="/contactus" element={<ContactUs />} />
@@ -48,7 +52,9 @@ export default function AppRoutes() {
 
             <Route path="/services/service" element={<Service />} />
           </Route>
+
           <Route path="/servicerequest" element={<RequestaService />} />
+          <Route path="/review/new" element={<NewReview />} />
           <Route path="/companyprofile" element={<CompanyProfile />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>

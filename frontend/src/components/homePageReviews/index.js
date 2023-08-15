@@ -6,6 +6,7 @@ import styles from "./index.module.css";
 const HomePageReviews = () => {
   return (
     <Container>
+      <h1 className={styles.heading}>Happy Home Owners</h1>
       <Row className={styles.allCards}>
         <Col className={styles.oneCard} lg={5}>
           {" "}

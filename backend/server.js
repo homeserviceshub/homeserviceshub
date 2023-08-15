@@ -1,30 +1,26 @@
 const express = require("express");
-const mysql = require("mysql");
-const cors = require("cors");
-
 const app = express();
+const cors = require("cors");
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+
+main().catch((err) => console.log(err));
+
+async function main() {
+  await mongoose.connect("mongodb://127.0.0.1:27017/homeservices");
+  console.log("Connection Made");
+  // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
+}
+
 app.use(cors());
+app.use(bodyParser.json());
+app.use(express.json());
 
-const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "homeservicesdatabase",
-});
-
-app.get("/homeservices", (re, res) => {
-  const sql = "SELECT * FROM homeservices";
-  db.query(sql, (err, data) => {
-    if (err) {
-      return res.json(err);
-    }
-    return res.json(data);
-  });
-});
-
-app.get("/", (re, res) => {
-  return res.json("FromBackend");
-});
+//getting routes
+const postRoute = require("./routes/postRoutes");
+const getRoute = require("./routes/getRoutes");
+app.use(postRoute);
+app.use(getRoute);
 
 app.listen(8000, () => {
   console.log("Running");

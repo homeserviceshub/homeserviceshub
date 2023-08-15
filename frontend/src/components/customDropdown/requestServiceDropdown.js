@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./index.module.css";
 
-const RequestServiceDropdown = () => {
+const RequestServiceDropdown = ({ onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
   const options = [
@@ -15,6 +15,9 @@ const RequestServiceDropdown = () => {
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
     setIsOpen(false);
+    if (onChange) {
+      onChange(event.target.value);
+    }
   };
 
   const handleClickOutside = (event) => {
