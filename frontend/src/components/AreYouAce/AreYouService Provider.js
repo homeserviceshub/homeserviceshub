@@ -9,7 +9,7 @@ const AreYouServiceProvider = () => {
     <div className={styles.main}>
       <div className={styles.innerDiv}>
         <h2>Are You Ace Service Provider?</h2>
-        <h3>Connect with new customers, now.</h3>
+        <h3>Connect with new customer, now.</h3>
 
         <CustomButton
           width={"250px"}
