@@ -1,15 +1,15 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
+import { CHECKLOGIN } from "../redux/actions/actionCheckLogin";
 
 const PrivateRoute = () => {
-  const tokenID = localStorage.getItem("auth");
+  const dispatch = useDispatch();
+  const id = localStorage.getItem("auth");
 
-  return tokenID !== null && tokenID !== "null" ? (
-    <Outlet />
-  ) : (
-    <Navigate to="/signin" replace />
-  );
+  return id && id !== null && id !== "null"
+    ? dispatch(CHECKLOGIN(true)) && <Outlet />
+    : dispatch(CHECKLOGIN(false)) && <Navigate to="/signin" replace />;
 };
 
 export default PrivateRoute;

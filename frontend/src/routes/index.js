@@ -24,6 +24,7 @@ import ServiceRequested from "../pages/requestAservice";
 import RequestaService from "../pages/requestAservice";
 import NewReview from "../pages/newReview";
 import PrivateRoute from "./privateRoute";
+import AuthCheckRoute from "./authCheckRoute";
 
 export default function AppRoutes() {
   return (
@@ -38,25 +39,22 @@ export default function AppRoutes() {
         <Route path="/reset-password" element={<ResetPassword />} /> */}
 
         <Route element={<Layout />}>
-          <Route path="/" element={<Home />} />
           <Route exact path="/user/profile" element={<PrivateRoute />}>
             <Route path="/user/profile" element={<Profile />} />
           </Route>
-          <Route path="/aboutus" element={<AboutUs />} />
-          <Route path="/faq" element={<Faq />} />
-          <Route path="/contactus" element={<ContactUs />} />
-          <Route path="/careers" element={<Careers />} />
-
-          <Route path="/services">
+          <Route element={<AuthCheckRoute />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/aboutus" element={<AboutUs />} />
+            <Route path="/faq" element={<Faq />} />
+            <Route path="/contactus" element={<ContactUs />} />
+            <Route path="/careers" element={<Careers />} />
             <Route path="/services" element={<Services />} />
-
             <Route path="/services/service" element={<Service />} />
+            <Route path="/servicerequest" element={<RequestaService />} />
+            <Route path="/review/new" element={<NewReview />} />
+            <Route path="/companyprofile" element={<CompanyProfile />} />
+            <Route path="*" element={<PageNotFound />} />
           </Route>
-
-          <Route path="/servicerequest" element={<RequestaService />} />
-          <Route path="/review/new" element={<NewReview />} />
-          <Route path="/companyprofile" element={<CompanyProfile />} />
-          <Route path="*" element={<PageNotFound />} />
         </Route>
         <Route element={<Layout2 />}>
           <Route path="/ace">
