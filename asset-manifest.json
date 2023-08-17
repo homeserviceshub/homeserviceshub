@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/my-app/static/css/main.ba32c908.css",
-    "main.js": "/my-app/static/js/main.51ccceea.js",
-    "static/media/companyBackgroundPhoto.jpg": "/my-app/static/media/companyBackgroundPhoto.43e928352c2f46a79088.jpg",
-    "static/media/aceBackgroundPhoto.jpg": "/my-app/static/media/aceBackgroundPhoto.5d3e1da102aaf03f2e86.jpg",
-    "static/media/backgroundImg.jpg": "/my-app/static/media/backgroundImg.a26e3bffe825cbcbb100.jpg",
-    "static/media/testimage.jpg": "/my-app/static/media/testimage.4133eb7560825a84250d.jpg",
-    "static/media/areYouAce.jpg": "/my-app/static/media/areYouAce.b57e0c275d92174c5c6f.jpg",
-    "static/media/homeimage4.avif": "/my-app/static/media/homeimage4.6c280e230c36bebbabdf.avif",
-    "index.html": "/my-app/index.html",
-    "main.ba32c908.css.map": "/my-app/static/css/main.ba32c908.css.map",
-    "main.51ccceea.js.map": "/my-app/static/js/main.51ccceea.js.map"
+    "main.css": "/homeserviceshub/static/css/main.03e50842.css",
+    "main.js": "/homeserviceshub/static/js/main.51ccceea.js",
+    "static/media/companyBackgroundPhoto.jpg": "/homeserviceshub/static/media/companyBackgroundPhoto.43e928352c2f46a79088.jpg",
+    "static/media/aceBackgroundPhoto.jpg": "/homeserviceshub/static/media/aceBackgroundPhoto.5d3e1da102aaf03f2e86.jpg",
+    "static/media/backgroundImg.jpg": "/homeserviceshub/static/media/backgroundImg.a26e3bffe825cbcbb100.jpg",
+    "static/media/testimage.jpg": "/homeserviceshub/static/media/testimage.4133eb7560825a84250d.jpg",
+    "static/media/areYouAce.jpg": "/homeserviceshub/static/media/areYouAce.b57e0c275d92174c5c6f.jpg",
+    "static/media/homeimage4.avif": "/homeserviceshub/static/media/homeimage4.6c280e230c36bebbabdf.avif",
+    "index.html": "/homeserviceshub/index.html",
+    "main.03e50842.css.map": "/homeserviceshub/static/css/main.03e50842.css.map",
+    "main.51ccceea.js.map": "/homeserviceshub/static/js/main.51ccceea.js.map"
   },
   "entrypoints": [
-    "static/css/main.ba32c908.css",
+    "static/css/main.03e50842.css",
     "static/js/main.51ccceea.js"
   ]
 }
