@@ -1,6 +1,6 @@
 {
   "name": "my-dreame-project",
-  "homepage": "https://homeserviceshub.github.io/",
+  "homepage": "https://homeserviceshub.github.io/homeserviceshub",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
