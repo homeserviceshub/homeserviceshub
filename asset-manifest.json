@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/static/css/main.b8dfae23.css",
-    "main.js": "/static/js/main.51ccceea.js",
-    "static/media/companyBackgroundPhoto.jpg": "/static/media/companyBackgroundPhoto.43e928352c2f46a79088.jpg",
-    "static/media/aceBackgroundPhoto.jpg": "/static/media/aceBackgroundPhoto.5d3e1da102aaf03f2e86.jpg",
-    "static/media/backgroundImg.jpg": "/static/media/backgroundImg.a26e3bffe825cbcbb100.jpg",
-    "static/media/testimage.jpg": "/static/media/testimage.4133eb7560825a84250d.jpg",
-    "static/media/areYouAce.jpg": "/static/media/areYouAce.b57e0c275d92174c5c6f.jpg",
-    "static/media/homeimage4.avif": "/static/media/homeimage4.6c280e230c36bebbabdf.avif",
-    "index.html": "/index.html",
-    "main.b8dfae23.css.map": "/static/css/main.b8dfae23.css.map",
-    "main.51ccceea.js.map": "/static/js/main.51ccceea.js.map"
+    "main.css": "/homeserviceshub/static/css/main.03e50842.css",
+    "main.js": "/homeserviceshub/static/js/main.51ccceea.js",
+    "static/media/companyBackgroundPhoto.jpg": "/homeserviceshub/static/media/companyBackgroundPhoto.43e928352c2f46a79088.jpg",
+    "static/media/aceBackgroundPhoto.jpg": "/homeserviceshub/static/media/aceBackgroundPhoto.5d3e1da102aaf03f2e86.jpg",
+    "static/media/backgroundImg.jpg": "/homeserviceshub/static/media/backgroundImg.a26e3bffe825cbcbb100.jpg",
+    "static/media/testimage.jpg": "/homeserviceshub/static/media/testimage.4133eb7560825a84250d.jpg",
+    "static/media/areYouAce.jpg": "/homeserviceshub/static/media/areYouAce.b57e0c275d92174c5c6f.jpg",
+    "static/media/homeimage4.avif": "/homeserviceshub/static/media/homeimage4.6c280e230c36bebbabdf.avif",
+    "index.html": "/homeserviceshub/index.html",
+    "main.03e50842.css.map": "/homeserviceshub/static/css/main.03e50842.css.map",
+    "main.51ccceea.js.map": "/homeserviceshub/static/js/main.51ccceea.js.map"
   },
   "entrypoints": [
-    "static/css/main.b8dfae23.css",
+    "static/css/main.03e50842.css",
     "static/js/main.51ccceea.js"
   ]
 }
