@@ -1,5 +1,5 @@
-import React, {  useState } from "react";
-import {  Col, Container, Form, Row } from "react-bootstrap";
+import React, { useState } from "react";
+import { Col, Container, Form, Row } from "react-bootstrap";
 import { BsStar, BsStarFill } from "react-icons/bs";
 import styles from "./index.module.css";
 import CustomButton from "../../components/customBtn";
@@ -75,10 +75,9 @@ const NewReview = () => {
 
             <Form.Group controlId="reviewStars" className={styles.customMargin}>
               <Form.Label>Rating</Form.Label>
-              <Row className={styles.starRow}>
+              <div className={styles.starRow}>
                 {[1, 2, 3, 4, 5].map((star) => (
-                  <Col
-                    lg={1}
+                  <div
                     key={star}
                     className={styles.stars}
                     onClick={() => handleStarClick(star)}
@@ -88,17 +87,17 @@ const NewReview = () => {
                     ) : (
                       <BsStar fill="gold" />
                     )}
-                  </Col>
+                  </div>
                 ))}
                 {reviewData.stars === 0 && checkStars && (
                   <p style={{ color: "red" }}>Please rate first!</p>
                 )}
-              </Row>
+              </div>
             </Form.Group>
             <Form.Group controlId="submitButton" className={styles.btn}>
               <CustomButton
                 type="submit"
-                text={"submit Review"}
+                text={"Submit Review"}
                 width={"auto"}
               />
             </Form.Group>

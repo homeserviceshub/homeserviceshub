@@ -9,6 +9,7 @@
 }
 .starRow {
   display: flex;
+  gap: 10px;
   line-height: 24px;
 }
 .btn {

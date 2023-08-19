@@ -38,7 +38,7 @@ function Service() {
       <div className={styles.locationSectionOuter}>
         <Container className={styles.container}>
           <Row className={styles.locationSection}>
-            <Col lg={3}>
+            <Col lg={3} className="py-1">
               <input
                 type="text"
                 placeholder="e.g. Plumbing, Kitchen"
@@ -49,17 +49,17 @@ function Service() {
             <Col lg={1} className={styles.nearText}>
               near
             </Col>
-            <Col lg={3}>
+            <Col lg={3} className="py-1">
               <input
                 type="text"
                 placeholder="e.g. Punjab"
                 className={styles.customInputField}
               />
             </Col>
-            <Col className={styles.dropdownBtn}>
+            <Col className={`${styles.dropdownBtn} py-4`}>
               <CustomeDropdown />
             </Col>
-            <Col className={styles.searchBtn} lg={2}>
+            <Col className={`${styles.searchBtn} py-2`} lg={2}>
               {/* <span className={styles.searchSpan}>
                 <BsSearch />
               </span> */}
@@ -70,8 +70,8 @@ function Service() {
       </div>
       <div className={styles.totalResultSectionOuter}>
         <Container className={styles.container}>
-          <Row className={styles.totalResultSection}>
-            <Col
+          <div className={styles.totalResultSection}>
+            <div
               lg={3}
               title="CategoryName"
               className={`${styles.totalResultSectionCol} ${
@@ -80,8 +80,8 @@ function Service() {
               onClick={handleClick}
             >
               Category Matched(100)
-            </Col>
-            <Col
+            </div>
+            <div
               title="CompanyName"
               lg={3}
               className={`${styles.totalResultSectionCol} ${
@@ -90,8 +90,8 @@ function Service() {
               onClick={handleClick}
             >
               Company Matched(0)
-            </Col>
-          </Row>
+            </div>
+          </div>
         </Container>
       </div>
       <div className={styles.mainDynamicSectionOuter}>

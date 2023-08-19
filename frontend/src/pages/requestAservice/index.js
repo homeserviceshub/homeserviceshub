@@ -130,7 +130,7 @@ const RequestaService = () => {
   };
 
   return (
-    <div>
+    <div className="mx-3">
       <div className={styles.headingDiv}>
         <div className={styles.mainHeading}>
           Share the details of your exciting Bathroom Remodel project with us

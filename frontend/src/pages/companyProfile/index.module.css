@@ -5,7 +5,7 @@
   background-color: white;
   position: sticky !important;
   top: 80px;
-  z-index: 2;
+  z-index: 1;
   border-top: 1px solid var(--color-primary);
 }
 .containerX {
@@ -29,13 +29,10 @@
   background-size: cover;
   color: white;
 }
-.complanyProfilePhotoRow {
-  height: 250px;
-}
 .companyProfilePhoto {
   display: flex;
   align-items: center;
-  padding: 0px;
+  padding: 20px 0px;
   margin: auto;
   border-radius: 12px;
   justify-content: center;
@@ -50,6 +47,9 @@
   flex-direction: column;
   justify-content: flex-end;
   margin-bottom: 21px;
+}
+.profileRow {
+  text-align: center;
 }
 .companyName {
   font-size: 3rem;
@@ -81,7 +81,6 @@
 }
 .writeReview {
   display: flex;
-  margin: auto 25px auto 0px;
 }
 .borders {
   border-radius: 6px;
@@ -93,6 +92,7 @@
   border-end-end-radius: 6px;
 }
 .tabs {
+  margin: 0px 10px;
   background-color: white;
   font-size: 1.2rem;
   font-weight: 600;
@@ -100,7 +100,7 @@
   display: flex;
 }
 .tab {
-  padding: 20px 20px 20px 17px;
+  padding: 20px 15px 20px 15px;
 }
 .tab:hover {
   color: white;
@@ -134,11 +134,11 @@
   display: flex;
   justify-content: space-between;
   line-height: 2.5rem;
+  flex-wrap: wrap;
+  margin: 10px;
 }
 .details {
   padding: 15px 20px;
-  margin-left: 20px;
-  margin-right: 0px;
 }
 .detailsHeading {
   margin: 0px;
@@ -197,6 +197,7 @@
 .allDetails {
   color: gray;
   cursor: default;
+  margin: 0px;
 }
 .detailDiv {
   padding-bottom: 15px;
@@ -223,4 +224,15 @@
 }
 .scrollLink:hover {
   color: white !important;
+}
+
+@media screen and (max-width: 767px) {
+  .companyName {
+    font-size: 2rem;
+  }
+  .tabs {
+    margin: 0px 11px;
+    font-size: 1rem;
+    flex-wrap: wrap;
+  }
 }

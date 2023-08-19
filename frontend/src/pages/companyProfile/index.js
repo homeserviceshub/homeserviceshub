@@ -9,7 +9,6 @@ import CompanyProjects from "../../components/companyProjects";
 import { useNavigate } from "react-router-dom";
 import { Link as ScrollLink } from "react-scroll";
 
-
 const CompanyProfile = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -142,7 +141,7 @@ const CompanyProfile = () => {
       <Container className={styles.containerX}>
         <Row className={styles.overviewSection} id="overview">
           <Col lg={8} className={styles.overview}>
-            <Row className={styles.overviewRow}>
+            <Row className="m-0">
               <Col className={`${styles.overviewCol} ${styles.borders}`}>
                 Here is the breif information about out company. hello there we
                 are home builder and we are professional in renovation.We are
@@ -155,7 +154,7 @@ const CompanyProfile = () => {
                 possible.
               </Col>
             </Row>
-            <Row className={styles.rating}>
+            <Row className="m-0">
               <Col className={`${styles.ratingCol} ${styles.borders}`}>
                 <div className={styles.ratingDiv1}>
                   <div className={styles.ratingDiv11}>
@@ -287,11 +286,15 @@ const CompanyProfile = () => {
             </Col>
           </Col> */}
         </Row>
-        <Row id="reviews">
+        <Row id="reviews" className="m-0">
           <Col lg={12} className={styles.reviewHeading}>
             <div>Reviews</div>
             <div className={styles.writeReview}>
-              <CustomButton text={"Write a Review"} onClick={newReview} />
+              <CustomButton
+                width={"auto"}
+                text={"Write a Review"}
+                onClick={newReview}
+              />
             </div>
           </Col>
           {stars.map((item, index) => {
@@ -331,7 +334,7 @@ const CompanyProfile = () => {
               </div>
             </div>
           </Col>
-          <Col>
+          <Col className="p-0">
             <div className={styles.detailDiv}>
               <div className={styles.detailHeading}>Year of Establised</div>
               <div className={styles.detailData}>2020</div>

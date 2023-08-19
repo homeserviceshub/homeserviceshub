@@ -13,7 +13,7 @@
   background-color: var(--color-primary-with-opacity);
   border-radius: 20px;
   margin: 60px auto 100px;
-  width: 600px;
+  max-width: 600px;
   padding: 20px 30px;
 }
 .heading {
@@ -66,4 +66,13 @@
 }
 .pointer {
   cursor: pointer;
+}
+
+@media screen and (max-width: 767px) {
+  .bothIcons {
+    gap: 20px;
+  }
+  .main {
+    padding: 20px;
+  }
 }

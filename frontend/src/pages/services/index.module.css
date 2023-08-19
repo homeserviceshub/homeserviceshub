@@ -1,7 +1,6 @@
 .customInputField {
   border: 1px solid rgb(127 127 127);
   border-radius: 6px;
-  height: 100%;
   width: 100%;
   padding: 5px 10px;
   position: relative;
@@ -21,9 +20,11 @@
 }
 .locationSection {
   padding: 15px 0px;
+  align-items: center;
 }
 .totalResultSection {
   background-color: white;
+  display: flex;
 }
 .totalResultSectionCol {
   padding: 20px;
@@ -154,5 +155,12 @@
 @media screen and (max-width: 767px) {
   .dropdownBtn {
     margin: 0;
+  }
+  .totalResultSectionCol {
+    padding: 20px 10px;
+    font-size: 0.9rem;
+  }
+  .mainDynamicSection {
+    margin: 0px;
   }
 }
