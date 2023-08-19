@@ -16,7 +16,7 @@ const MainPhoto = () => {
           <button
             className={styles.customButton}
             onClick={() => {
-              navigate("/services");
+              navigate("/services/service");
             }}
           >
             Discover Now

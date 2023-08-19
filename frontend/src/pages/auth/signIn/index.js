@@ -27,6 +27,9 @@ function SignIn() {
       replace: true,
     });
   }
+  function handleClose() {
+    navigate(-1);
+  }
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -64,8 +67,11 @@ function SignIn() {
   }
   return (
     <Container fluid className={styles.containerX}>
-      <Row className=" justify-content-center align-items-center h-100">
+      <Row className=" mx-1 justify-content-center align-items-center h-100">
         <Col md={4} className={` p-5 ${styles.containerY}`}>
+          <span onClick={handleClose} className={styles.closeBtn}>
+            X
+          </span>
           <div className="text-center">
             <img src="/photos/" alt="logox" />
           </div>

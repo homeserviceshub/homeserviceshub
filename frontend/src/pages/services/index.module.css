@@ -63,6 +63,12 @@
 .profilePhoto {
   border-radius: 12px;
 }
+.verifiedPhotoDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
 .verifyPhoto {
   border-radius: 12px;
 }
@@ -72,9 +78,10 @@
 .categoryList {
   display: flex;
   align-items: flex-end;
-  height: 30px;
+
   font-size: 0.9rem;
   gap: 5px;
+  flex-wrap: wrap;
 }
 .companyName {
   font-size: 1.5rem;
@@ -105,11 +112,7 @@
   padding-right: 22px;
 }
 .dropdownBtn {
-  display: flex;
-  width: 100%;
   margin: 0px 20px;
-  align-items: center;
-  justify-content: center;
 }
 .searchSpan {
   padding: 8px 15px;
@@ -146,4 +149,10 @@
 }
 .categories:hover {
   color: green;
+}
+
+@media screen and (max-width: 767px) {
+  .dropdownBtn {
+    margin: 0;
+  }
 }

@@ -1,6 +1,7 @@
 .allCards {
   justify-content: space-between;
   padding-top: 80px;
+  margin: 0px;
 }
 .oneCard {
   position: relative;
@@ -12,8 +13,9 @@
 }
 .cardImgDiv {
   position: absolute;
-  top: -51px;
-  left: 41.6%;
+  top: 0px;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 .cardImg {
   width: 100px;

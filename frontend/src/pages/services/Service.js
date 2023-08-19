@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import CustomButton from "../../components/customBtn";
 import styles from "./index.module.css";
-import {  BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
+import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import CustomeDropdown from "../../components/customDropdown";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -150,7 +150,7 @@ function Service() {
                           </Link>
                         </div>
                       </Col>
-                      <Col lg={2}>
+                      <Col lg={2} className={styles.verifiedPhotoDiv}>
                         <img
                           src="/photos/verified.png"
                           width={100}
@@ -165,7 +165,10 @@ function Service() {
                         >
                           <CustomButton text={"Request a service"} />
                         </div>
-                        <div onClick={() => navigate("/companyprofile")}>
+                        <div
+                          className={styles.firstBtn}
+                          onClick={() => navigate("/companyprofile")}
+                        >
                           <CustomButton text={"Profile"} />
                         </div>
                       </Col>
@@ -232,7 +235,7 @@ function Service() {
                           </Link>
                         </div>
                       </Col>
-                      <Col lg={2}>
+                      <Col lg={2} className={styles.verifiedPhotoDiv}>
                         <img
                           src="/photos/verified.png"
                           width={100}
@@ -247,7 +250,10 @@ function Service() {
                         >
                           <CustomButton text={"Request a service"} />
                         </div>
-                        <div onClick={() => navigate("/companyprofile")}>
+                        <div
+                          className={styles.firstBtn}
+                          onClick={() => navigate("/companyprofile")}
+                        >
                           <CustomButton text={"Profile"} />
                         </div>
                       </Col>

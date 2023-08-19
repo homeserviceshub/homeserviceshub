@@ -9,7 +9,8 @@
   font-weight: 500;
   font-family: "Oswald", sans-serif;
   color: #fff;
-  margin-bottom: 28px;
+  margin-bottom: 15px;
+  margin-top: 30px;
   cursor: default;
 }
 
@@ -56,4 +57,5 @@
 .iconDiv {
   display: flex;
   gap: 5px;
+  padding-top: 15px;
 }
