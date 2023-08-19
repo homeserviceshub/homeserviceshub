@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import styles from "./index.module.css";
 import CustomButton from "../../components/customBtn";
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import Help from "../../components/help";
 import ReviewCardComponent from "../../components/reviewCard";
 import CompanyProjects from "../../components/companyProjects";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Link as ScrollLink } from "react-scroll";
 
-import IconFacebook from "../../components/icons/IconFacebook";
-import IconInstagram from "../../components/icons/IconInstagram";
-import IconLinkedIn from "../../components/icons/IconLinkedIn";
-import IconTwitter from "../../components/icons/IconTwitter";
-import IconYoutube from "../../components/icons/IconYoutube";
 
 const CompanyProfile = () => {
   useEffect(() => {
@@ -21,23 +16,8 @@ const CompanyProfile = () => {
   }, []);
   const navigate = useNavigate();
   const stars = ["1", "2", "3", "4", "5"];
-  const description = `Agora Design Build expertly handled two renovations flawlessly. They completed both projects on time 
-  and on budget. They provided excellent service and professional installers who were on-site on time, and were respectful 
-  of our home. I intend to hire them again for future projects. I have told all family and friends of this company.This 
-  company expertly handled two renovations flawlessly. They completed both projects on time and on budget. They provided 
-  excellent service and professional installers who were on-site on time, and were respectful of our home. I intend to 
-  hire them again for future projects. I have told all family and friends of this company.
-  The final results exceeded our expectations and we absolutely love our updated main bath, ensuite, and basement powder 
-  room. We loved working with the Agora Design Build team and look forward to our next project. We definitely recommend.`;
   const [selectedFilter, setSelectedFilter] = useState("overview");
-  const socialMedia = [
-    // user can give max 8 links of social media
-    { link: "https://www.facebook.com/", icon: <IconFacebook /> },
-    { link: "https://www.instagram.com/", icon: <IconInstagram /> },
-    { link: "https://www.linkedin.com/", icon: <IconLinkedIn /> },
-    { link: "https://www.youtube.com/", icon: <IconYoutube /> },
-    { link: "https://www.twitter.com/", icon: <IconTwitter /> },
-  ];
+
   const activeTab = (e) => {
     setSelectedFilter(e.target.title);
   };
@@ -54,6 +34,7 @@ const CompanyProfile = () => {
             <Col lg={2} className={styles.companyProfilePhoto}>
               <img
                 src="/icons/default-profile-picture-male-icon.svg"
+                alt="Profile"
                 width={100}
                 height={100}
                 className={styles.profileImg}
@@ -110,7 +91,7 @@ const CompanyProfile = () => {
                 onClick={activeTab}
                 lg={1}
                 className={`${styles.tab} ${
-                  selectedFilter == "overview" ? styles.activeTab : ""
+                  selectedFilter === "overview" ? styles.activeTab : ""
                 }`}
               >
                 Overview
@@ -123,7 +104,7 @@ const CompanyProfile = () => {
                 onClick={activeTab}
                 lg={1}
                 className={`${styles.tab} ${
-                  selectedFilter == "reviews" ? styles.activeTab : ""
+                  selectedFilter === "reviews" ? styles.activeTab : ""
                 }`}
               >
                 Reviews
@@ -136,7 +117,7 @@ const CompanyProfile = () => {
                 onClick={activeTab}
                 lg={1}
                 className={`${styles.tab} ${
-                  selectedFilter == "details" ? styles.activeTab : ""
+                  selectedFilter === "details" ? styles.activeTab : ""
                 }`}
               >
                 Details
@@ -149,7 +130,7 @@ const CompanyProfile = () => {
                 onClick={activeTab}
                 lg={1}
                 className={`${styles.tab} ${
-                  selectedFilter == "gallery" ? styles.activeTab : ""
+                  selectedFilter === "gallery" ? styles.activeTab : ""
                 }`}
               >
                 Gallery

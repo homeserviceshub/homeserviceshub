@@ -49,7 +49,7 @@
 .profileMainCol {
   display: flex;
   flex-direction: column;
-  justify-content: end;
+  justify-content: flex-end;
   margin-bottom: 21px;
 }
 .companyName {
@@ -63,7 +63,7 @@
 .profilebtns {
   display: flex;
   flex-direction: column;
-  justify-content: end;
+  justify-content: flex-end;
   gap: 15px;
   padding: 50px;
 }

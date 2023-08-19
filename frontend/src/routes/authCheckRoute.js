@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Navigate, Outlet } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import {  Outlet } from "react-router-dom";
 import { CHECKLOGIN } from "../redux/actions/actionCheckLogin";
 import axios from "axios";
 
 const AuthCheckRoute = () => {
   const dispatch = useDispatch();
-  const id = localStorage.getItem("auth");
+  // const id = localStorage.getItem("auth");
   useEffect(() => {
     window.scrollTo(0, 0);
     const id = localStorage.getItem("auth");

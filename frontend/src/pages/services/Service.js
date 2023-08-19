@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import CustomButton from "../../components/customBtn";
 import styles from "./index.module.css";
-import { BsSearch, BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
+import {  BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import CustomeDropdown from "../../components/customDropdown";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";

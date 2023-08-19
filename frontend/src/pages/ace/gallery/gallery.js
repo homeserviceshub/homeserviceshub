@@ -6,8 +6,7 @@ import {
   Col,
   Button,
   Spinner,
-  Modal,
-} from "react-bootstrap";
+  } from "react-bootstrap";
 import { FaEdit } from "react-icons/fa";
 import styles from "./index.module.css";
 import CustomButton from "../../../components/customBtn";
@@ -66,22 +65,22 @@ const AceGallery = () => {
     setImages(updatedImages);
   };
 
-  const handleCloseFullScreen = () => {
-    setShowFullScreen(false);
-    setSelectedImageIndex(null);
-  };
+  // const handleCloseFullScreen = () => {
+  //   setShowFullScreen(false);
+  //   setSelectedImageIndex(null);
+  // };
 
-  const handleNextImage = () => {
-    setSelectedImageIndex((prevIndex) =>
-      prevIndex === images.length - 1 ? 0 : prevIndex + 1
-    );
-  };
+  // const handleNextImage = () => {
+  //   setSelectedImageIndex((prevIndex) =>
+  //     prevIndex === images.length - 1 ? 0 : prevIndex + 1
+  //   );
+  // };
 
-  const handlePrevImage = () => {
-    setSelectedImageIndex((prevIndex) =>
-      prevIndex === 0 ? images.length - 1 : prevIndex - 1
-    );
-  };
+  // const handlePrevImage = () => {
+  //   setSelectedImageIndex((prevIndex) =>
+  //     prevIndex === 0 ? images.length - 1 : prevIndex - 1
+  //   );
+  // };
 
   return (
     <Container>

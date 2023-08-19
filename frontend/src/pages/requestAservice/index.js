@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./index.module.css";
-import { Col, Container, Form, Row } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import CustomButton from "../../components/customBtn";
 import RequestServiceDropdown from "../../components/customDropdown/requestServiceDropdown";
 import axios from "axios";

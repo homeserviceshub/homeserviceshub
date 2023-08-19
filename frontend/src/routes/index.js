@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "../pages/home";
 import Layout, { Layout2 } from "../components/layout";
 import Signin from "../pages/auth/signIn";
@@ -20,7 +20,7 @@ import Faq from "../pages/faq";
 import Careers from "../pages/careers";
 import ContactUs from "../pages/contactus";
 import Service from "../pages/services/Service";
-import ServiceRequested from "../pages/requestAservice";
+// import ServiceRequested from "../pages/requestAservice";
 import RequestaService from "../pages/requestAservice";
 import NewReview from "../pages/newReview";
 import PrivateRoute from "./privateRoute";

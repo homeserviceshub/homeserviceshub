@@ -87,7 +87,7 @@ const ServiceRequest = () => {
   useEffect(() => {
     let count = data.length - completedTasks;
     dispatch(REMAININGTASKS(count));
-  }, [completedTasks, data]);
+  }, [completedTasks, data,dispatch]);
   const activeTab = (e) => {
     setSelectedFilter(e.target.title);
   };
@@ -132,7 +132,7 @@ const ServiceRequest = () => {
                 onClick={activeTab}
                 lg={1}
                 className={`${styles.tab} ${
-                  selectedFilter == "allTasks" ? styles.activeTab : ""
+                  selectedFilter === "allTasks" ? styles.activeTab : ""
                 }`}
               >
                 All Tasks({data.length})
@@ -151,7 +151,7 @@ const ServiceRequest = () => {
                   onClick={activeTab}
                   lg={1}
                   className={`${styles.tab} ${
-                    selectedFilter == "completedTasks" ? styles.activeTab : ""
+                    selectedFilter === "completedTasks" ? styles.activeTab : ""
                   }`}
                 >
                   CompletedTasks({completedTasks})

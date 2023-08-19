@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
-import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
+import React, {  useState } from "react";
+import {  Col, Container, Form, Row } from "react-bootstrap";
+import { BsStar, BsStarFill } from "react-icons/bs";
 import styles from "./index.module.css";
 import CustomButton from "../../components/customBtn";
 

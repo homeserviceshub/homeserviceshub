@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import { Card } from "react-bootstrap";
 import styles from "./index.module.css";
-import { BsStarFill } from "react-icons/bs";
+// import { BsStarFill } from "react-icons/bs";
 import CustomButton from "../customBtn";
 
 // const ReviewCardComponent = ({ photo, title, stars, date, description }) => {
 const RequestReviewCardComponent = () => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [reviewed, setReviewed] = useState(false);
+  // const [isExpanded, setIsExpanded] = useState(false);
+  const [reviewed] = useState(false);
 
   const [requested, setRequested] = useState(false);
 
   const photo = "/icons/default-profile-picture-male-icon.svg";
   const name = "User Name";
-  const stars = [1, 2, 3, 4, 5];
+  // const stars = [1, 2, 3, 4, 5];
   const date = "7/10/2023";
 
   return (

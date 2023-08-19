@@ -1,11 +1,9 @@
 import styles from "./ResetPassword.module.css";
-import React, { useState } from "react";
-import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
+import React from "react";
 import { Form, Container, Row, Col, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 function ResetPasword() {
-  const [credField, setCredField] = useState(false);
   const navigate = useNavigate();
 
   function gotoSignIn() {

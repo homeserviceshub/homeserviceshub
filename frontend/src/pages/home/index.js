@@ -1,14 +1,6 @@
-import React, { useEffect, useState } from "react";
-import Navbar from "../../components/navbar";
-import ScreenSlider from "../../components/screenslider";
+import React, { useEffect } from "react";
 import { trendingServices } from "../../Data/DataList";
-// import Gellary from "../components/gellary";
-// import SearchBar from "../components/searchBar";
-
-import TopBuilders from "../../components/topBuilders";
-// import FAQs from "../components/FAQs";
 import OurUpdateForm from "../../components/ourUpdateForm";
-import Footer from "../../components/footer";
 import MainPhoto from "../../components/mainPhoto";
 import BuildingOptions from "../../components/options/buildingOptions";
 import { Featured } from "../../components/featured";

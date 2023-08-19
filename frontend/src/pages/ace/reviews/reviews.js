@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styles from "./index.module.css";
 import { Container, Row, Col } from "react-bootstrap";
 import { Link as ScrollLink } from "react-scroll";
-import CustomButton from "../../../components/customBtn";
 import ReviewCardComponent from "../../../components/reviewCard";
 import RequestReviewCardComponent from "../../../components/reviewCard/requestReviewCardComponent";
 
@@ -23,7 +22,7 @@ const AceReviews = () => {
                 onClick={activeTab}
                 lg={1}
                 className={`${styles.tab} ${
-                  selectedFilter == "all" ? styles.activeTab : ""
+                  selectedFilter === "all" ? styles.activeTab : ""
                 }`}
               >
                 All Reviews
@@ -41,7 +40,7 @@ const AceReviews = () => {
                 onClick={activeTab}
                 lg={1}
                 className={`${styles.tab} ${
-                  selectedFilter == "projectdone" ? styles.activeTab : ""
+                  selectedFilter === "projectdone" ? styles.activeTab : ""
                 }`}
               >
                 Projects Done

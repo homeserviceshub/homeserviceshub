@@ -1,17 +1,15 @@
 import React from "react";
-import { Col, Container, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import Styles from "./index.module.css";
 // import Carousel from "react-elastic-carousel";  I have deleted this npm package
-import CustomButton from "../customBtn";
-import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
-import IconMaleProfile from "../icons/IconDefaultMaleProfile";
+
 
 const TopBuilders = () => {
-  const breakPoints = [
-    { width: 1, itemsToShow: 1 },
-    { width: 850, itemsToShow: 1 },
-    { width: 1200, itemsToShow: 3 },
-  ];
+  // const breakPoints = [
+  //   { width: 1, itemsToShow: 1 },
+  //   { width: 850, itemsToShow: 1 },
+  //   { width: 1200, itemsToShow: 3 },
+  // ];
   return (
     <>
       <Row className={Styles.headingRow}>

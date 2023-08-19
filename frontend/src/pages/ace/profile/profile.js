@@ -1,33 +1,20 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Modal, Form, InputGroup } from "react-bootstrap";
+import { Container, Row, Col, Modal, Form } from "react-bootstrap";
 import styles from "./index.module.css";
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
 import Help from "../../../components/help";
-import { Link } from "react-router-dom";
-import IconFacebook from "../../../components/icons/IconFacebook";
-import IconInstagram from "../../../components/icons/IconInstagram";
-import IconLinkedIn from "../../../components/icons/IconLinkedIn";
-import IconYoutube from "../../../components/icons/IconYoutube";
-import IconTwitter from "../../../components/icons/IconTwitter";
 import CustomButton from "../../../components/customBtn";
 
 const AceProfile = () => {
-  const socialMedia = [
-    // user can give max 8 links of social media
-    { link: "https://www.facebook.com/", icon: <IconFacebook /> },
-    { link: "https://www.instagram.com/", icon: <IconInstagram /> },
-    { link: "https://www.linkedin.com/", icon: <IconLinkedIn /> },
-    { link: "https://www.youtube.com/", icon: <IconYoutube /> },
-    { link: "https://www.twitter.com/", icon: <IconTwitter /> },
-  ];
+
   const [profileModalShow, setProfileModalShow] = useState(false);
   const [discriptionModalShow, setDiscriptionModalShow] = useState(false);
   const [socialModalShow, setSocialModalShow] = useState(false);
   const [detailModalShow, setDetailModalShow] = useState(false);
   const [projectsModalShow, setProjectsModalShow] = useState(false);
 
-  const [discription, setDiscription] = useState(
+  const [discription] = useState(
     "Here is the breif information about out company. hello there we are home builder and we are professional in renovation.We are just a small group of 10 people and looking forward to work with you guys. there is no rush you can check our website rating from the most trusted website for home renovation and then decide wheather you want the best of an advice of an old friend.We are good in bathroom reno, kitched reno and basement renovation. Just fill up some details and we will reply you as soon as possible."
   );
 

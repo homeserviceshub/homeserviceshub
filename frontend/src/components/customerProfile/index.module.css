@@ -82,7 +82,7 @@
   border-radius: 6px;
 }
 .infoDivOnEditing {
-  justify-content: end;
+  justify-content: flex-end;
 }
 .floatingEye {
   position: absolute;
@@ -100,7 +100,7 @@
 }
 .categoryList {
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   height: 30px;
   font-size: 0.9rem;
   gap: 5px;
