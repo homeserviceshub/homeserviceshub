@@ -7,7 +7,9 @@ const bodyParser = require("body-parser");
 main().catch((err) => console.log(err));
 
 async function main() {
-  await mongoose.connect("mongodb://127.0.0.1:27017/homeservices");
+  await mongoose.connect(
+    "mongodb+srv://homeserviceshub1:5ecpQMPZyWi9g0mE@homeservicescluster.0zszq0t.mongodb.net/homeserviceshub"
+  );
   console.log("Connection Made");
   // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
 }

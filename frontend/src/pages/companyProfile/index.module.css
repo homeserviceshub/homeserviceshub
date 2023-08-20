@@ -81,6 +81,7 @@
 }
 .writeReview {
   display: flex;
+  align-items: center;
 }
 .borders {
   border-radius: 6px;

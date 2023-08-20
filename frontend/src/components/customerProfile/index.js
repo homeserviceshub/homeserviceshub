@@ -147,7 +147,8 @@ const CustomerProfile = () => {
             <div className={styles.btnDiv}>
               <CustomButton
                 text={"logout"}
-                width={"130px"}
+                width={"auto"}
+                height={"auto"}
                 className={styles.btn}
                 onClick={logout}
               />
@@ -161,15 +162,15 @@ const CustomerProfile = () => {
             {data.profile_photo === null ? (
               <img
                 src={data.profile_photo}
-                width={350}
-                height={350}
+                width="100%"
+                height="100%"
                 className={styles.img}
               />
             ) : (
               <img
                 src="/icons/default-profile-picture-male-icon.svg"
-                width={350}
-                height={350}
+                width="100%"
+                height="100%"
                 className={styles.img}
               />
             )}
@@ -256,7 +257,7 @@ const CustomerProfile = () => {
         </div>
       </Container>
       <Container>
-        <Row id="reviews">
+        <Row id="reviews" className="mx-0">
           <Col lg={12} className={styles.reviewHeading}>
             <div>Reviews(5)</div>
           </Col>
@@ -264,7 +265,7 @@ const CustomerProfile = () => {
             return <ReviewCardComponent key={index} />;
           })}
         </Row>
-        <Row id="bookmarks">
+        <Row id="bookmarks" className="mx-0">
           <Col lg={12} className={styles.reviewHeading}>
             <div>Bookmarks({bookmarks.length})</div>
           </Col>

@@ -7,7 +7,7 @@ function CustomButton(props) {
       type={props.type}
       className={styles.customButton}
       onClick={props.onClick}
-      style={{ width: props.width }}
+      style={{ width: props.width, height: props.height }}
       onSubmit={props.onSubmit}
     >
       {props.text}

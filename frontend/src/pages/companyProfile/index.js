@@ -292,6 +292,7 @@ const CompanyProfile = () => {
             <div className={styles.writeReview}>
               <CustomButton
                 width={"auto"}
+                height="auto"
                 text={"Write a Review"}
                 onClick={newReview}
               />

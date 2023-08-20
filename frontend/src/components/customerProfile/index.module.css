@@ -33,9 +33,10 @@
   color: gray;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 .tab {
-  padding: 20px 20px 20px 17px;
+  padding: 10px;
 }
 .tab:hover {
   color: white;
@@ -49,6 +50,7 @@
 .imgDiv {
   display: flex;
   justify-content: center;
+  padding: 0px 100px;
 }
 .img {
   border-radius: 50%;
@@ -63,9 +65,6 @@
   align-items: center;
   display: flex;
   position: relative;
-}
-.btnDiv {
-  margin: auto;
 }
 .outerDiv {
   margin: 24px 10px;
@@ -101,9 +100,9 @@
 .categoryList {
   display: flex;
   align-items: flex-end;
-  height: 30px;
   font-size: 0.9rem;
   gap: 5px;
+  flex-wrap: wrap;
 }
 .categories {
   color: var(--color-primary);
@@ -139,5 +138,14 @@
   margin-bottom: 20px;
 }
 .btnDiv {
-  margin: auto 0px;
+  margin: auto 5px auto 0px;
+}
+
+@media screen and (max-width: 767px) {
+  .tabs {
+    font-size: 0.8rem;
+  }
+  .btnDiv {
+    margin: 1px 5px 1px 0px;
+  }
 }
