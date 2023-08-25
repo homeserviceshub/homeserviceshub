@@ -7,10 +7,12 @@ import CustomeDropdown from "../../components/customDropdown";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { SELECTEDSERVICE } from "../../redux/actions/action1";
+import AOS from "aos";
 
 function Service() {
   useEffect(() => {
     window.scrollTo(0, 0);
+    AOS.init();
   }, []);
   const clickedData = useSelector((state) => {
     return state.reducer1;
@@ -112,7 +114,11 @@ function Service() {
               <Col lg={12}>
                 {adList.map((item, index) => {
                   return (
-                    <Row className={styles.dynamicRow} key={index}>
+                    <Row
+                      className={styles.dynamicRow}
+                      key={index}
+                      data-aos="fade-up"
+                    >
                       <Col lg={2}>
                         {" "}
                         <img
@@ -197,7 +203,11 @@ function Service() {
                 })}
                 {list.map((item, index) => {
                   return (
-                    <Row className={styles.dynamicRow} key={index}>
+                    <Row
+                      className={styles.dynamicRow}
+                      key={index}
+                      data-aos="fade-up"
+                    >
                       <Col lg={2}>
                         {" "}
                         <img

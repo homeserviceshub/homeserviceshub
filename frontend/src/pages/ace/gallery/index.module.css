@@ -1,5 +1,6 @@
 .title {
   border: 1px solid var(--color-primary);
+  width: 100%;
   outline: none;
   padding: 5px;
   border-radius: 6px;
@@ -9,6 +10,14 @@
 }
 .edit {
   cursor: pointer;
+  display: flex;
+  position: relative;
+  margin-bottom: 10px;
+}
+.icon {
+  position: absolute;
+  right: 11px;
+  font-size: 22px;
 }
 .noImagesMessage {
   font-size: 3rem;

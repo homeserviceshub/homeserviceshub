@@ -1,14 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Col, Container, Dropdown, Row } from "react-bootstrap";
 import styles from "./index.module.css";
 import { useNavigate } from "react-router-dom";
 // import ScreenSlider from "../screenslider";
 import { useDispatch } from "react-redux";
 import { SELECTEDSERVICE } from "../../../redux/actions/action1";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const BuildingOptions = ({ options, heading }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    AOS.init();
+  }, []);
 
   const handleClick = (value) => {
     dispatch(SELECTEDSERVICE(value));
@@ -29,6 +35,7 @@ const BuildingOptions = ({ options, heading }) => {
         {options.map((item, index) => {
           return (
             <Col
+              data-aos="fade-up"
               key={index}
               lg={4}
               onClick={() => {

@@ -51,7 +51,7 @@ const AceReviews = () => {
       </div>
 
       <Container className={styles.containerX}>
-        <Row id="all">
+        <Row id="all" className="m-0">
           <Col lg={12} className={styles.reviewHeading}>
             <div>Reviews(5)</div>
           </Col>
@@ -59,7 +59,7 @@ const AceReviews = () => {
             return <ReviewCardComponent key={index} />;
           })}
         </Row>
-        <Row id="projectdone">
+        <Row id="projectdone" className="m-0 pb-3">
           <Col lg={12} className={styles.reviewHeading}>
             <div>Projects done(5)</div>
           </Col>

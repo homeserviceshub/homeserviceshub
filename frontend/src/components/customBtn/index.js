@@ -9,6 +9,7 @@ function CustomButton(props) {
       onClick={props.onClick}
       style={{ width: props.width, height: props.height }}
       onSubmit={props.onSubmit}
+      disabled={props.disabled}
     >
       {props.text}
     </button>

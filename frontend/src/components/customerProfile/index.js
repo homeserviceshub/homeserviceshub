@@ -16,13 +16,14 @@ import moment from "moment";
 
 const CustomerProfile = () => {
   const [data, setData] = useState({
-    profile_photo: "",
+    profile_photo: null,
     username: "",
     number: "",
     email: "",
     password: "",
     joining_date: "",
   });
+  const [dummyData, setDummyData] = useState(data);
   const stars = ["1", "2", "3", "4", "5"];
   const list = ["1", "2", "3"];
   const [bookmarks, setBookmarks] = useState(list);
@@ -53,12 +54,35 @@ const CustomerProfile = () => {
   useEffect(() => {
     const newData = { ...data, ...usersData.data };
     setData(newData);
+    setDummyData(newData);
     console.log(newData, "combined Data");
   }, [usersData.data]);
+  const handleFormChange = (event) => {
+    const { name, value } = event.target;
+    setDummyData({
+      ...dummyData,
+      [name]: value,
+    });
+  };
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
 
-  const handlechanges = (formData) => {
-    console.log(formData, "Form Data");
-    setData(formData);
+    reader.onloadend = () => {
+      setDummyData({
+        ...dummyData,
+        profile_photo: reader.result,
+      });
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handlechanges = () => {
+    // console.log(formData, "Form Data");
+    setData(dummyData);
     setProfileModalShow(false);
   };
   const activeTab = (e) => {
@@ -161,14 +185,14 @@ const CustomerProfile = () => {
           <div className={styles.imgDiv}>
             {data.profile_photo === null ? (
               <img
-                src={data.profile_photo}
+                src="/icons/default-profile-picture-male-icon.svg"
                 width="100%"
                 height="100%"
                 className={styles.img}
               />
             ) : (
               <img
-                src="/icons/default-profile-picture-male-icon.svg"
+                src={data.profile_photo}
                 width="100%"
                 height="100%"
                 className={styles.img}
@@ -256,7 +280,7 @@ const CustomerProfile = () => {
           </Row>
         </div>
       </Container>
-      <Container>
+      <Container className="mb-0">
         <Row id="reviews" className="mx-0">
           <Col lg={12} className={styles.reviewHeading}>
             <div>Reviews(5)</div>
@@ -271,7 +295,7 @@ const CustomerProfile = () => {
           </Col>
           {bookmarks.map((item, index) => {
             return (
-              <Row className={styles.dynamicRow} key={index}>
+              <Row className={styles.dynamicRow} key={index} data-aos="fade-up">
                 <Col lg={2}>
                   {" "}
                   <img
@@ -351,7 +375,9 @@ const CustomerProfile = () => {
         show={profileModalShow}
         onHide={() => setProfileModalShow(false)}
         handlechanges={handlechanges}
-        data={data}
+        handleFormChange={handleFormChange}
+        handleImageChange={handleImageChange}
+        data={dummyData}
       />
     </div>
   );
@@ -362,38 +388,12 @@ export default CustomerProfile;
 function ProfileModal(props) {
   const [validated, setValidated] = useState(false);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState(
     // Initialize the formData state with the current data
-    profile_photo: "",
-    username: props.data.username,
-    number: props.data.number,
-    email: props.data.email,
-    password: props.data.password,
-    joining_date: props.data.joining_date,
-  });
-
-  const handleFormChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setFormData({
-        ...formData,
-        profile_photo: reader.result,
-      });
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
-  };
+    props.data
+  );
+  console.log(props.data);
+  console.log(formData, "formdata");
 
   return (
     <Modal
@@ -413,8 +413,7 @@ function ProfileModal(props) {
               <Form.Control
                 type="file"
                 accept="image/*"
-                value={formData.profile_photo}
-                onChange={handleImageChange}
+                onChange={props.handleImageChange}
               />
             </Form.Group>
           </Row>
@@ -424,9 +423,9 @@ function ProfileModal(props) {
               <Form.Control
                 type="text"
                 placeholder="Full name"
-                name="name"
-                value={formData.username}
-                onChange={handleFormChange}
+                name="username"
+                value={props.data.username}
+                onChange={props.handleFormChange}
               />
             </Form.Group>
           </Row>
@@ -437,8 +436,8 @@ function ProfileModal(props) {
                 type="email"
                 placeholder="abc@email.com"
                 name="email"
-                value={formData.email}
-                onChange={handleFormChange}
+                value={props.data.email}
+                onChange={props.handleFormChange}
               />
             </Form.Group>
           </Row>
@@ -449,8 +448,8 @@ function ProfileModal(props) {
                 type="text"
                 placeholder="******"
                 name="password"
-                value={formData.password}
-                onChange={handleFormChange}
+                value={props.data.password}
+                onChange={props.handleFormChange}
               />
             </Form.Group>
           </Row>
@@ -462,8 +461,8 @@ function ProfileModal(props) {
                 type="number"
                 placeholder="XXXXX-XXXXX"
                 name="number"
-                value={formData.number}
-                onChange={handleFormChange}
+                value={props.data.number}
+                onChange={props.handleFormChange}
               />
               <Form.Control.Feedback type="invalid">
                 Please provide a valid address.

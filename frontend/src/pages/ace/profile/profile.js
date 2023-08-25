@@ -7,7 +7,6 @@ import Help from "../../../components/help";
 import CustomButton from "../../../components/customBtn";
 
 const AceProfile = () => {
-
   const [profileModalShow, setProfileModalShow] = useState(false);
   const [discriptionModalShow, setDiscriptionModalShow] = useState(false);
   const [socialModalShow, setSocialModalShow] = useState(false);
@@ -72,8 +71,8 @@ const AceProfile = () => {
                   <img
                     src={selectedImage}
                     alt="Selected"
-                    width={100}
-                    height={100}
+                    width={"350px"}
+                    height={"350px"}
                     className={styles.profileImg}
                   />
                 ) : (
@@ -116,10 +115,9 @@ const AceProfile = () => {
       </div>
 
       <Container className={styles.containerY}>
-        <Row></Row>
         <Row id="overview">
           <Col lg={8} className={styles.overview}>
-            <Row className={styles.overviewRow}>
+            <Row className={`${styles.overviewRow} m-0`}>
               <Col className={`${styles.overviewCol} ${styles.borders}`}>
                 <span
                   className={styles.editIcon}
@@ -130,7 +128,7 @@ const AceProfile = () => {
                 {discription}
               </Col>
             </Row>
-            <Row className={styles.rating}>
+            <Row className={`${styles.rating} m-0`}>
               <Col className={`${styles.ratingCol} ${styles.borders}`}>
                 <span
                   className={styles.editIcon}
@@ -307,7 +305,7 @@ const AceProfile = () => {
               </div>
             </div>
           </Col>
-          <Col>
+          <Col className="p-0">
             <div className={styles.detailDiv}>
               <div className={styles.detailHeading}>Year of Establised</div>
               <div className={styles.detailData}>2020</div>

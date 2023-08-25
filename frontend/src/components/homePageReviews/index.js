@@ -1,14 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import styles from "./index.module.css";
+import AOS from "aos";
 
 const HomePageReviews = () => {
+  useEffect(() => {
+    AOS.init();
+  }, []);
   return (
     <Container>
-      <h1 className={styles.heading}>Happy Home Owners</h1>
+      <h1 className={styles.heading} data-aos="fade-up">
+        Happy Home Owners
+      </h1>
       <Row className={styles.allCards}>
-        <Col className={styles.oneCard} lg={5}>
+        <Col
+          className={styles.oneCard}
+          lg={5}
+          data-aos="flip-left"
+          data-aos-easing="ease-out-cubic"
+          data-aos-duration="2000"
+        >
           {" "}
           <div className={styles.cardImgDiv}>
             <img
@@ -31,7 +43,13 @@ const HomePageReviews = () => {
             <BsStar />
           </div>
         </Col>
-        <Col className={styles.oneCard} lg={5}>
+        <Col
+          className={styles.oneCard}
+          lg={5}
+          data-aos="flip-left"
+          data-aos-easing="ease-out-cubic"
+          data-aos-duration="2000"
+        >
           {" "}
           <div className={styles.cardImgDiv}>
             <img
@@ -55,7 +73,13 @@ const HomePageReviews = () => {
             <BsStar />
           </div>
         </Col>
-        <Col className={styles.oneCard} lg={5}>
+        <Col
+          className={styles.oneCard}
+          lg={5}
+          data-aos="flip-left"
+          data-aos-easing="ease-out-cubic"
+          data-aos-duration="2000"
+        >
           {" "}
           <div className={styles.cardImgDiv}>
             <img
@@ -79,7 +103,13 @@ const HomePageReviews = () => {
             <BsStar />
           </div>
         </Col>
-        <Col className={styles.oneCard} lg={5}>
+        <Col
+          className={styles.oneCard}
+          lg={5}
+          data-aos="flip-left"
+          data-aos-easing="ease-out-cubic"
+          data-aos-duration="2000"
+        >
           {" "}
           <div className={styles.cardImgDiv}>
             <img

@@ -163,4 +163,10 @@
   .mainDynamicSection {
     margin: 0px;
   }
+  .dynamicHeading {
+    font-size: 1.5rem;
+  }
+  .error {
+    font-size: 1rem;
+  }
 }

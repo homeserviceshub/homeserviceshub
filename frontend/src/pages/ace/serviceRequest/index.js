@@ -83,25 +83,32 @@ const ServiceRequest = () => {
   const [profileModalShow, setProfileModalShow] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("allTasks");
   const [completedTasks, setCompletedTasks] = useState(0);
+  const [taskInProgress, setTaskInProgress] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
     let count = data.length - completedTasks;
     dispatch(REMAININGTASKS(count));
-  }, [completedTasks, data,dispatch]);
+  }, [completedTasks, data, dispatch]);
   const activeTab = (e) => {
     setSelectedFilter(e.target.title);
   };
   const handleReject = (index) => {
-    const updatedItems = data.filter((item, i) => i !== index);
-    setData(updatedItems);
+    if (!taskInProgress) {
+      const updatedItems = data.filter((item, i) => i !== index);
+      setData(updatedItems);
+    }
   };
   const handleAccept = (index) => {
-    setData((prevData) => {
-      const updatedData = [...prevData];
-      updatedData[index] = { ...updatedData[index], accepted: true };
-      return updatedData;
-    });
-    setAcceptedItemIndex(index);
+    if (!taskInProgress) {
+      setTaskInProgress(true);
+
+      setData((prevData) => {
+        const updatedData = [...prevData];
+        updatedData[index] = { ...updatedData[index], accepted: true };
+        return updatedData;
+      });
+      setAcceptedItemIndex(index);
+    }
   };
   const handleOpt = (index) => {
     setData((prevData) => {
@@ -115,6 +122,7 @@ const ServiceRequest = () => {
     });
     setCompletedTasks(completedTasks + 1);
     setProfileModalShow(false);
+    setTaskInProgress(false);
   };
   return (
     <div className={styles.backgroundColor}>
@@ -162,7 +170,7 @@ const ServiceRequest = () => {
         </Container>
       </div>
       <Container>
-        <Row>
+        <Row className="m-0">
           <Col lg={12} id="allTasks" className={styles.allRequests}>
             {data.map((item, index) => {
               return (
@@ -181,15 +189,16 @@ const ServiceRequest = () => {
                       <Col lg={12} className={styles.data}>
                         <b>Timimg</b> - {item.timing}
                       </Col>
+                      <Col lg={12} className={styles.data}>
+                        <b>Location</b> - {item.location}
+                      </Col>
 
                       {item.accepted ? (
                         <>
                           <Col lg={12} className={styles.data}>
                             <b>Name</b> - {item.customerName}
                           </Col>
-                          <Col lg={12} className={styles.data}>
-                            <b>Location</b> - {item.location}
-                          </Col>
+
                           <Col lg={12} className={styles.data}>
                             <b>Number</b> - {item.number}
                           </Col>
@@ -286,11 +295,13 @@ const ServiceRequest = () => {
                           <CustomButton
                             text={"Reject"}
                             width={"130px"}
+                            disabled={taskInProgress}
                             onClick={() => handleReject(index)}
                           />
                           <CustomButton
                             text={"Accept"}
                             width={"130px"}
+                            disabled={taskInProgress}
                             onClick={() => handleAccept(index)}
                           />
                         </>

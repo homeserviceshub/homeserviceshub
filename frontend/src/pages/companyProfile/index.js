@@ -8,14 +8,21 @@ import ReviewCardComponent from "../../components/reviewCard";
 import CompanyProjects from "../../components/companyProjects";
 import { useNavigate } from "react-router-dom";
 import { Link as ScrollLink } from "react-scroll";
+import AOS from "aos";
 
 const CompanyProfile = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
+    AOS.init();
   }, []);
   const navigate = useNavigate();
   const stars = ["1", "2", "3", "4", "5"];
   const [selectedFilter, setSelectedFilter] = useState("overview");
+  const [bookmark, setbookmark] = useState(false);
+
+  const bookmarkClicked = () => {
+    setbookmark(!bookmark);
+  };
 
   const activeTab = (e) => {
     setSelectedFilter(e.target.title);
@@ -70,6 +77,12 @@ const CompanyProfile = () => {
                 <CustomButton
                   text={"Request a service"}
                   onClick={() => navigate("/servicerequest")}
+                />
+              </div>
+              <div className={styles.profilebtn}>
+                <CustomButton
+                  text={bookmark ? "Remove from bookmark" : "Add to bookmark"}
+                  onClick={bookmarkClicked}
                 />
               </div>
             </Col>
@@ -141,7 +154,7 @@ const CompanyProfile = () => {
       <Container className={styles.containerX}>
         <Row className={styles.overviewSection} id="overview">
           <Col lg={8} className={styles.overview}>
-            <Row className="m-0">
+            <Row className="m-0" data-aos="zoom-in">
               <Col className={`${styles.overviewCol} ${styles.borders}`}>
                 Here is the breif information about out company. hello there we
                 are home builder and we are professional in renovation.We are
@@ -154,7 +167,7 @@ const CompanyProfile = () => {
                 possible.
               </Col>
             </Row>
-            <Row className="m-0">
+            <Row className="m-0" data-aos="zoom-in">
               <Col className={`${styles.ratingCol} ${styles.borders}`}>
                 <div className={styles.ratingDiv1}>
                   <div className={styles.ratingDiv11}>
@@ -249,7 +262,10 @@ const CompanyProfile = () => {
               </Col>
             </Row>
           </Col>
-          <Col className={`${styles.details} ${styles.borders}`}>
+          <Col
+            className={`${styles.details} ${styles.borders}`}
+            data-aos="zoom-in"
+          >
             Ace awards
           </Col>
           {/* <Col className={`${styles.details} ${styles.borders}`}>
@@ -287,7 +303,7 @@ const CompanyProfile = () => {
           </Col> */}
         </Row>
         <Row id="reviews" className="m-0">
-          <Col lg={12} className={styles.reviewHeading}>
+          <Col lg={12} className={styles.reviewHeading} data-aos="zoom-in">
             <div>Reviews</div>
             <div className={styles.writeReview}>
               <CustomButton

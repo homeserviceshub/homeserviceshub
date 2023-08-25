@@ -1,12 +1,5 @@
 import React, { useState, useRef } from "react";
-import {
-  Card,
-  Container,
-  Row,
-  Col,
-  Button,
-  Spinner,
-  } from "react-bootstrap";
+import { Card, Container, Row, Col, Button, Spinner } from "react-bootstrap";
 import { FaEdit } from "react-icons/fa";
 import styles from "./index.module.css";
 import CustomButton from "../../../components/customBtn";
@@ -41,7 +34,10 @@ const AceGallery = () => {
       // If an image is selected for editing, replace it
 
       // Add the selected image to the gallery
-      setImages([...images, { src: reader.result, title: "New Image" }]);
+      setImages([
+        ...images,
+        { src: reader.result, title: "Image Title", editable: false },
+      ]);
     };
     reader.readAsDataURL(file);
   };
@@ -52,16 +48,14 @@ const AceGallery = () => {
   };
 
   const handleEditTitle = (index) => {
-    if (selectedImageIndex === index) {
-      setSelectedImageIndex(null);
-    } else {
-      setSelectedImageIndex(index);
-    }
+    const updatedImages = [...images];
+    updatedImages[index].editable = !updatedImages[index].editable;
+    setImages(updatedImages);
   };
 
   const handleTitleChange = (event, index) => {
     const updatedImages = [...images];
-    updatedImages[index].title = event.target.textContent;
+    updatedImages[index].title = event.target.value;
     setImages(updatedImages);
   };
 
@@ -103,18 +97,21 @@ const AceGallery = () => {
                   onClick={() => handleImageClick(index)}
                 />
                 <Card.Body>
-                  <Card.Title
-                    className={styles.title}
-                    contentEditable={selectedImageIndex === index}
-                    suppressContentEditableWarning
-                    onBlur={(event) => handleTitleChange(event, index)}
-                  >
-                    {image.title}
-                    <FaEdit
-                      onClick={() => handleEditTitle(index)}
-                      className={styles.edit}
+                  <div className={styles.edit}>
+                    <input
+                      type="text"
+                      placeholder="Title"
+                      value={image.title}
+                      disabled={!image.editable}
+                      onChange={(e) => handleTitleChange(e, index)}
+                      className={styles.title}
+                      style={{ opacity: image.editable ? 1 : 0.5 }}
                     />
-                  </Card.Title>
+                    <FaEdit
+                      className={styles.icon}
+                      onClick={() => handleEditTitle(index)}
+                    />
+                  </div>
                   <Button
                     variant="danger"
                     onClick={() => handleRemoveImage(index)}

@@ -18,7 +18,7 @@ const AboutUsComponent = () => {
   const teamData = [
     {
       img: "/icons/default-profile-picture-male-icon.svg",
-      title: "Chief Executive Officer",
+      title: "Chief Advicer Officer",
     },
     {
       img: "/icons/default-profile-picture-male-icon.svg",
@@ -67,9 +67,43 @@ const AboutUsComponent = () => {
     "/photos/testimage.jpg",
     "/photos/homeimage5.jpg",
     "/photos/homeimage3.jpg",
+    "/photos/homeimage2.jpg",
+    "/photos/homeimage6.jpg",
+    "/photos/homeimage3.jpg",
+    "/photos/homeimage5.jpg",
+    "/photos/homeimage2.jpg",
+    "/photos/homeimage6.jpg",
+    "/photos/homeimage2.jpg",
+    "/photos/homeimage5.jpg",
+    "/photos/homeimage3.jpg",
+    "/photos/homeimage3.jpg",
     "/photos/homeimage6.jpg",
     "/photos/ongoing3.jpg",
+    "/photos/ongoing6.jpg",
+    "/photos/ongoing5.jpg",
+    "/photos/ongoing2.jpg",
+    "/photos/ongoing1.jpg",
+    "/photos/ongoing4.jpg",
+    "/photos/ongoing2.jpg",
     "/photos/ongoing3.jpg",
+    "/photos/ongoing1.jpg",
+    "/photos/ongoing4.jpg",
+    "/photos/ongoing6.jpg",
+    "/photos/ongoing3.jpg",
+    "/photos/ongoing5.jpg",
+    "/photos/ongoing1.jpg",
+    "/photos/ongoing2.jpg",
+    "/photos/ongoing4.jpg",
+    "/photos/ongoing3.jpg",
+    "/photos/ongoing5.jpg",
+    "/photos/ongoing1.jpg",
+    "/photos/ongoing2.jpg",
+    "/photos/ongoing6.jpg",
+    "/photos/ongoing3.jpg",
+    "/photos/ongoing5.jpg",
+    "/photos/ongoing1.jpg",
+    "/photos/ongoing4.jpg",
+    "/photos/ongoing2.jpg",
     "/photos/ongoing6.jpg",
     "/photos/homeimage2.jpg",
     "/photos/homeimage4.avif",
@@ -87,7 +121,7 @@ const AboutUsComponent = () => {
             service experts for all their home improvement requirements.
           </h4>
           <div className={styles.firstSectionBtn}>
-            <CustomButton text={"Discover Now"} />{" "}
+            <CustomButton text={"Discover Now"} width="auto" />{" "}
           </div>
         </Container>
         <Row className={styles.allImages}>
@@ -132,7 +166,18 @@ const AboutUsComponent = () => {
             }}
           ></Col>
         </Row>
-        <Row className={styles.secondSection}>
+        <Row className={styles.thirdSection}>
+          <Col lg={6} className={styles.photoOppositeDiv}>
+            <div className={styles.oppositeDivHeading}>
+              Join Our Platform and Reach New Heights
+            </div>
+            <div className={styles.oppositeDivDescription}>
+              Our platform empowers professionals to elevate their businesses to
+              new heights. Through our website, which hosts numerous homeowner
+              projects, you can experience rapid business growth and expand your
+              reach significantly.
+            </div>
+          </Col>
           <Col
             lg={6}
             className={styles.familyPhoto}
@@ -145,20 +190,9 @@ const AboutUsComponent = () => {
               url("/photos/aceBackgroundPhoto.jpg")`,
             }}
           ></Col>
-          <Col lg={6} className={styles.photoOppositeDiv}>
-            <div className={styles.oppositeDivHeading}>
-              Join Our Platform and Reach New Heights
-            </div>
-            <div className={styles.oppositeDivDescription}>
-              Our platform empowers professionals to elevate their businesses to
-              new heights. Through our website, which hosts numerous homeowner
-              projects, you can experience rapid business growth and expand your
-              reach significantly.
-            </div>
-          </Col>
         </Row>
       </div>
-      <div className={styles.thirdSection}>
+      <div className={styles.coreMembers}>
         <div className={styles.membersHeading}>Our Core Members</div>
         <div className={styles.members}>
           <div className={styles.member}>

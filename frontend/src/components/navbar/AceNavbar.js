@@ -20,9 +20,10 @@ const AceNavbar = () => {
   const handleClick = () => {
     setDropdown(!dropdown);
   };
-  const GotoLogOut = () => {
+  const GotoSignin = () => {
     navigate("/ace/signin");
   };
+
   const handleActiveRoute = (item) => {
     setChangeActive(item.title);
     if (window.innerWidth <= 768) {
@@ -43,7 +44,14 @@ const AceNavbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-logo">
-        <div className="logo">House Maker</div>
+        <div
+          className="logo"
+          onClick={() => {
+            navigate("/ace/signin");
+          }}
+        >
+          House Maker
+        </div>
         <div className="logoSlag"> You Think We Build</div>
       </div>
       <div className="menu-icon" onClick={() => handleClick()}>
@@ -58,43 +66,41 @@ const AceNavbar = () => {
       <ul className={dropdown ? "nav-menu active" : "nav-menu"}>
         {aceMenuItems.map((item, index) => {
           return (
-            <div key={index}>
-              <li
-                key={index}
-                className="item"
-                onClick={() => {
-                  handleActiveRoute(item);
+            <li
+              key={index}
+              className="item"
+              onClick={() => {
+                handleActiveRoute(item);
+              }}
+            >
+              <Link
+                className={item.cName}
+                style={{
+                  color: changeActive === item.title && "var(--color-primary)",
                 }}
+                to={item.url}
               >
-                <Link
-                  className={item.cName}
-                  style={{
-                    color:
-                      changeActive === item.title && "var(--color-primary)",
-                  }}
-                  to={item.url}
-                >
-                  <span
-                    className={changeActive === item.title ? "itemSpan" : ""}
-                  ></span>
-                  {item.title}
-                </Link>
-                {item.title == "Service Request" && remainingTasks !== 0 && (
-                  <span className="newTasks">{remainingTasks}</span>
-                )}
-              </li>
-            </div>
+                <span
+                  className={changeActive === item.title ? "itemSpan" : ""}
+                ></span>
+                {item.title}
+              </Link>
+              {item.title == "Service Request" && remainingTasks !== 0 && (
+                <span className="newTasks">{remainingTasks}</span>
+              )}
+            </li>
           );
         })}
 
-        <li
-          className="item"
-          onClick={() => {
-            GotoLogOut();
-          }}
-        >
-          <CustomButton text={"Log Out"} />
-        </li>
+        {loggedIn ? (
+          <li className="item" onClick={GotoSignin}>
+            <CustomButton text={"Profile"} />
+          </li>
+        ) : (
+          <li className="item" onClick={GotoSignin}>
+            <CustomButton text={"SIGN IN"} />
+          </li>
+        )}
       </ul>
     </nav>
   );

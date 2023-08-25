@@ -35,12 +35,12 @@ const Footer = () => {
               <Link to={"/careers"} className={styles.link}>
                 Careers
               </Link>
-              <Link to={"/aboutus"} className={styles.link}>
+              {/* <Link to={"/aboutus"} className={styles.link}>
                 Help
-              </Link>
-              <Link to={"/aboutus"} className={styles.link}>
+              </Link> */}
+              {/* <Link to={"/aboutus"} className={styles.link}>
                 Terms & Conditions
-              </Link>
+              </Link> */}
             </div>
           </Col>
           <Col lg={3} md={6} sm={6}>

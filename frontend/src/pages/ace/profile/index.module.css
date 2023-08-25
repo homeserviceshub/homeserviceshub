@@ -6,7 +6,7 @@
   background-color: white;
   position: sticky !important;
   top: 80px;
-  z-index: 2;
+  z-index: 1;
   border-top: 1px solid var(--color-primary);
 }
 .containerX {
@@ -35,15 +35,18 @@
 .companyProfilePhoto {
   display: flex;
   align-items: center;
-  padding: 0px;
+  padding: 20px 0px;
   margin: auto;
   border-radius: 12px;
   justify-content: center;
 }
+
 .profileImg {
   width: 200px;
   height: 200px;
   border-radius: 12px;
+  object-fit: cover;
+  object-position: center;
 }
 .profileMainCol {
   display: flex;
@@ -76,10 +79,9 @@
 }
 
 .overviewCol {
-  font-weight: 500;
-  height: 160px;
-  padding: 20px;
   position: relative;
+  font-weight: 500;
+  padding: 20px;
 }
 .overviewCol2 {
   padding: 20px;
@@ -87,21 +89,22 @@
   display: flex;
   justify-content: center;
   overflow: hidden;
-  margin: 10px 0px;
 }
 .ratingCol {
-  padding: 31px 20px;
+  position: relative;
+  padding: 20px;
   font-size: 1.5rem;
   display: flex;
   justify-content: space-between;
   line-height: 2.5rem;
-  position: relative;
+  flex-wrap: wrap;
+  margin: 10px;
 }
 .details {
   padding: 15px 20px;
-  margin-left: 20px;
+  /* margin-left: 20px;
   margin-right: 0px;
-  position: relative;
+  position: relative; */
 }
 .detailsHeading {
   margin: 0px;
@@ -160,31 +163,6 @@
   gap: 5px;
   padding-top: 10px;
 }
-.details {
-  padding: 15px 20px;
-  margin-left: 20px;
-  margin-right: 0px;
-}
-.detailsHeading {
-  margin: 0px;
-}
-.detail {
-  padding-bottom: 10px;
-}
-.ratingDiv11 {
-  font-size: 20px;
-  font-weight: 700;
-}
-.ratingDiv21 {
-  display: flex;
-  gap: 10px;
-  align-items: baseline;
-}
-.ratingDiv211 {
-  font-size: 1rem;
-  font-weight: 500;
-  width: 160px;
-}
 .ratingDiv12 {
   font-size: 4rem;
   display: flex;
@@ -200,18 +178,6 @@
 .ratingDiv32 {
   font-size: 3rem;
 }
-.ratingDiv212 {
-  font-size: 1rem;
-  font-weight: 700;
-}
-.ratingDiv221 {
-  font-size: 1rem;
-  font-weight: 500;
-  width: 140px;
-  display: flex;
-  align-items: baseline;
-  gap: 3px;
-}
 
 .nameInDetailsInner {
   font-size: 3rem;
@@ -220,12 +186,11 @@
   color: gray;
 }
 .allDetails {
-  gap: 35px;
-  padding: 10px 18px;
-  background-color: white;
-  border-radius: 6px;
-  margin-top: 10px;
   position: relative;
+  color: gray;
+  cursor: default;
+  margin: 0px;
+  gap: 30px;
 }
 .detailDiv {
   padding-bottom: 15px;
@@ -242,4 +207,25 @@
   cursor: pointer;
   width: auto;
   padding: 0px;
+  color: black;
+}
+@media screen and (max-width: 767px) {
+  .profileImg {
+    width: 200px;
+    height: 200px;
+  }
+  .companyName {
+    font-size: 2rem;
+  }
+  .tabs {
+    margin: 0px 11px;
+    font-size: 1rem;
+    flex-wrap: wrap;
+  }
+  .profileRow {
+    text-align: center;
+  }
+  .allDetails {
+    gap: 0px;
+  }
 }

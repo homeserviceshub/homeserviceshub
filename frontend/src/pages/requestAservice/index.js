@@ -5,6 +5,8 @@ import CustomButton from "../../components/customBtn";
 import RequestServiceDropdown from "../../components/customDropdown/requestServiceDropdown";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import AOS from "aos";
+
 const RequestaService = () => {
   const [card2, setCard2] = useState(false);
   const [card3, setCard3] = useState(false);
@@ -39,6 +41,10 @@ const RequestaService = () => {
     customerID: customerID,
     clientID: clientID,
   });
+
+  useEffect(() => {
+    AOS.init();
+  }, []);
 
   // Step 2: Use useEffect to scroll when card states change
 
@@ -140,7 +146,7 @@ const RequestaService = () => {
           professionals for you to compare and choose from.
         </h5>
       </div>
-      <div className={styles.main} id="firstCard">
+      <div className={styles.main} id="firstCard" data-aos="fade-up">
         <div className={styles.heading}>Dear user, fill your basic details</div>
         <Form onSubmit={handleClickCard1} id="firstForm">
           <Form.Group className="mb-3" controlId="formBasicName">
@@ -240,7 +246,7 @@ const RequestaService = () => {
         </Form>
       </div>
       {card2 && (
-        <div key={1} ref={secondCardRef} id="secondCard">
+        <div key={1} ref={secondCardRef} id="secondCard" data-aos="fade-up">
           <div className={styles.main}>
             <div className={styles.heading}>Dear user, where do you live</div>
             <div className={styles.bothIcons}>
@@ -296,7 +302,7 @@ const RequestaService = () => {
         </div>
       )}
       {card3 && (
-        <div key={2} ref={thirdCardRef} id="thirdCard">
+        <div key={2} ref={thirdCardRef} id="thirdCard" data-aos="fade-up">
           <div className={styles.main}>
             <div className={styles.heading}>
               Dear user, Select timing in which you are comfortable
@@ -333,7 +339,7 @@ const RequestaService = () => {
         </div>
       )}
       {card4 && (
-        <div key={3} ref={forthCardRef} id="forthCard">
+        <div key={3} ref={forthCardRef} id="forthCard" data-aos="fade-up">
           <div className={styles.main}>
             <div className={styles.heading}>
               Dear user, Add some specific details for Ace's understanding
