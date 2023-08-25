@@ -5,14 +5,14 @@ import styles from "./index.module.css";
 import { useState } from "react";
 import { AiFillEdit, AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { Link as ScrollLink } from "react-scroll";
-import { BiSave } from "react-icons/bi";
+// import { BiSave } from "react-icons/bi";
 import ReviewCardComponent from "../reviewCard";
 import { Link, useNavigate } from "react-router-dom";
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { CHECKLOGIN } from "../../redux/actions/actionCheckLogin";
 import { GetUserData } from "../../redux/actions/actionGetUserData";
-import moment from "moment";
+// import moment from "moment";
 
 const CustomerProfile = () => {
   const [data, setData] = useState({
@@ -27,7 +27,7 @@ const CustomerProfile = () => {
   const stars = ["1", "2", "3", "4", "5"];
   const list = ["1", "2", "3"];
   const [bookmarks, setBookmarks] = useState(list);
-  const [categories, setCategories] = useState([
+  const [categories] = useState([
     "Architect",
     "General Constractor",
     "Painter",
@@ -299,7 +299,7 @@ const CustomerProfile = () => {
                 <Col lg={2}>
                   {" "}
                   <img
-                    src="/photos/member5.jpg"
+                    src="./photos/member5.jpg"
                     width={160}
                     height={130}
                     className={styles.profilePhoto}
@@ -332,7 +332,7 @@ const CustomerProfile = () => {
                 </Col>
                 <Col lg={2}>
                   <img
-                    src="/photos/verified.png"
+                    src="./photos/verified.png"
                     width={100}
                     height={100}
                     className={styles.verifyPhoto}

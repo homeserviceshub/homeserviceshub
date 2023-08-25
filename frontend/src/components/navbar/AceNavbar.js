@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 const AceNavbar = () => {
   const [dropdown, setDropdown] = useState(false);
   const [changeActive, setChangeActive] = useState("Home");
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -85,7 +85,7 @@ const AceNavbar = () => {
                 ></span>
                 {item.title}
               </Link>
-              {item.title == "Service Request" && remainingTasks !== 0 && (
+              {item.title === "Service Request" && remainingTasks !== 0 && (
                 <span className="newTasks">{remainingTasks}</span>
               )}
             </li>

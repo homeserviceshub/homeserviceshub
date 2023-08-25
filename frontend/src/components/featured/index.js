@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
-import { Col, Container, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import CustomButton from "../customBtn";
 import styles from "./index.module.css";
@@ -9,37 +9,37 @@ export const Featured = ({ heading }) => {
   const generateSlides = [
     {
       index: 1,
-      src: "/icons/default-profile-picture-male-icon.svg",
+      src: "./icons/default-profile-picture-male-icon.svg",
       alt: "image",
     },
     {
       index: 2,
-      src: "/icons/default-profile-picture-male-icon.svg",
+      src: "./icons/default-profile-picture-male-icon.svg",
       alt: "image",
     },
     {
       index: 3,
-      src: "/icons/default-profile-picture-male-icon.svg",
+      src: "./icons/default-profile-picture-male-icon.svg",
       alt: "image",
     },
     {
       index: 4,
-      src: "/icons/default-profile-picture-male-icon.svg",
+      src: "./icons/default-profile-picture-male-icon.svg",
       alt: "image",
     },
     {
       index: 5,
-      src: "/icons/default-profile-picture-male-icon.svg",
+      src: "./icons/default-profile-picture-male-icon.svg",
       alt: "image",
     },
     {
       index: 6,
-      src: "/icons/default-profile-picture-male-icon.svg",
+      src: "./icons/default-profile-picture-male-icon.svg",
       alt: "image",
     },
     {
       index: 7,
-      src: "/icons/default-profile-picture-male-icon.svg",
+      src: "./icons/default-profile-picture-male-icon.svg",
       alt: "image",
     },
   ];
@@ -82,6 +82,7 @@ export const Featured = ({ heading }) => {
                 <Col lg={5}>
                   <img
                     src={slide.src}
+                    alt="slide"
                     width={150}
                     height={150}
                     className={styles.img}

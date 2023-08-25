@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Col, Container, Dropdown, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import styles from "./index.module.css";
 import { useNavigate } from "react-router-dom";
 // import ScreenSlider from "../screenslider";

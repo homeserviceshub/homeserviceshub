@@ -29,7 +29,7 @@ const UserProfile = () => {
       <Row>
         <div className={styles.imgDiv}>
           <img
-            src="/photos/member2.avif"
+            src="./photos/member2.avif"
             width={350}
             height={350}
             className={styles.img}
