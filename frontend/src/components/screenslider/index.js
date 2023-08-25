@@ -6,7 +6,7 @@ function ScreenSlider() {
       <Carousel.Item>
         <img
           className="d-block w-100"
-          src="./photos/homeimage2.jpg"
+          src="/photos/homeimage2.jpg"
           alt="First slide"
           height="400px"
         />
@@ -17,7 +17,7 @@ function ScreenSlider() {
       <Carousel.Item>
         <img
           className="d-block w-100"
-          src="./photos/homeimage3.jpg"
+          src="/photos/homeimage3.jpg"
           alt="First slide"
           height="400px"
         />
@@ -28,7 +28,7 @@ function ScreenSlider() {
       <Carousel.Item>
         <img
           className="d-block w-100"
-          src="./photos/homeimage4.avif"
+          src="/photos/homeimage4.avif"
           alt="Second slide"
           height="400px"
         />
@@ -40,7 +40,7 @@ function ScreenSlider() {
       <Carousel.Item>
         <img
           className="d-block w-100"
-          src="./photos/homeimage5.jpg"
+          src="/photos/homeimage5.jpg"
           alt="Third slide"
           height="400px"
         />

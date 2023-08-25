@@ -39,7 +39,7 @@ const CompanyProfile = () => {
           <Row className={styles.complanyProfilePhotoRow}>
             <Col lg={2} className={styles.companyProfilePhoto}>
               <img
-                src="./icons/default-profile-picture-male-icon.svg"
+                src="/icons/default-profile-picture-male-icon.svg"
                 alt="Profile"
                 width={100}
                 height={100}

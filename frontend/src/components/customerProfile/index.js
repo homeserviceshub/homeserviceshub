@@ -299,7 +299,7 @@ const CustomerProfile = () => {
                 <Col lg={2}>
                   {" "}
                   <img
-                    src="./photos/member5.jpg"
+                    src="/photos/member5.jpg"
                     width={160}
                     height={130}
                     className={styles.profilePhoto}

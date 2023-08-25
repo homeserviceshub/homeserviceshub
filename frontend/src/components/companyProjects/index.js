@@ -6,11 +6,11 @@ import "react-image-lightbox/style.css";
 
 const CompanyProjects = () => {
   const [images] = useState([
-    { src: "./photos/ongoing4.jpg", title: "Model 1" },
-    { src: "./photos/ongoing5.jpg", title: "Model 2" },
-    { src: "./photos/ongoing1.jpg", title: "Model 3" },
-    { src: "./photos/ongoing2.jpg", title: "Model 4" },
-    { src: "./photos/ongoing3.jpg", title: "Model 5" },
+    { src: "/photos/ongoing4.jpg", title: "Model 1" },
+    { src: "/photos/ongoing5.jpg", title: "Model 2" },
+    { src: "/photos/ongoing1.jpg", title: "Model 3" },
+    { src: "/photos/ongoing2.jpg", title: "Model 4" },
+    { src: "/photos/ongoing3.jpg", title: "Model 5" },
   ]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [showFullScreen, setShowFullScreen] = useState(false);
