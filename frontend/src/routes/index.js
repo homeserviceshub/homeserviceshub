@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import Home from "../pages/home";
 import Layout, { Layout2 } from "../components/layout";
 import Signin from "../pages/auth/signIn";
@@ -28,7 +28,7 @@ import AuthCheckRoute from "./authCheckRoute";
 
 export default function AppRoutes() {
   return (
-    <BrowserRouter basename="/">
+    <HashRouter basename="/">
       <Routes>
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
@@ -66,6 +66,6 @@ export default function AppRoutes() {
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
