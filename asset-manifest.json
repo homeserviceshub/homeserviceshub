@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/homeserviceshub/static/css/main.c520007c.css",
-    "main.js": "/homeserviceshub/static/js/main.973a162b.js",
+    "main.css": "/homeserviceshub/static/css/main.d90c93b0.css",
+    "main.js": "/homeserviceshub/static/js/main.6387bcd2.js",
     "static/media/companyBackgroundPhoto.jpg": "/homeserviceshub/static/media/companyBackgroundPhoto.43e928352c2f46a79088.jpg",
     "static/media/aceBackgroundPhoto.jpg": "/homeserviceshub/static/media/aceBackgroundPhoto.5d3e1da102aaf03f2e86.jpg",
     "static/media/backgroundImg.jpg": "/homeserviceshub/static/media/backgroundImg.a26e3bffe825cbcbb100.jpg",
@@ -9,11 +9,11 @@
     "static/media/areYouAce.jpg": "/homeserviceshub/static/media/areYouAce.b57e0c275d92174c5c6f.jpg",
     "static/media/homeimage4.avif": "/homeserviceshub/static/media/homeimage4.6c280e230c36bebbabdf.avif",
     "index.html": "/homeserviceshub/index.html",
-    "main.c520007c.css.map": "/homeserviceshub/static/css/main.c520007c.css.map",
-    "main.973a162b.js.map": "/homeserviceshub/static/js/main.973a162b.js.map"
+    "main.d90c93b0.css.map": "/homeserviceshub/static/css/main.d90c93b0.css.map",
+    "main.6387bcd2.js.map": "/homeserviceshub/static/js/main.6387bcd2.js.map"
   },
   "entrypoints": [
-    "static/css/main.c520007c.css",
-    "static/js/main.973a162b.js"
+    "static/css/main.d90c93b0.css",
+    "static/js/main.6387bcd2.js"
   ]
 }
