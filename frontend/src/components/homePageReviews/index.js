@@ -14,17 +14,11 @@ const HomePageReviews = () => {
         Happy Home Owners
       </h1>
       <Row className={styles.allCards}>
-        <Col
-          className={styles.oneCard}
-          lg={5}
-          data-aos="flip-left"
-          data-aos-easing="ease-out-cubic"
-          data-aos-duration="2000"
-        >
+        <Col className={styles.oneCard} lg={5} data-aos="zoom-in">
           {" "}
           <div className={styles.cardImgDiv}>
             <img
-              src="/icons/default-profile-picture-male-icon.svg"
+              src="/assets/icons/default-profile-picture-male-icon.svg"
               alt="text"
               width="100px"
               height="100px"
@@ -44,17 +38,11 @@ const HomePageReviews = () => {
             <BsStar />
           </div>
         </Col>
-        <Col
-          className={styles.oneCard}
-          lg={5}
-          data-aos="flip-left"
-          data-aos-easing="ease-out-cubic"
-          data-aos-duration="2000"
-        >
+        <Col className={styles.oneCard} lg={5} data-aos="zoom-in">
           {" "}
           <div className={styles.cardImgDiv}>
             <img
-              src="/icons/default-profile-picture-male-icon.svg"
+              src="./icons/default-profile-picture-male-icon.svg"
               alt="text"
               width="100px"
               height="100px"
@@ -75,17 +63,11 @@ const HomePageReviews = () => {
             <BsStar />
           </div>
         </Col>
-        <Col
-          className={styles.oneCard}
-          lg={5}
-          data-aos="flip-left"
-          data-aos-easing="ease-out-cubic"
-          data-aos-duration="2000"
-        >
+        <Col className={styles.oneCard} lg={5} data-aos="zoom-in">
           {" "}
           <div className={styles.cardImgDiv}>
             <img
-              src="/icons/default-profile-picture-male-icon.svg"
+              src="./icons/default-profile-picture-male-icon.svg"
               alt="text"
               width="100px"
               height="100px"
@@ -106,17 +88,11 @@ const HomePageReviews = () => {
             <BsStar />
           </div>
         </Col>
-        <Col
-          className={styles.oneCard}
-          lg={5}
-          data-aos="flip-left"
-          data-aos-easing="ease-out-cubic"
-          data-aos-duration="2000"
-        >
+        <Col className={styles.oneCard} lg={5} data-aos="zoom-in">
           {" "}
           <div className={styles.cardImgDiv}>
             <img
-              src="/icons/default-profile-picture-male-icon.svg"
+              src="./icons/default-profile-picture-male-icon.svg"
               alt="text"
               width="100px"
               height="100px"

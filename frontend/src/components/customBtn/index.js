@@ -5,9 +5,14 @@ function CustomButton(props) {
   return (
     <button
       type={props.type}
-      className={styles.customButton}
+      className={`${styles.customButton} ${props.customClass}`}
       onClick={props.onClick}
-      style={{ width: props.width, height: props.height }}
+      style={{
+        width: props.width,
+        height: props.height,
+        backgroundColor: props.background,
+        color: props.color,
+      }}
       onSubmit={props.onSubmit}
       disabled={props.disabled}
     >

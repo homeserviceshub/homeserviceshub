@@ -48,9 +48,7 @@
   justify-content: flex-end;
   margin-bottom: 21px;
 }
-.profileRow {
-  text-align: center;
-}
+
 .companyName {
   font-size: 3rem;
   font-weight: 800;
@@ -183,7 +181,7 @@
 .ratingDiv221 {
   font-size: 1rem;
   font-weight: 500;
-  width: 140px;
+  width: 160px;
   display: flex;
   align-items: baseline;
   gap: 3px;
@@ -235,5 +233,8 @@
     margin: 0px 11px;
     font-size: 1rem;
     flex-wrap: wrap;
+  }
+  .profileRow {
+    text-align: center;
   }
 }

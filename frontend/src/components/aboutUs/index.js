@@ -17,97 +17,94 @@ const AboutUsComponent = () => {
   ];
   const teamData = [
     {
-      img: "/icons/default-profile-picture-male-icon.svg",
-      title: "Chief Advicer Officer",
+      img: "./photos/ChiefAdvisorOfficer.JPG",
+      title: "Chief Advicer Officer", // jshii
     },
     {
-      img: "/icons/default-profile-picture-male-icon.svg",
-      title: "Chief Customer Officer",
+      img: "./photos/ChiefAnalystOfficer.jpg",
+      title: "Chief Analyst Officer", //anmol veera
     },
     {
-      img: "/icons/default-profile-picture-male-icon.svg",
-      title: "Chief People Officer",
+      img: "./photos/ChiefEngineerOfficer.jpg",
+      title: "Chief Engineer Officer", //raja mamu
     },
     {
-      img: "/icons/default-profile-picture-male-icon.svg",
-      title: "Chief Technology Officer",
+      img: "./photos/ChiefMarketingOfficer.jpg",
+      title: "Chief Marketing Officer", //honey mamu
     },
     {
-      img: "/icons/default-profile-picture-male-icon.svg",
-      title: "Chief Marketing Officer",
+      img: "./photos/ChiefTechnologyOfficer.jpg",
+      title: "Chief Technology Officer", //bablu mamu
     },
     {
-      img: "/icons/default-profile-picture-male-icon.svg",
-      title: "Chief Analyst Officer",
+      img: "./photos/ChiefInformationOfficer.jpg",
+      title: "Chief Legal Advicer ", //jimma mamu
     },
     {
-      img: "/icons/default-profile-picture-male-icon.svg",
-      title: "Chief Engineer Officer",
+      img: "./icons/default-profile-picture-male-icon.svg",
+      title: "Chief Security Officer",
     },
     {
-      img: "/icons/default-profile-picture-male-icon.svg",
+      img: "./icons/default-profile-picture-male-icon.svg",
       title: "Chief Application Officer",
     },
-    // {img:"/icons/default-profile-picture-male-icon.svg",title:""},
-    // {img:"/icons/default-profile-picture-male-icon.svg",title:""},
-    // {img:"/icons/default-profile-picture-male-icon.svg",title:""},
   ];
   const photos = [
-    "/photos/homeimage2.jpg",
-    "/photos/homeimage3.jpg",
-    "/photos/homeimage4.avif",
-    "/photos/homeimage5.jpg",
-    "/photos/homeimage6.jpg",
-    "/photos/ongoing1.jpg",
-    "/photos/ongoing2.jpg",
-    "/photos/ongoing3.jpg",
-    "/photos/ongoing4.jpg",
-    "/photos/ongoing5.jpg",
-    "/photos/ongoing2.jpg",
-    "/photos/testimage.jpg",
-    "/photos/homeimage5.jpg",
-    "/photos/homeimage3.jpg",
-    "/photos/homeimage2.jpg",
-    "/photos/homeimage6.jpg",
-    "/photos/homeimage3.jpg",
-    "/photos/homeimage5.jpg",
-    "/photos/homeimage2.jpg",
-    "/photos/homeimage6.jpg",
-    "/photos/homeimage2.jpg",
-    "/photos/homeimage5.jpg",
-    "/photos/homeimage3.jpg",
-    "/photos/homeimage3.jpg",
-    "/photos/homeimage6.jpg",
-    "/photos/ongoing3.jpg",
-    "/photos/ongoing6.jpg",
-    "/photos/ongoing5.jpg",
-    "/photos/ongoing2.jpg",
-    "/photos/ongoing1.jpg",
-    "/photos/ongoing4.jpg",
-    "/photos/ongoing2.jpg",
-    "/photos/ongoing3.jpg",
-    "/photos/ongoing1.jpg",
-    "/photos/ongoing4.jpg",
-    "/photos/ongoing6.jpg",
-    "/photos/ongoing3.jpg",
-    "/photos/ongoing5.jpg",
-    "/photos/ongoing1.jpg",
-    "/photos/ongoing2.jpg",
-    "/photos/ongoing4.jpg",
-    "/photos/ongoing3.jpg",
-    "/photos/ongoing5.jpg",
-    "/photos/ongoing1.jpg",
-    "/photos/ongoing2.jpg",
-    "/photos/ongoing6.jpg",
-    "/photos/ongoing3.jpg",
-    "/photos/ongoing5.jpg",
-    "/photos/ongoing1.jpg",
-    "/photos/ongoing4.jpg",
-    "/photos/ongoing2.jpg",
-    "/photos/ongoing6.jpg",
-    "/photos/homeimage2.jpg",
-    "/photos/homeimage4.avif",
-    "/photos/ongoing3.jpg",
+    "./photos/homeimage2.jpg",
+    "./photos/homeimage3.jpg",
+    "./photos/homeimage4.avif",
+    "./photos/homeimage5.jpg",
+    "./photos/homeimage6.jpg",
+    "./photos/ongoing1.jpg",
+    "./photos/ongoing2.jpg",
+    "./photos/ongoing3.jpg",
+    "./photos/ongoing4.jpg",
+    "./photos/ongoing5.jpg",
+    "./photos/ongoing2.jpg",
+    "./photos/testimage.jpg",
+    "./photos/homeimage5.jpg",
+    "./photos/homeimage3.jpg",
+    "./photos/homeimage2.jpg",
+    "./photos/homeimage6.jpg",
+    "./photos/homeimage3.jpg",
+    "./photos/homeimage5.jpg",
+    "./photos/homeimage2.jpg",
+    "./photos/homeimage6.jpg",
+    "./photos/homeimage2.jpg",
+    "./photos/homeimage5.jpg",
+    "./photos/homeimage3.jpg",
+    "./photos/homeimage3.jpg",
+    "./photos/homeimage6.jpg",
+    "./photos/ongoing3.jpg",
+    "./photos/ongoing6.jpg",
+    "./photos/ongoing5.jpg",
+    "./photos/ongoing2.jpg",
+    "./photos/ongoing1.jpg",
+    "./photos/ongoing4.jpg",
+    "./photos/ongoing2.jpg",
+    "./photos/ongoing3.jpg",
+    "./photos/ongoing1.jpg",
+    "./photos/ongoing4.jpg",
+    "./photos/ongoing6.jpg",
+    "./photos/ongoing3.jpg",
+    "./photos/ongoing5.jpg",
+    "./photos/ongoing1.jpg",
+    "./photos/ongoing2.jpg",
+    "./photos/ongoing4.jpg",
+    "./photos/ongoing3.jpg",
+    "./photos/ongoing5.jpg",
+    "./photos/ongoing1.jpg",
+    "./photos/ongoing2.jpg",
+    "./photos/ongoing6.jpg",
+    "./photos/ongoing3.jpg",
+    "./photos/ongoing5.jpg",
+    "./photos/ongoing1.jpg",
+    "./photos/ongoing4.jpg",
+    "./photos/ongoing2.jpg",
+    "./photos/ongoing6.jpg",
+    "./photos/homeimage2.jpg",
+    "./photos/homeimage4.avif",
+    "./photos/ongoing3.jpg",
   ];
 
   return (
@@ -162,7 +159,7 @@ const AboutUsComponent = () => {
               rgba(0,0,0,0.5),
               rgba(0, 0, 0, 0.5)
               ),
-              url("/photos/familyphoto1.jpg")`,
+              url("./photos/familyphoto1.jpg")`,
             }}
           ></Col>
         </Row>
@@ -187,7 +184,7 @@ const AboutUsComponent = () => {
               rgba(0,0,0,0.5),
               rgba(0, 0, 0, 0.5)
               ),
-              url("/photos/aceBackgroundPhoto.jpg")`,
+              url("./photos/aceBackgroundPhoto.jpg")`,
             }}
           ></Col>
         </Row>
@@ -197,7 +194,7 @@ const AboutUsComponent = () => {
         <div className={styles.members}>
           <div className={styles.member}>
             <img
-              src="/photos/ceoimage1.jpg"
+              src="./photos/ceoimage.jpg"
               width={250}
               height={250}
               alt="CEO/Owner"

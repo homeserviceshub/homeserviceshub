@@ -74,6 +74,10 @@ const CustomerProfile = () => {
         profile_photo: reader.result,
       });
     };
+    setData({
+      ...dummyData,
+      profile_photo: reader.result,
+    });
 
     if (file) {
       reader.readAsDataURL(file);
@@ -185,7 +189,7 @@ const CustomerProfile = () => {
           <div className={styles.imgDiv}>
             {data.profile_photo === null ? (
               <img
-                src="/icons/default-profile-picture-male-icon.svg"
+                src="./icons/default-profile-picture-male-icon.svg"
                 width="100%"
                 height="100%"
                 className={styles.img}
@@ -299,7 +303,7 @@ const CustomerProfile = () => {
                 <Col lg={2}>
                   {" "}
                   <img
-                    src="/photos/member5.jpg"
+                    src="./photos/member5.jpg"
                     width={160}
                     height={130}
                     className={styles.profilePhoto}

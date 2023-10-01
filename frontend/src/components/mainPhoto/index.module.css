@@ -48,29 +48,24 @@
   justify-content: center;
   margin-top: 40px;
 }
-
-.customButton {
-  background-color: transparent;
-  width: auto;
-  margin-top: 40px;
-  border: 1px solid var(--color-primary);
-  color: var(--color-primary);
-  border-radius: 6px;
-  padding: 6px 50px;
+.inputGroup {
+  margin-top: 60px;
+  height: 50px;
+}
+.inputField {
   font-size: 1.5rem;
-  transition: color 0.15s ease-in-out, background-color 0.45s ease-in-out,
-    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-.customButton:hover {
-  color: var(--color-white);
-  background-color: var(--color-primary);
-  border-color: var(--color-primary);
-}
-.customButton:focus {
-  color: var(--color-white);
-  background-color: var(--color-primary);
+.inputField:focus,
+.inputField:focus-visible {
+  color: var(--bs-body-color);
+  background-color: var(--bs-body-bg);
   border-color: var(--color-primary);
   outline: 0;
+  box-shadow: 0 0 20px 0.25rem var(--color-primary-with-opacity-30);
+}
+.inputBtn {
+  font-size: 1.2rem;
+  width: 130px;
 }
 
 /* Add additional media queries for responsiveness */
@@ -82,5 +77,12 @@
 
   .subHeader {
     font-size: 1.5rem;
+  }
+  .inputField {
+    font-size: 1rem;
+  }
+  .inputBtn {
+    font-size: 1rem;
+    width: auto;
   }
 }

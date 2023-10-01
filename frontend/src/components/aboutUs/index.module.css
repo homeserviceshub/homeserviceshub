@@ -115,7 +115,7 @@
 .img {
   border-radius: 50%;
   object-fit: cover;
-  object-position: center;
+  object-position: top;
 }
 
 .forthSection {
@@ -179,5 +179,8 @@
   .allImages {
     top: -4%;
     left: -65%;
+  }
+  .otherMembers {
+    margin: 0px;
   }
 }

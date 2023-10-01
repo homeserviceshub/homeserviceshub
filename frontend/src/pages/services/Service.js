@@ -17,7 +17,12 @@ function Service() {
   const clickedData = useSelector((state) => {
     return state.reducer1;
   });
-  console.log(clickedData, "check kr oee");
+  const [searchData, setSearchData] = useState({
+    category: clickedData,
+    location: "",
+    sortedBy: "",
+  });
+
   const navigate = useNavigate();
   const [selectedFilter, setSelectedFilter] = useState("CategoryName");
   const [categories, setCategories] = useState([
@@ -45,7 +50,13 @@ function Service() {
                 type="text"
                 placeholder="e.g. Plumbing, Kitchen"
                 className={styles.customInputField}
-                value={clickedData}
+                value={searchData.category}
+                onChange={(e) => {
+                  setSearchData({
+                    ...searchData,
+                    category: e.target.value,
+                  });
+                }}
               />
             </Col>
             <Col lg={1} className={styles.nearText}>
@@ -56,16 +67,33 @@ function Service() {
                 type="text"
                 placeholder="e.g. Punjab"
                 className={styles.customInputField}
+                value={searchData.location}
+                onChange={(e) => {
+                  setSearchData({
+                    ...searchData,
+                    location: e.target.value,
+                  });
+                }}
               />
             </Col>
             <Col className={`${styles.dropdownBtn} py-4`}>
-              <CustomeDropdown />
+              <CustomeDropdown
+                onChange={(selectedService) => {
+                  setSearchData({
+                    ...searchData,
+                    sortedBy: selectedService,
+                  });
+                }}
+              />
             </Col>
             <Col className={`${styles.searchBtn} py-2`} lg={2}>
               {/* <span className={styles.searchSpan}>
                 <BsSearch />
               </span> */}
-              <CustomButton text={"Search"} />
+              <CustomButton
+                text={"Search"}
+                onClick={() => console.log(searchData)}
+              />
             </Col>
           </Row>
         </Container>
@@ -122,7 +150,7 @@ function Service() {
                       <Col lg={2}>
                         {" "}
                         <img
-                          src="/photos/member5.jpg"
+                          src="./icons/default-profile-picture-male-icon.svg"
                           width={160}
                           height={130}
                           className={styles.profilePhoto}
@@ -158,7 +186,7 @@ function Service() {
                       </Col>
                       <Col lg={2} className={styles.verifiedPhotoDiv}>
                         <img
-                          src="/photos/verified.png"
+                          src="./photos/verified.png"
                           width={100}
                           height={100}
                           className={styles.verifyPhoto}
@@ -187,6 +215,10 @@ function Service() {
                               onClick={() => {
                                 window.scrollTo(0, 0);
                                 dispatch(SELECTEDSERVICE(item));
+                                setSearchData({
+                                  ...searchData,
+                                  category: item,
+                                });
                               }}
                               className={styles.categories}
                             >
@@ -211,7 +243,7 @@ function Service() {
                       <Col lg={2}>
                         {" "}
                         <img
-                          src="./photos/member5.jpg"
+                          src="./icons/default-profile-picture-male-icon.svg"
                           width={160}
                           height={130}
                           className={styles.profilePhoto}
@@ -247,7 +279,7 @@ function Service() {
                       </Col>
                       <Col lg={2} className={styles.verifiedPhotoDiv}>
                         <img
-                          src="/photos/verified.png"
+                          src="./photos/verified.png"
                           width={100}
                           height={100}
                           className={styles.verifyPhoto}
