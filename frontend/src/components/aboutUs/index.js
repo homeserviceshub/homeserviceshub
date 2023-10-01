@@ -225,6 +225,7 @@ const AboutUsComponent = () => {
         {otherLinks.map((item, index) => {
           return (
             <div
+              key={index}
               className={styles.detail}
               onClick={() => {
                 return navigate(item.url);

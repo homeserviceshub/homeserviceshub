@@ -60,7 +60,7 @@ const AceProfile = () => {
         rgba(0, 0, 0, 0.2) 0%,
         rgba(0, 0, 0, 0.6) 100%
       ),
-      url("/photos/companyBackgroundPhoto.jpg")`,
+      url("./photos/companyBackgroundPhoto.jpg")`,
         }}
       >
         <Container className={styles.containerX}>
@@ -77,7 +77,7 @@ const AceProfile = () => {
                   />
                 ) : (
                   <img
-                    src="/icons/default-profile-picture-male-icon.svg"
+                    src="./icons/default-profile-picture-male-icon.svg"
                     width={100}
                     height={100}
                     className={styles.profileImg}

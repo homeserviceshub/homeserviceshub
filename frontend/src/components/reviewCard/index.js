@@ -7,7 +7,7 @@ import AOS from "aos";
 // const ReviewCardComponent = ({ photo, title, stars, date, description }) => {
 const ReviewCardComponent = () => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const photo = "/icons/default-profile-picture-male-icon.svg";
+  const photo = "./icons/default-profile-picture-male-icon.svg";
   const title = "Bathroom Renovation";
   const stars = [1, 2, 3, 4, 5];
   const date = "7/10/2023";

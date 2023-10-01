@@ -11,7 +11,7 @@ const RequestReviewCardComponent = () => {
 
   const [requested, setRequested] = useState(false);
 
-  const photo = "/icons/default-profile-picture-male-icon.svg";
+  const photo = "./icons/default-profile-picture-male-icon.svg";
   const name = "User Name";
   // const stars = [1, 2, 3, 4, 5];
   const date = "7/10/2023";

@@ -18,7 +18,7 @@ const HomePageReviews = () => {
           {" "}
           <div className={styles.cardImgDiv}>
             <img
-              src="/assets/icons/default-profile-picture-male-icon.svg"
+              src="./icons/default-profile-picture-male-icon.svg"
               alt="text"
               width="100px"
               height="100px"

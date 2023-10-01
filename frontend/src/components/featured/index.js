@@ -9,37 +9,37 @@ export const Featured = ({ heading }) => {
   const generateSlides = [
     {
       index: 1,
-      src: "/icons/default-profile-picture-male-icon.svg",
+      src: "./icons/default-profile-picture-male-icon.svg",
       alt: "image",
     },
     {
       index: 2,
-      src: "/icons/default-profile-picture-male-icon.svg",
+      src: "./icons/default-profile-picture-male-icon.svg",
       alt: "image",
     },
     {
       index: 3,
-      src: "/icons/default-profile-picture-male-icon.svg",
+      src: "./icons/default-profile-picture-male-icon.svg",
       alt: "image",
     },
     {
       index: 4,
-      src: "/icons/default-profile-picture-male-icon.svg",
+      src: "./icons/default-profile-picture-male-icon.svg",
       alt: "image",
     },
     {
       index: 5,
-      src: "/icons/default-profile-picture-male-icon.svg",
+      src: "./icons/default-profile-picture-male-icon.svg",
       alt: "image",
     },
     {
       index: 6,
-      src: "/icons/default-profile-picture-male-icon.svg",
+      src: "./icons/default-profile-picture-male-icon.svg",
       alt: "image",
     },
     {
       index: 7,
-      src: "/icons/default-profile-picture-male-icon.svg",
+      src: "./icons/default-profile-picture-male-icon.svg",
       alt: "image",
     },
   ];
