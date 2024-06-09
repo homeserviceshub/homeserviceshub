@@ -1,15 +1,23 @@
 import React, { useState } from "react";
-import { Col, Container, Form, Row } from "react-bootstrap";
+import { Col, Container, Form, Row, Spinner } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router-dom";
 import { BsStar, BsStarFill } from "react-icons/bs";
 import styles from "./index.module.css";
 import CustomButton from "../../components/customBtn";
+import axios from "axios";
 
 const NewReview = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [reviewData, setReviewData] = useState({
     title: "",
     description: "",
     stars: 0,
+    reviewBy: localStorage.getItem("auth"),
+    reviewTo: id,
+    date: new Date().toISOString(),
   });
+  const [isLoading, setIsLoading] = useState(false);
   const [checkStars, setCheckStars] = useState(false);
 
   const handleInputChange = (event) => {
@@ -28,19 +36,33 @@ const NewReview = () => {
   };
 
   const handleSubmit = (event) => {
+    setIsLoading(true);
     event.preventDefault();
-    if (reviewData.stars === 0) {
+    if (reviewData.stars !== 0 && reviewData.description && reviewData.title) {
       setCheckStars(true);
+      try {
+        axios
+          .post("http://localhost:8000/newreview", {
+            reviewData: reviewData,
+          })
+          .then((response) => {
+            if (response.status === 200) {
+              setIsLoading(false);
+              alert("Your Review has been submitted successfully!!");
+              navigate(-1);
+            }
+          });
+      } catch (error) {
+        console.error("Error:", error);
+      }
     }
-    // Here, you can handle the submission of the review data to your backend or wherever you need to store it.
-    console.log(reviewData);
   };
 
   return (
     <Container>
       <Row className={` ${styles.customMargin} justify-content-center`}>
         <Col md={8} lg={6} className={styles.heading}>
-          Write a review to companyName
+          Write a review
         </Col>
       </Row>
       <Row className="justify-content-center">
@@ -97,7 +119,16 @@ const NewReview = () => {
             <Form.Group controlId="submitButton" className={styles.btn}>
               <CustomButton
                 type="submit"
-                text={"Submit Review"}
+                text={
+                  isLoading ? (
+                    <Spinner
+                      animation="border"
+                      className={styles.signInLoader}
+                    />
+                  ) : (
+                    "Submit Review"
+                  )
+                }
                 width={"auto"}
               />
             </Form.Group>

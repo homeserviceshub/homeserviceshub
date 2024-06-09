@@ -16,18 +16,23 @@
   margin-bottom: 0px;
 }
 
-.companyProfileBackgroundPhoto {
-  /* background: radial-gradient(
-      circle,
-      rgba(0, 0, 0, 0.2) 0%,
-      rgba(0, 0, 0, 0.6) 100%
-    ),
-    url("/public/photos/companyBackgroundPhoto.jpg"); */
-
+.companyProfileBackground {
+  position: relative;
   background-repeat: no-repeat !important;
   background-position: center !important;
   background-size: cover !important;
   color: white;
+  background: radial-gradient(
+    circle,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+}
+.companyProfileBackgroundPhoto {
+  width: 100%;
+  height: 100%;
+
+  position: absolute;
 }
 .complanyProfilePhotoRow {
   padding: 20px 0px;
@@ -39,6 +44,7 @@
   margin: auto;
   border-radius: 12px;
   justify-content: center;
+  z-index: 1;
 }
 
 .profileImg {
@@ -53,6 +59,7 @@
   flex-direction: column;
   justify-content: flex-end;
   margin-bottom: 21px;
+  z-index: 1;
 }
 .companyName {
   font-size: 3rem;
@@ -68,6 +75,7 @@
   justify-content: flex-end;
   gap: 15px;
   padding: 50px;
+  z-index: 1;
 }
 .borders {
   border-radius: 6px;
@@ -209,18 +217,45 @@
   padding: 0px;
   color: black;
 }
+.allStars {
+  font-size: large;
+}
+.categories {
+  display: inline-flex;
+  margin-right: 10px;
+  border: 1px solid var(--color-primary);
+  border-radius: 20px;
+  padding: 0px 5px;
+  color: var(--color-primary);
+  margin-bottom: 7px;
+  align-items: center;
+}
+.categoryDelete {
+  color: red;
+  padding-left: 5px;
+}
+.awards {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+}
 
 @media screen and (max-width: 767px) {
   .profileImg {
     width: 200px;
     height: 200px;
   }
+  .profileCol {
+    font-size: 1rem;
+  }
   .companyName {
-    font-size: 2rem;
+    font-size: 1.5rem;
+    font-weight: 100;
   }
   .tabs {
-    margin: 0px 11px;
-    font-size: 1rem;
+    margin: 0px;
+    font-size: 0.8rem;
     flex-wrap: wrap;
   }
   .profileRow {

@@ -1,15 +1,59 @@
 import React, { useState, useRef } from "react";
-import { Card, Container, Row, Col, Button, Spinner } from "react-bootstrap";
+import {
+  Card,
+  Container,
+  Row,
+  Col,
+  Button,
+  Spinner,
+  Modal,
+} from "react-bootstrap";
 import { FaEdit } from "react-icons/fa";
 import styles from "./index.module.css";
-import CustomButton from "../../../components/customBtn";
-import Lightbox from "react-image-lightbox";
-import "react-image-lightbox/style.css";
+import CustomButton, { CustomRedButton } from "../../../components/customBtn";
+import Lightbox from "yet-another-react-lightbox";
+import { Fullscreen, Video, Zoom } from "yet-another-react-lightbox/plugins";
+import axios from "axios";
+import { useEffect } from "react";
 
 const AceGallery = () => {
   const [images, setImages] = useState([
     // Photos will be added here
   ]);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteIndex, setDeleteIndex] = useState(null);
+  const [aceData, setAceData] = useState();
+  useEffect(() => {
+    const id = localStorage.getItem("aauth");
+    if (id) {
+      try {
+        axios
+          .post("http://localhost:8000/acedata", {
+            id: id,
+          })
+          .then((response) => {
+            if (response.status === 200) {
+              if (response.data.message) {
+                console.log(response.data.message);
+              } else {
+                setAceData(response.data.aceData);
+                setImages(response.data.aceData.media);
+              }
+            }
+          })
+          .catch((error) => {
+            console.error("AxiosError:", error);
+            console.log(error);
+          });
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    } else {
+      navigate("/ace/signin", {
+        replace: true,
+      });
+    }
+  }, []);
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [showFullScreen, setShowFullScreen] = useState(false);
   const fileInputRef = useRef(null);
@@ -20,67 +64,100 @@ const AceGallery = () => {
     setShowFullScreen(true);
     setIsLoading(true);
   };
+  const handleAddImage = async () => {
+    if (isLoading) return;
 
-  const handleImageLoad = () => {
-    setIsLoading(false);
+    setIsLoading(true); // Set loading state to true
+
+    try {
+      const file = fileInputRef.current.files[0];
+      if (!file) return; // No image selected
+
+      const formData = new FormData();
+      formData.append("media", file);
+
+      const response = await axios.post(
+        "http://localhost:8000/upload",
+        formData
+      );
+
+      if (response.status === 200) {
+        const mediaObject = {
+          path: response.data.filePath.filename,
+          type: "image",
+        };
+
+        setImages((prevImages) => [
+          ...prevImages,
+          { src: mediaObject, title: "Image Title", editable: false },
+        ]);
+
+        const updatedAceData = {
+          ...aceData,
+          media: [
+            ...aceData.media,
+            { src: mediaObject, title: "Image Title", editable: false },
+          ],
+        };
+
+        await axios.post("http://localhost:8000/updateaceuser", {
+          data: updatedAceData,
+          id: localStorage.getItem("aauth"),
+        });
+
+        setAceData(updatedAceData);
+
+        alert("New Photo Added Successfully");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setIsLoading(false); // Reset loading state
+    }
   };
+  const handleRemoveImage = async () => {
+    try {
+      const newImages = [...images];
+      newImages.splice(deleteIndex, 1);
 
-  const handleAddImage = () => {
-    const file = fileInputRef.current.files[0];
-    if (!file) return; // No image selected
+      setImages(newImages);
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      // If an image is selected for editing, replace it
+      const updatedAceData = {
+        ...aceData,
+        media: aceData.media.filter((_, i) => i !== deleteIndex),
+      };
 
-      // Add the selected image to the gallery
-      setImages([
-        ...images,
-        { src: reader.result, title: "Image Title", editable: false },
-      ]);
-    };
-    reader.readAsDataURL(file);
+      setAceData(updatedAceData);
+
+      await axios.post("http://localhost:8000/updateaceuser", {
+        data: updatedAceData,
+        id: localStorage.getItem("aauth"),
+      });
+
+      alert("Image deleted successfully");
+    } catch (error) {
+      console.error("Error:", error);
+    }
+    setDeleteModal(false);
   };
-
-  const handleRemoveImage = (index) => {
-    const newImages = images.filter((_, i) => i !== index);
-    setImages(newImages);
-  };
-
   const handleEditTitle = (index) => {
     const updatedImages = [...images];
     updatedImages[index].editable = !updatedImages[index].editable;
     setImages(updatedImages);
   };
-
   const handleTitleChange = (event, index) => {
+    //updating on backend is pending
     const updatedImages = [...images];
     updatedImages[index].title = event.target.value;
     setImages(updatedImages);
   };
 
-  // const handleCloseFullScreen = () => {
-  //   setShowFullScreen(false);
-  //   setSelectedImageIndex(null);
-  // };
-
-  // const handleNextImage = () => {
-  //   setSelectedImageIndex((prevIndex) =>
-  //     prevIndex === images.length - 1 ? 0 : prevIndex + 1
-  //   );
-  // };
-
-  // const handlePrevImage = () => {
-  //   setSelectedImageIndex((prevIndex) =>
-  //     prevIndex === 0 ? images.length - 1 : prevIndex - 1
-  //   );
-  // };
-
   return (
     <Container>
       <h1 className="mt-4 mb-3">Gallery</h1>
       <Row>
-        {images.length === 0 ? (
+        {console.log(images)}
+        {images == undefined || images.length === 0 ? (
           <Col>
             <div className={styles.noImagesMessage}>
               Sorry, no images to display.
@@ -92,7 +169,7 @@ const AceGallery = () => {
               <Card className={styles.card}>
                 <Card.Img
                   variant="top"
-                  src={image.src}
+                  src={`http://localhost:8000/images/${image.src.path}`}
                   alt={image.title}
                   onClick={() => handleImageClick(index)}
                 />
@@ -112,12 +189,14 @@ const AceGallery = () => {
                       onClick={() => handleEditTitle(index)}
                     />
                   </div>
-                  <Button
-                    variant="danger"
-                    onClick={() => handleRemoveImage(index)}
-                  >
-                    Remove
-                  </Button>
+                  <CustomRedButton
+                    text={"Remove"}
+                    // width={"auto"}
+                    onClick={() => {
+                      setDeleteIndex(index);
+                      setDeleteModal(true);
+                    }}
+                  />
                 </Card.Body>
               </Card>
             </Col>
@@ -136,72 +215,47 @@ const AceGallery = () => {
         ref={fileInputRef}
         onChange={handleAddImage}
       />
-      {/* <Modal
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        show={showFullScreen}
-        onHide={handleCloseFullScreen}
-      >
-        <Modal.Body className={styles.fullScreenContainer}>
-          <div className={styles.imageWrapper}>
-            <img
-              src={images[selectedImageIndex]?.src}
-              alt={images[selectedImageIndex]?.title}
-              width="100%"
-              height="100%"
-            />
-          </div>
-          <div className={styles.titleWrapper}>
-            <h3>{images[selectedImageIndex]?.title}</h3>
-          </div>
-          <div className={styles.navigationWrapper}>
-            <CustomButton
-              text={"Previous"}
-              onClick={handlePrevImage}
-              width={"auto"}
-            />{" "}
-            <CustomButton
-              text={"Next"}
-              onClick={handleNextImage}
-              width={"auto"}
-            />
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <CustomButton
-            text={"Close"}
-            onClick={handleCloseFullScreen}
-            width={"auto"}
-          />
-        </Modal.Footer>
-      </Modal> */}
       {showFullScreen && selectedImageIndex !== null && (
         <Lightbox
-          mainSrc={images[selectedImageIndex].src}
-          nextSrc={images[(selectedImageIndex + 1) % images.length].src}
-          prevSrc={
-            images[(selectedImageIndex + images.length - 1) % images.length].src
-          }
-          onCloseRequest={() => setShowFullScreen(false)}
-          onMovePrevRequest={() =>
-            setSelectedImageIndex(
-              (selectedImageIndex + images.length - 1) % images.length
-            )
-          }
-          onMoveNextRequest={() =>
-            setSelectedImageIndex((selectedImageIndex + 1) % images.length)
-          }
-          onImageLoad={handleImageLoad}
+          index={selectedImageIndex}
+          open={showFullScreen}
+          close={() => setShowFullScreen(false)}
+          slides={images.map((image) => ({
+            src: `http://localhost:8000/images/${image.src.path}`,
+            title: image.title,
+          }))}
+          plugins={[Fullscreen, Video, Zoom]}
         />
       )}
-      {isLoading && (
-        <div className={styles.loadingOverlay}>
-          <Spinner animation="border" role="status" variant="light" />
-        </div>
-      )}
+      <DeleteModal
+        show={deleteModal}
+        onHide={() => setDeleteModal(false)}
+        handleRemoveImage={handleRemoveImage}
+      />
     </Container>
   );
 };
+
+function DeleteModal(props) {
+  return (
+    <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">Alert</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <h4>Are you sure to delete this media?</h4>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={props.onHide}>Close</Button>
+        <Button onClick={props.handleRemoveImage}>Delete</Button>
+      </Modal.Footer>
+    </Modal>
+  );
+}
 
 export default AceGallery;

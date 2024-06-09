@@ -1,0 +1,21 @@
+.main {
+  background: radial-gradient(
+    circle,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+  z-index: -1;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+.innerDiv {
+  padding: 30px;
+  text-align: center;
+  color: white;
+}
+.btnDiv {
+  width: 15%;
+  margin: auto;
+  margin-top: 25px !important;
+}

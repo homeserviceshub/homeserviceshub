@@ -28,7 +28,7 @@ const ContactUsComponent = () => {
               rgba(0,0,0,0.5),
               rgba(0, 0, 0, 0.5)
               ),
-              url("./photos/familyphoto1.jpg")`,
+              url("${process.env.PUBLIC_URL}/photos/familyphoto1.jpg")`,
           }}
         ></Col>
       </Row>
@@ -42,7 +42,7 @@ const ContactUsComponent = () => {
               rgba(0,0,0,0.5),
               rgba(0, 0, 0, 0.5)
               ),
-              url("./photos/aceBackgroundPhoto.jpg")`,
+              url("${process.env.PUBLIC_URL}/photos/aceBackgroundPhoto.jpg")`,
           }}
         ></Col>
         <Col lg={6} className={styles.photoOppositeDiv}>
@@ -80,7 +80,7 @@ const ContactUsComponent = () => {
               rgba(0,0,0,0.5),
               rgba(0, 0, 0, 0.5)
               ),
-              url("./photos/aceBackgroundPhoto.jpg")`,
+              url("${process.env.PUBLIC_URL}/photos/aceBackgroundPhoto.jpg")`,
           }}
         ></Col>
       </Row>

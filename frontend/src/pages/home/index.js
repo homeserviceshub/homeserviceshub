@@ -23,12 +23,6 @@ function Home() {
       dispatch(CHECKLOGIN(false));
     }
   }, []);
-  useEffect(() => {
-    axios
-      .get("http://localhost:8000/usersData")
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log(err));
-  }, []);
 
   const ourOfferedServicesHeading = "Our Offered Services";
   const trendingheading = "Trending Services";

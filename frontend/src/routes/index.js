@@ -50,9 +50,9 @@ export default function AppRoutes() {
             <Route path="/careers" element={<Careers />} />
             <Route path="/services" element={<Services />} />
             <Route path="/services/service" element={<Service />} />
-            <Route path="/servicerequest" element={<RequestaService />} />
-            <Route path="/review/new" element={<NewReview />} />
-            <Route path="/companyprofile" element={<CompanyProfile />} />
+            <Route path="/:id/servicerequest" element={<RequestaService />} />
+            <Route path="/review/:id/new" element={<NewReview />} />
+            <Route path="/companyprofile/:id" element={<CompanyProfile />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
         </Route>

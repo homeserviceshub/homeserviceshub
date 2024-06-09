@@ -10,6 +10,7 @@ import axios from "axios";
 function SignIn() {
   const [credField, setCredField] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(false);
 
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
@@ -45,9 +46,11 @@ function SignIn() {
         if (response.data.message) {
           setTimeout(function () {
             setIsSubmitting(false);
+            setError(true);
           }, 1000);
           console.log(response.data.message, "yaaaa");
         } else {
+          setError(false);
           console.log(response.data, "gl bngi");
           localStorage.setItem("auth", response.data[0]._id);
           dispatch(CHECKLOGIN(true));
@@ -106,7 +109,13 @@ function SignIn() {
                   >
                     {!credField ? <AiFillEyeInvisible /> : <AiFillEye />}
                   </span>
+                  {error && (
+                    <div className="mb-3" style={{ color: "red" }}>
+                      **User not found**
+                    </div>
+                  )}
                 </Col>
+
                 <Col md={12} className="text-center">
                   <Button
                     type="submit"
@@ -123,13 +132,15 @@ function SignIn() {
                     )}
                   </Button>
 
-                  <a
-                    href="hhtp:google.com"
-                    alt="Forggetin"
-                    onClick={Forgetpassword}
-                  >
-                    Forget your Password ?
-                  </a>
+                  <div className="mt-3">
+                    <a
+                      href="hhtp:google.com"
+                      alt="Forggetin"
+                      onClick={Forgetpassword}
+                    >
+                      Forget your Password ?
+                    </a>
+                  </div>
                   <div className={styles.lineDiv}></div>
                   <div>
                     <Button

@@ -1,17 +1,48 @@
 import React, { useState, useEffect } from "react";
-import { menuItems } from "../../Data/DataList";
+// import { menuItems } from "../../Data/DataList";
 import { FaTimes, FaBars } from "react-icons/fa";
 import "./navBar.css";
 import CustomButton from "../customBtn";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import axios from "axios";
 
 const Navbar = () => {
   const [dropdown, setDropdown] = useState(false);
   const [changeActive, setChangeActive] = useState("Home");
+  const [userData, setUserData] = useState([]);
   const checklogin = useSelector((state) => {
     return state.checkLoginReducer;
   });
+  const getMenuItems = (user) => {
+    console.log(user);
+    // Base menu items
+    const menuItems = [
+      {
+        title: "Home",
+        url: "/",
+        cName: "nav-links",
+      },
+      {
+        title: "Services",
+        url: "/services",
+        cName: "nav-links",
+      },
+    ];
+
+    // Add the conditional menu item
+    const aceMenuItem = {
+      title: user.aceData ? "Switch to Ace" : "Join Us",
+      url: user.isAce ? "/ace/signin" : "/ace",
+      cName: "nav-links",
+    };
+
+    // Add the aceMenuItem to the menuItems array
+    menuItems.push(aceMenuItem);
+
+    return menuItems;
+  };
+  const menuItems = getMenuItems(userData);
 
   const [loggedIn, setLoggedIn] = useState(checklogin);
   const navigate = useNavigate();
@@ -19,6 +50,16 @@ const Navbar = () => {
 
   useEffect(() => {
     setLoggedIn(checklogin);
+    const getData = async () => {
+      const userResponse = await axios.post("http://localhost:8000/userdata", {
+        _id: localStorage.getItem("auth"),
+      });
+      if (userResponse.status === 200) {
+        console.log(userResponse.data[0]);
+        setUserData(userResponse.data[0]);
+      }
+    };
+    getData();
   }, [checklogin]);
 
   const handleClick = () => {
@@ -48,8 +89,8 @@ const Navbar = () => {
       setChangeActive(activeItem.title);
     } else if (
       currentPath === "/services/service" ||
-      currentPath === "/companyprofile" ||
-      currentPath === "/servicerequest"
+      currentPath.includes("/companyprofile/") ||
+      currentPath.includes("/servicerequest")
     ) {
       setChangeActive("Services");
     } else {

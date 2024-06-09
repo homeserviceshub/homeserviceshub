@@ -25,10 +25,22 @@
   font-weight: 500;
   justify-content: center;
 }
+.outer {
+  padding: 0px 30px;
+  height: auto !important;
+}
 .oneCard {
   padding: 10px;
+  margin: 10px;
   background-color: var(--color-primary-with-opacity) !important;
   border-radius: 10px;
+  text-align: left;
+}
+.imgDiv {
+  width: 110px !important;
+  height: 110px;
+  padding: 0;
+  margin-left: 15px;
 }
 .outerDiv {
   width: 30%;
@@ -46,9 +58,32 @@
 .btnDiv {
   padding-top: 10px;
 }
+.aceData {
+  display: flex;
+  flex-direction: column;
+  line-height: 26px;
+}
+.largerFont {
+  font-size: larger;
+}
+.mediumFont {
+  font-size: medium;
+}
+.stars {
+  font-size: larger;
+  line-height: inherit;
+}
+.categories {
+  font-size: medium;
+  padding: 0 2px;
+}
+
 @media screen and (max-width: 767px) {
   .main {
     margin: 0px;
     padding: 10px;
+  }
+  .outer {
+    padding: 0;
   }
 }

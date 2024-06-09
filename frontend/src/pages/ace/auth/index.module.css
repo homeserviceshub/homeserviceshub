@@ -104,3 +104,8 @@
   opacity: 1 !important;
   background-color: rgb(223, 0, 0);
 }
+.errorMessage {
+  color: red;
+  line-height: 10px;
+  font-weight: 500;
+}

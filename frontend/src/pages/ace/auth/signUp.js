@@ -3,32 +3,55 @@ import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { Form, Container, Row, Col, Button, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import styles from "./index.module.css";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import { CHECKLOGIN } from "../../../redux/actions/actionCheckLogin";
 
 function AceSignUp() {
   const [credField, setCredField] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const id = localStorage.getItem("auth");
   const [username, setUsername] = useState(null);
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null);
+  const [number, setNumber] = useState(null);
+  const [postalCode, setPostalCode] = useState(null);
 
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   function gotoSignin() {
     navigate("signin");
   }
-
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    navigate("/ace/profile");
+    if (username && email && password && confirmPassword && number) {
+      axios
+        .post("http://localhost:8000/ace/signup", {
+          companyName: username,
+          companyEmail: email,
+          companyPassword: password,
+          companyNumber: number,
+          postalCode: postalCode,
+          _id: id,
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            console.log(response);
+            navigate("/ace/profile", {
+              replace: true,
+            });
+            localStorage.setItem("aauth", response.data.user._id);
+          }
+        })
+        .catch((error) => {
+          console.error("AxiosError:", error);
+          console.log(error);
+        });
+    }
+
     setIsSubmitting(true);
-    // dispatch(
-    //   loginAction(email, password, null, () => {
-    //     setIsSubmitting(false);
-    //   })
-    // );
   }
   function handleClose() {
     navigate(-1);
@@ -55,7 +78,7 @@ function AceSignUp() {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Username"
+                    placeholder="Company Name"
                     value={username}
                     onChange={({ target: { value } }) => setUsername(value)}
                     autoComplete="off"
@@ -65,9 +88,29 @@ function AceSignUp() {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Email Address"
+                    placeholder="Company Email Address"
                     value={email}
                     onChange={({ target: { value } }) => setEmail(value)}
+                    autoComplete="off"
+                  />
+                </Col>
+                <Col md={12}>
+                  <input
+                    type="number"
+                    className="form-control"
+                    placeholder="Company Number"
+                    value={number}
+                    onChange={({ target: { value } }) => setNumber(value)}
+                    autoComplete="off"
+                  />
+                </Col>
+                <Col md={12}>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Postal Code"
+                    value={postalCode}
+                    onChange={({ target: { value } }) => setPostalCode(value)}
                     autoComplete="off"
                   />
                 </Col>

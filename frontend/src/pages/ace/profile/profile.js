@@ -1,10 +1,21 @@
-import React, { useState } from "react";
-import { Container, Row, Col, Modal, Form } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import {
+  Container,
+  Row,
+  Col,
+  Modal,
+  Form,
+  InputGroup,
+  Button,
+} from "react-bootstrap";
 import styles from "./index.module.css";
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
 import Help from "../../../components/help";
 import CustomButton from "../../../components/customBtn";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import SwitchToUser from "../../../components/switchToUser";
 
 const AceProfile = () => {
   const [profileModalShow, setProfileModalShow] = useState(false);
@@ -12,64 +23,168 @@ const AceProfile = () => {
   const [socialModalShow, setSocialModalShow] = useState(false);
   const [detailModalShow, setDetailModalShow] = useState(false);
   const [projectsModalShow, setProjectsModalShow] = useState(false);
-
+  const [aceData, setAceData] = useState();
+  const navigate = useNavigate();
   const [discription] = useState(
     "Here is the breif information about out company. hello there we are home builder and we are professional in renovation.We are just a small group of 10 people and looking forward to work with you guys. there is no rush you can check our website rating from the most trusted website for home renovation and then decide wheather you want the best of an advice of an old friend.We are good in bathroom reno, kitched reno and basement renovation. Just fill up some details and we will reply you as soon as possible."
   );
 
+  const [dummyData, setDummyData] = useState(aceData);
+  useEffect(() => {
+    const id = localStorage.getItem("aauth");
+    if (id) {
+      try {
+        axios
+          .post("http://localhost:8000/acedata", {
+            id: id,
+          })
+          .then((response) => {
+            if (response.status === 200) {
+              if (response.data.message) {
+                console.log(response.data.message);
+              } else {
+                setAceData(response.data.aceData);
+                setDummyData(response.data.aceData);
+              }
+            }
+          })
+          .catch((error) => {
+            console.error("AxiosError:", error);
+            console.log(error);
+          });
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    } else {
+      navigate("/ace/signin", {
+        replace: true,
+      });
+    }
+  }, []);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [coverImage, setCoverImage] = useState(null);
-  console.log(coverImage);
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
+  const handleFormChange = (event) => {
+    const { name, value } = event.target;
 
-    reader.onloadend = () => {
-      setSelectedImage(reader.result);
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
+    // Update state based on the input field name
+    if (name === "categories") {
+      setDummyData((prev) => ({
+        ...prev,
+        categories: value.split(",").map((category) => category.trimStart()),
+      }));
+    } else if (name === "services") {
+      setDummyData((prev) => ({
+        ...prev,
+        services: value.split(",").map((service) => service.trimStart()),
+      }));
+    } else if (name === "serviceAreas") {
+      setDummyData((prev) => ({
+        ...prev,
+        serviceAreas: value.split(",").map((area) => area.trimStart()),
+      }));
+    } else {
+      setDummyData({
+        ...dummyData,
+        [name]: value,
+      });
     }
   };
-  const handleCoverChange = (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setCoverImage(reader.result);
-    };
 
-    if (file) {
-      reader.readAsDataURL(file);
+  const handleimagechange = (event) => {
+    setDummyData({
+      ...dummyData,
+      profilePhoto: event.target.files[0], // Use the first file from event.target.files
+    });
+  };
+  const handleClose = () => {
+    setDummyData({
+      ...aceData,
+    });
+    setProfileModalShow(false);
+    setSocialModalShow(false);
+    setDetailModalShow(false);
+    setDiscriptionModalShow(false);
+    setProjectsModalShow(false);
+  };
+  const handlechanges = async () => {
+    var data;
+
+    // If there is a new profile photo, upload it
+    if (dummyData.profilePhoto) {
+      try {
+        const formData = new FormData();
+        formData.append("media", dummyData.profilePhoto);
+
+        const response = await axios.post(
+          "http://localhost:8000/upload",
+          formData
+        );
+
+        if (response.status === 200) {
+          const mediaObject = {
+            path: response.data.filePath.filename,
+            type: "image",
+          };
+
+          data = mediaObject;
+
+          // Update aceData and dummyData with the new profile photo
+          setAceData((prevData) => ({
+            ...prevData,
+            profilePhoto: mediaObject,
+          }));
+
+          setDummyData((prevData) => ({
+            ...prevData,
+            profilePhoto: mediaObject,
+          }));
+        }
+      } catch (error) {
+        console.error("Error uploading media:", error);
+      }
     }
+
+    // Update user data on the backend
+    try {
+      await axios
+        .post("http://localhost:8000/updateaceuser", {
+          data: {
+            ...dummyData,
+            profilePhoto: data,
+          },
+          id: localStorage.getItem("aauth"),
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            console.log(response.data);
+            alert("User data updated successfully");
+          }
+        })
+        .catch((error) => {
+          console.error("AxiosError:", error);
+          console.log(error);
+        });
+    } catch (error) {
+      console.error("Error:", error);
+    }
+
+    // Close all modal windows
+    setProfileModalShow(false);
+    setSocialModalShow(false);
+    setDetailModalShow(false);
+    setDiscriptionModalShow(false);
+    setProjectsModalShow(false);
   };
 
   return (
     <div className={styles.customContainer}>
-      <div
-        className={styles.companyProfileBackgroundPhoto}
-        style={{
-          background: coverImage
-            ? `radial-gradient(
-              circle,
-              rgba(0, 0, 0, 0.2) 0%,
-              rgba(0, 0, 0, 0.6) 100%
-            ),url(${coverImage})`
-            : `radial-gradient(
-        circle,
-        rgba(0, 0, 0, 0.2) 0%,
-        rgba(0, 0, 0, 0.6) 100%
-      ),
-      url("./photos/companyBackgroundPhoto.jpg")`,
-        }}
-      >
+      <div className={styles.companyProfileBackground}>
         <Container className={styles.containerX}>
           <Row className={styles.complanyProfilePhotoRow}>
             <Col lg={2} className={styles.companyProfilePhoto}>
               <div>
-                {selectedImage ? (
+                {aceData?.profilePhoto ? (
                   <img
-                    src={selectedImage}
+                    src={`http://localhost:8000/images/${aceData.profilePhoto.path}`}
                     alt="Selected"
                     width={"350px"}
                     height={"350px"}
@@ -77,7 +192,10 @@ const AceProfile = () => {
                   />
                 ) : (
                   <img
-                    src="./icons/default-profile-picture-male-icon.svg"
+                    src={
+                      process.env.PUBLIC_URL +
+                      "/icons/default-profile-picture-male-icon.svg"
+                    }
                     width={100}
                     height={100}
                     className={styles.profileImg}
@@ -88,14 +206,14 @@ const AceProfile = () => {
             <Col lg={7} className={styles.profileMainCol}>
               <Row className={styles.profileRow}>
                 <Col lg={12} className={styles.companyName}>
-                  Name of Company
+                  {aceData ? aceData.companyName : "Company Name"}
                 </Col>
                 <Col lg={12} className={styles.profileCol}>
-                  Location/Address
+                  {aceData ? aceData.location : "Location"}
                 </Col>
                 <Col lg={12} className={styles.profileCol}>
                   {" "}
-                  (88)Reviws
+                  ({aceData ? aceData?.totalReviews : "0"})Reviews
                 </Col>
               </Row>
             </Col>
@@ -106,6 +224,12 @@ const AceProfile = () => {
               <div className={styles.profilebtn}>
                 <CustomButton
                   text={"Edit Profile"}
+                  onClick={() => setProfileModalShow(true)}
+                />
+              </div>
+              <div className={styles.profilebtn}>
+                <CustomButton
+                  text={"Customer Dashboard"}
                   onClick={() => setProfileModalShow(true)}
                 />
               </div>
@@ -125,7 +249,7 @@ const AceProfile = () => {
                 >
                   <FaEdit />
                 </span>
-                {discription}
+                {aceData?.brief ? aceData.brief : discription}
               </Col>
             </Row>
             <Row className={`${styles.rating} m-0`}>
@@ -137,61 +261,100 @@ const AceProfile = () => {
                   <FaEdit />
                 </span>
                 <div className={styles.ratingDiv1}>
-                  <div className={styles.ratingDiv11}>
-                    10k Ratings <span className={styles.spanI}>I</span>
-                  </div>
+                  <div className={styles.ratingDiv11}>Overall Ratings</div>
                   <div className={styles.ratingDiv12}>
                     <span>
                       <BsStarFill fill="gold" />
                     </span>{" "}
-                    4/5
+                    {Math.floor(aceData?.overallRating)}/5
                   </div>
                 </div>
                 <div className={styles.ratingDiv2}>
                   <div className={styles.ratingDiv21}>
                     <div className={styles.ratingDiv211}>
-                      Avenrage Rating{" "}
+                      Reviews Rating{" "}
                       <Help
-                        text={"Stars on the basis of time taken for reply"}
+                        text={
+                          "Stars on the basis of average of all reviews given by users."
+                        }
                       />
                     </div>
-                    <div className={styles.ratingDiv22}>
-                      <BsStarFill fill="gold" />
-                      <BsStarFill fill="gold" />
-                      <BsStarFill fill="gold" />
-                      <BsStarFill fill="gold" />
-                      <BsStarHalf fill="gold" />
+                    <div className={styles.allStars}>
+                      {[...Array(5)].map((_, index) => {
+                        const rating = Number(aceData?.avgRating);
+                        const fullStars = Math.floor(rating);
+                        const hasHalfStar = rating - fullStars >= 0.5;
+
+                        return (
+                          <span key={index}>
+                            {index < fullStars ? (
+                              <BsStarFill fill="gold" />
+                            ) : index === fullStars && hasHalfStar ? (
+                              <BsStarHalf fill="gold" />
+                            ) : (
+                              <BsStar fill="gold" />
+                            )}
+                          </span>
+                        );
+                      })}
                     </div>
                   </div>
                   <div className={styles.ratingDiv21}>
                     <div className={styles.ratingDiv211}>
                       Reputation{" "}
                       <Help
-                        text={"Stars on the basis of time taken for reply"}
+                        text={
+                          "Stars on the basis of acceptance rate of projects"
+                        }
                       />
                     </div>
-                    <div>
-                      <BsStarFill fill="gold" />
-                      <BsStarFill fill="gold" />
-                      <BsStarFill fill="gold" />
-                      <BsStarHalf fill="gold" />
+                    <div className={styles.allStars}>
+                      {[...Array(5)].map((_, index) => {
+                        const rating = Number(aceData?.reputation);
+                        const fullStars = Math.floor(rating);
+                        const hasHalfStar = rating - fullStars >= 0.5;
 
-                      <BsStar fill="gold" />
+                        return (
+                          <span key={index}>
+                            {index < fullStars ? (
+                              <BsStarFill fill="gold" />
+                            ) : index === fullStars && hasHalfStar ? (
+                              <BsStarHalf fill="gold" />
+                            ) : (
+                              <BsStar fill="gold" />
+                            )}
+                          </span>
+                        );
+                      })}
                     </div>
                   </div>
                   <div className={styles.ratingDiv21}>
                     <div className={styles.ratingDiv211}>
                       Responsiveness
                       <Help
-                        text={"Stars on the basis of time taken for reply"}
+                        text={
+                          "Stars on the basis of Average time taken for reply"
+                        }
                       />
                     </div>
-                    <div>
-                      <BsStarFill fill="gold" />
-                      <BsStarFill fill="gold" />
-                      <BsStarFill fill="gold" />
-                      <BsStarFill fill="gold" />
-                      <BsStarFill fill="gold" />
+                    <div className={styles.allStars}>
+                      {[...Array(5)].map((_, index) => {
+                        const rating = Number(aceData?.responsiveness);
+                        const fullStars = Math.floor(rating);
+                        const hasHalfStar = rating - fullStars >= 0.5;
+
+                        return (
+                          <span key={index}>
+                            {index < fullStars ? (
+                              <BsStarFill fill="gold" />
+                            ) : index === fullStars && hasHalfStar ? (
+                              <BsStarHalf fill="gold" />
+                            ) : (
+                              <BsStar fill="gold" />
+                            )}
+                          </span>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
@@ -203,7 +366,9 @@ const AceProfile = () => {
                         text={"Stars on the basis of time taken for reply"}
                       />
                     </div>
-                    <div className={styles.ratingDiv212}>30</div>
+                    <div className={styles.ratingDiv212}>
+                      {aceData?.projectsDone}
+                    </div>
                   </div>
                   <div className={styles.ratingDiv21}>
                     <div className={styles.ratingDiv221}>
@@ -212,7 +377,9 @@ const AceProfile = () => {
                         text={"Stars on the basis of time taken for reply"}
                       />
                     </div>
-                    <div className={styles.ratingDiv212}>3</div>
+                    <div className={styles.ratingDiv212}>
+                      {aceData?.projectsOngoing}
+                    </div>
                   </div>
                   <div className={styles.ratingDiv21}>
                     <div className={styles.ratingDiv221}>
@@ -221,54 +388,19 @@ const AceProfile = () => {
                         text={"Stars on the basis of time taken for reply"}
                       />
                     </div>
-                    <div className={styles.ratingDiv212}>Mon-Fri</div>
+                    <div className={styles.ratingDiv212}>
+                      {aceData ? aceData?.availability : "Mon-Fri"}
+                    </div>
                   </div>
                 </div>
               </Col>
             </Row>
           </Col>
-          <Col className={`${styles.details} ${styles.borders}`}>
-            Ace awards
+          <Col
+            className={`${styles.details} ${styles.borders} ${styles.awards}`}
+          >
+            No Awards
           </Col>
-          {/* <Col className={`${styles.details} ${styles.borders}`}>
-            <Col lg={12} className={styles.detail}>
-              <span
-                className={styles.editIcon}
-                onClick={() => setSocialModalShow(true)}
-              >
-                <FaEdit />
-              </span>
-              <h3 className={styles.detailsHeading}>Contact Details</h3>
-              <div>+91-8054875055</div>
-              <div>+91-8054875055</div>
-            </Col>
-            <Col lg={12} className={styles.detail}>
-              <h3 className={styles.detailsHeading}>Email Details</h3>
-              <div>hrmnsidhu2019@gmail.com</div>
-            </Col>
-            <Col lg={12} className={styles.detail}>
-              <h3 className={styles.detailsHeading}>Website</h3>
-              <div>www.myWebsite.com</div>
-            </Col>
-            <Col lg={12} className={styles.detail}>
-              <h3 className={styles.detailsHeading}>Social media</h3>
-              <div className={styles.iconDiv}>
-                {socialMedia.map((item, index) => {
-                  return (
-                    <div key={index} className={styles.icon}>
-                      <Link
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        to={item.link}
-                      >
-                        {item.icon}
-                      </Link>
-                    </div>
-                  );
-                })}
-              </div>
-            </Col>
-          </Col> */}
         </Row>
         <Row className={styles.allDetails}>
           <span
@@ -281,71 +413,106 @@ const AceProfile = () => {
             <div className={styles.detailDiv}>
               <div className={styles.detailHeading}>Categories</div>
               <div className={styles.detailData}>
-                Basement Renovation, Bathroom Renovation, General Contractors,
-                Design/Build, Home Additions, Architects, Kitchen & Bathroom -
-                Cabinets & Design, and Structural Engineering
+                {aceData?.categories && aceData?.categories.length !== 0
+                  ? aceData.categories.map((item, index) => {
+                      if (aceData.categories.length === index + 1) {
+                        return item + ".";
+                      } else return item + ", ";
+                    })
+                  : "Category 1, Category 2, Category 3, Category 4"}
               </div>
             </div>
             <div className={styles.detailDiv}>
               <div className={styles.detailHeading}>Services</div>
               <div className={styles.detailData}>
-                Basement Renovation, Bathroom Renovation, Basement Finishing,
-                Bathroom Remodeling, Kitchen Makeovers, Kitchen Renovation,
-                Engineering, structural engineering, mechanical engineering,
-                drafting services, home additions, rear additions, home
-                extensions, rear extensions, marble installers, tile
-                installation, ceramic tile setting, marble tile setting and most
-                Interior Renovation Projects.
+                {aceData?.services && aceData?.services.length !== 0
+                  ? aceData?.services?.map((item, index) => {
+                      if (aceData.services.length === index + 1) {
+                        return item + ".";
+                      } else return item + ", ";
+                    })
+                  : "Service A, Service B, Service C, Service D"}
               </div>
             </div>
             <div className={styles.detailDiv}>
               <div className={styles.detailHeading}>Area's Served</div>
               <div className={styles.detailData}>
-                Amritsar,Jalandhar,Ludhiana,Patiala,Beas,Riya
+                {aceData?.serviceAreas && aceData?.serviceAreas.length !== 0
+                  ? aceData?.serviceAreas.map((item, index) => {
+                      if (aceData.serviceAreas.length === index + 1) {
+                        return item + ".";
+                      } else return item + ", ";
+                    })
+                  : "City 1, City 2, City 3, City 4, City 5"}
               </div>
             </div>
           </Col>
           <Col className="p-0">
             <div className={styles.detailDiv}>
               <div className={styles.detailHeading}>Year of Establised</div>
-              <div className={styles.detailData}>2020</div>
+              <div className={styles.detailData}>
+                {aceData?.yearOfEstablishment
+                  ? aceData.yearOfEstablishment
+                  : "Not Added Yet"}
+              </div>
             </div>
             <div className={styles.detailDiv}>
               <div className={styles.detailHeading}>Payment method</div>
-              <div className={styles.detailData}>Cash and Cheque</div>
+              <div className={styles.detailData}>
+                {aceData && aceData.paymentMethod}
+              </div>
             </div>
             <div className={styles.detailDiv}>
               <div className={styles.detailHeading}>Number of workers</div>
-              <div className={styles.detailData}>20</div>
+              <div className={styles.detailData}>
+                {aceData && aceData.totalWorkers}
+              </div>
             </div>
             <div className={styles.detailDiv}>
               <div className={styles.detailHeading}>Written Contract</div>
-              <div className={styles.detailData}>Yes</div>
+              <div className={styles.detailData}>
+                {(aceData && aceData?.writtenContract === "true") ||
+                aceData?.writtenContract === true
+                  ? "Yes"
+                  : "No"}
+              </div>
             </div>
           </Col>
         </Row>
       </Container>
+      {/* <SwitchToUser /> */}
       <ProfileModal
         show={profileModalShow}
         onHide={() => setProfileModalShow(false)}
-        handleImageChange={handleImageChange}
-        handleCoverChange={handleCoverChange}
-      />
-      <SocialModal
-        show={socialModalShow}
-        onHide={() => setSocialModalShow(false)}
-      />
-      <DetailModal
-        show={detailModalShow}
-        onHide={() => setDetailModalShow(false)}
+        handlechanges={handlechanges}
+        handleClose={handleClose}
+        handleFormChange={handleFormChange}
+        handleimagechange={handleimagechange}
+        data={dummyData}
       />
       <DiscriptionModal
         show={discriptionModalShow}
         onHide={() => setDiscriptionModalShow(false)}
+        handlechanges={handlechanges}
+        handleClose={handleClose}
+        handleFormChange={handleFormChange}
+        data={dummyData}
       />
       <ProjectsModal
         show={projectsModalShow}
         onHide={() => setProjectsModalShow(false)}
+        handlechanges={handlechanges}
+        handleClose={handleClose}
+        handleFormChange={handleFormChange}
+        data={dummyData}
+      />
+      <DetailModal
+        show={detailModalShow}
+        onHide={() => setDetailModalShow(false)}
+        handlechanges={handlechanges}
+        handleClose={handleClose}
+        handleFormChange={handleFormChange}
+        data={dummyData}
       />
     </div>
   );
@@ -353,16 +520,8 @@ const AceProfile = () => {
 
 function ProfileModal(props) {
   const [validated, setValidated] = useState(false);
+  const [formData, setFormData] = useState(props.data);
 
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
-    setValidated(true);
-  };
   return (
     <Modal
       {...props}
@@ -378,35 +537,15 @@ function ProfileModal(props) {
       <Modal.Body>
         <Form noValidate validated={validated}>
           <Row className="mb-3">
-            <Form.Group as={Col} md="6" controlId="validationCustom01">
-              <Form.Label>First name</Form.Label>
-              <Form.Control
-                required
-                type="text"
-                placeholder="First name"
-                defaultValue="Harman"
-              />
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group as={Col} md="6" controlId="validationCustom02">
-              <Form.Label>Last name</Form.Label>
-              <Form.Control
-                required
-                type="text"
-                placeholder="Last name"
-                defaultValue="Sidhu"
-              />
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            </Form.Group>
-          </Row>
-          <Row className="mb-3">
             <Form.Group as={Col} md="12" controlId="validationCustom02">
               <Form.Label>Company name</Form.Label>
               <Form.Control
-                required
                 type="text"
-                placeholder="Company name"
-                defaultValue="Home Makers"
+                name="companyName"
+                value={props.data?.companyName}
+                onChange={props.handleFormChange}
+                required
+                placeholder="Company Name"
               />
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
@@ -417,17 +556,7 @@ function ProfileModal(props) {
               <Form.Control
                 type="file"
                 accept="image/*"
-                onChange={props.handleImageChange}
-              />
-
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group as={Col} md="12" controlId="validationCustom02">
-              <Form.Label>Change Cover Photo</Form.Label>
-              <Form.Control
-                type="file"
-                accept="image/*"
-                onChange={props.handleCoverChange}
+                onChange={props.handleimagechange}
               />
 
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -435,91 +564,41 @@ function ProfileModal(props) {
           </Row>
           <Row className="mb-3">
             <Form.Group as={Col} md="12" controlId="validationCustom03">
-              <Form.Label>Address</Form.Label>
-              <Form.Control type="text" placeholder="Address..." required />
+              <Form.Label>Location</Form.Label>
+              <Form.Control
+                type="text"
+                name="location"
+                value={props.data?.location}
+                onChange={props.handleFormChange}
+                required
+                placeholder="Location..."
+              />
               <Form.Control.Feedback type="invalid">
-                Please provide a valid address.
+                Please provide a valid Location.
               </Form.Control.Feedback>
             </Form.Group>
           </Row>
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <CustomButton text={"Close"} onClick={props.onHide} width={"auto"} />
+        <CustomButton
+          text={"Close"}
+          onClick={() => props.handleClose()}
+          width={"auto"}
+        />
         <CustomButton
           text={"Save Changes"}
-          // onClick={handleSubmit}
-          onClick={props.onHide}
+          onClick={() => props.handlechanges(formData)}
           width={"auto"}
         />
       </Modal.Footer>
     </Modal>
   );
 }
-function ProjectsModal(props) {
-  const [validated, setValidated] = useState(false);
 
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
-    setValidated(true);
-  };
-  return (
-    <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          Edit Projects Details
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form noValidate validated={validated}>
-          <Row className="mb-3">
-            <Form.Group as={Col} md="12" controlId="validationCustom02">
-              <Form.Label>Availability</Form.Label>
-              <Form.Control
-                required
-                type="text"
-                placeholder="days you are available..."
-                defaultValue="Mon-Fri"
-              />
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            </Form.Group>
-          </Row>
-        </Form>
-      </Modal.Body>
-      <Modal.Footer>
-        <CustomButton text={"Close"} onClick={props.onHide} width={"auto"} />
-        <CustomButton
-          text={"Save Changes"}
-          // onClick={handleSubmit}
-          onClick={props.onHide}
-          width={"auto"}
-        />
-      </Modal.Footer>
-    </Modal>
-  );
-}
 function DiscriptionModal(props) {
   const [validated, setValidated] = useState(false);
-
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
-    setValidated(true);
-  };
+  const [formData, setFormData] = useState(props.data);
   return (
     <Modal
       {...props}
@@ -542,7 +621,10 @@ function DiscriptionModal(props) {
                 as="textarea"
                 placeholder="Summary..."
                 style={{ height: "100px" }}
-                defaultValue=""
+                type="text"
+                name="brief"
+                value={props.data?.brief}
+                onChange={props.handleFormChange}
               />
 
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -554,26 +636,16 @@ function DiscriptionModal(props) {
         <CustomButton text={"Close"} onClick={props.onHide} width={"auto"} />
         <CustomButton
           text={"Save Changes"}
-          // onClick={handleSubmit}
-          onClick={props.onHide}
+          onClick={() => props.handlechanges(formData)}
           width={"auto"}
         />
       </Modal.Footer>
     </Modal>
   );
 }
-function SocialModal(props) {
+function ProjectsModal(props) {
   const [validated, setValidated] = useState(false);
-
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
-    setValidated(true);
-  };
+  const [formData, setFormData] = useState(props.data);
   return (
     <Modal
       {...props}
@@ -583,114 +655,24 @@ function SocialModal(props) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Edit Social Details
+          Edit Projects Details
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form noValidate validated={validated}>
           <Row className="mb-3">
-            <Form.Group as={Col} md="6" controlId="validationCustom01">
-              <Form.Label>Contact Detail</Form.Label>
-              <Form.Control
-                required
-                type="number"
-                placeholder="XXXXX-XXXXXX"
-                defaultValue=""
-              />
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group as={Col} md="6" controlId="validationCustom01">
-              <Form.Label>Contact Detail</Form.Label>
-              <Form.Control
-                required
-                type="number"
-                placeholder="XXXXX-XXXXXX"
-                defaultValue=""
-              />
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            </Form.Group>
-          </Row>
-          <Row className="mb-3">
             <Form.Group as={Col} md="12" controlId="validationCustom02">
-              <Form.Label>Email</Form.Label>
+              <Form.Label>Availability</Form.Label>
               <Form.Control
                 required
                 type="text"
-                placeholder="abc@gmail.com"
-                defaultValue=""
+                placeholder="Mon-Sat"
+                defaultValue="Mon-Fri"
+                name="availability"
+                value={props.data?.availability}
+                onChange={props.handleFormChange}
               />
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            </Form.Group>
-          </Row>
-
-          <Row className="mb-3">
-            <Form.Group as={Col} md="12" controlId="validationCustom03">
-              <Form.Label>Website</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="www.housemakers.com"
-                required
-              />
-              <Form.Control.Feedback type="invalid">
-                Please provide a valid website.
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Row>
-          <Row className="mb-3">
-            <Form.Group as={Col} md="12" controlId="validationCustom03">
-              <Form.Label>Facebook Link</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="www.facebook.com"
-                required
-              />
-              <Form.Control.Feedback type="invalid">
-                Please provide a valid website.
-              </Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group as={Col} md="12" controlId="validationCustom03">
-              <Form.Label>Instagram Link</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="www.instagram.com"
-                required
-              />
-              <Form.Control.Feedback type="invalid">
-                Please provide a valid website.
-              </Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group as={Col} md="12" controlId="validationCustom03">
-              <Form.Label>LinkedIn Link</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="www.linkedin.com"
-                required
-              />
-              <Form.Control.Feedback type="invalid">
-                Please provide a valid website.
-              </Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group as={Col} md="12" controlId="validationCustom03">
-              <Form.Label>Youtube Link</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="www.youtube.com"
-                required
-              />
-              <Form.Control.Feedback type="invalid">
-                Please provide a valid website.
-              </Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group as={Col} md="12" controlId="validationCustom03">
-              <Form.Label>Twitter Link</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="www.twitter.com"
-                required
-              />
-              <Form.Control.Feedback type="invalid">
-                Please provide a valid website.
-              </Form.Control.Feedback>
             </Form.Group>
           </Row>
         </Form>
@@ -699,8 +681,7 @@ function SocialModal(props) {
         <CustomButton text={"Close"} onClick={props.onHide} width={"auto"} />
         <CustomButton
           text={"Save Changes"}
-          // onClick={handleSubmit}
-          onClick={props.onHide}
+          onClick={() => props.handlechanges(formData)}
           width={"auto"}
         />
       </Modal.Footer>
@@ -709,15 +690,18 @@ function SocialModal(props) {
 }
 function DetailModal(props) {
   const [validated, setValidated] = useState(false);
+  const [formData, setFormData] = useState(props.data);
 
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
+  const handleAddItem = (newItem, item, setItem, newItemState) => {
+    if (newItem.trim() !== "") {
+      setItem([...item, newItem]);
+      newItemState("");
     }
-
-    setValidated(true);
+  };
+  const onDeleteItem = (index, itemState, setItem) => {
+    const newItems = [...itemState];
+    newItems.splice(index, 1);
+    setItem(newItems);
   };
   return (
     <Modal
@@ -739,9 +723,12 @@ function DetailModal(props) {
               <Form.Control
                 required
                 type="text"
-                placeholder="Categories..."
-                defaultValue=""
+                placeholder="Add category..."
+                value={props.data?.categories}
+                name="categories"
+                onChange={props.handleFormChange}
               />
+              {console.log(props?.data?.categories)}
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
           </Row>
@@ -751,56 +738,102 @@ function DetailModal(props) {
               <Form.Control
                 required
                 type="text"
-                placeholder="Services..."
-                defaultValue=""
+                placeholder="Add Services..."
+                value={props.data?.services}
+                name="services"
+                onChange={props.handleFormChange}
               />
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
           </Row>
           <Row className="mb-3">
-            <Form.Group as={Col} md="12" controlId="validationCustom03">
+            <Form.Group as={Col} md="12" controlId="validationCustom01">
               <Form.Label>Services Provided in Areas</Form.Label>
               <Form.Control
-                type="text"
-                placeholder="Amritsar,Jalandhar,Ludhiana"
                 required
+                type="text"
+                placeholder="Add category..."
+                value={props.data?.serviceAreas}
+                name="serviceAreas"
+                onChange={props.handleFormChange}
               />
-              <Form.Control.Feedback type="invalid">
-                Please provide a valid address.
-              </Form.Control.Feedback>
+              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
           </Row>
           <Row className="mb-3">
-            <Form.Group as={Col} md="12" controlId="validationCustom03">
+            <Form.Group
+              as={Col}
+              md="12"
+              className="mb-3"
+              controlId="validationCustom03"
+            >
               <Form.Label>Year Established</Form.Label>
-              <Form.Control type="text" placeholder="e.g.2000" required />
+              <Form.Control
+                type="text"
+                placeholder="e.g.2000"
+                required
+                name="yearOfEstablishment"
+                value={props.data?.yearOfEstablishment}
+                onChange={props.handleFormChange}
+              />
               <Form.Control.Feedback type="invalid">
-                Please provide a valid address.
+                Please provide a valid Location.
               </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group as={Col} md="12" controlId="validationCustom03">
+            <Form.Group
+              as={Col}
+              className="mb-3"
+              md="12"
+              controlId="validationCustom03"
+            >
               <Form.Label>Payment method</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="e.g.cash/card/UPI"
                 required
+                name="paymentMethod"
+                value={props.data?.paymentMethod}
+                onChange={props.handleFormChange}
               />
               <Form.Control.Feedback type="invalid">
-                Please provide a valid address.
+                Please provide a valid Location.
               </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group as={Col} md="12" controlId="validationCustom03">
+            <Form.Group
+              as={Col}
+              className="mb-3"
+              md="12"
+              controlId="validationCustom03"
+            >
               <Form.Label>Number of workers</Form.Label>
-              <Form.Control type="text" placeholder="e.g.20" required />
+              <Form.Control
+                type="text"
+                placeholder="e.g.20"
+                required
+                name="totalWorkers"
+                value={props.data?.totalWorkers}
+                onChange={props.handleFormChange}
+              />
               <Form.Control.Feedback type="invalid">
-                Please provide a valid address.
+                Please provide a valid Location.
               </Form.Control.Feedback>
             </Form.Group>
             <Form.Group as={Col} md="12" controlId="validationCustom03">
               <Form.Label>Written Contract</Form.Label>
-              <Form.Control type="text" placeholder="Yes/No" required />
+              <Form.Select
+                required
+                name="writtenContract"
+                value={props.data?.writtenContract}
+                onChange={props.handleFormChange}
+              >
+                <option value="" disabled>
+                  Select Option
+                </option>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+              </Form.Select>
               <Form.Control.Feedback type="invalid">
-                Please provide a valid address.
+                Please provide a valid option.
               </Form.Control.Feedback>
             </Form.Group>
           </Row>
@@ -810,8 +843,7 @@ function DetailModal(props) {
         <CustomButton text={"Close"} onClick={props.onHide} width={"auto"} />
         <CustomButton
           text={"Save Changes"}
-          // onClick={handleSubmit}
-          onClick={props.onHide}
+          onClick={() => props.handlechanges(formData)}
           width={"auto"}
         />
       </Modal.Footer>

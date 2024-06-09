@@ -15,14 +15,19 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  cursor: pointer;
 }
 .cardImg {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  cursor: pointer;
 }
 .cardText {
   line-height: 2rem;
+  text-align: justify;
 }
 .readMore {
   color: var(--color-primary);
@@ -52,6 +57,9 @@
   border-color: var(--color-primary);
   cursor: not-allowed !important;
 }
+.details {
+  font-weight: 700;
+}
 
 /*  */
 
@@ -66,7 +74,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 1rem;
+
     gap: 15px;
   }
   .lowerColumn {
@@ -81,9 +89,6 @@
   }
   .stars {
     justify-content: center;
-  }
-  .cardText {
-    text-align: left;
   }
 }
 

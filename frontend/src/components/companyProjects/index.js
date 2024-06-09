@@ -1,16 +1,39 @@
 import React, { useState } from "react";
 import styles from "./index.module.css";
 import { Card, Container, Row, Col, Spinner } from "react-bootstrap";
-import Lightbox from "react-image-lightbox";
-import "react-image-lightbox/style.css";
+import Lightbox from "yet-another-react-lightbox";
+import { Fullscreen, Video, Zoom } from "yet-another-react-lightbox/plugins";
 
 const CompanyProjects = () => {
   const [images] = useState([
-    { src: "./photos/ongoing4.jpg", title: "Model 1" },
-    { src: "./photos/ongoing5.jpg", title: "Model 2" },
-    { src: "./photos/ongoing1.jpg", title: "Model 3" },
-    { src: "./photos/ongoing2.jpg", title: "Model 4" },
-    { src: "./photos/ongoing3.jpg", title: "Model 5" },
+    //   alt: "image 1",
+    //   width: "100%",
+    //   height: "100%",
+    {
+      src: process.env.PUBLIC_URL + "/photos/familyphoto2.jpg",
+
+      title: "Model 1",
+    },
+    {
+      src: process.env.PUBLIC_URL + "/photos/ongoing4.jpg",
+
+      title: "Model 2",
+    },
+    {
+      src: process.env.PUBLIC_URL + "/photos/ongoing1.jpg",
+
+      title: "Model 3",
+    },
+    {
+      src: process.env.PUBLIC_URL + "/photos/ongoing2.jpg",
+
+      title: "Model 4",
+    },
+    {
+      src: process.env.PUBLIC_URL + "/photos/ongoing3.jpg",
+
+      title: "Model 5",
+    },
   ]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [showFullScreen, setShowFullScreen] = useState(false);
@@ -58,27 +81,14 @@ const CompanyProjects = () => {
 
       {showFullScreen && selectedImageIndex !== null && (
         <Lightbox
-          mainSrc={images[selectedImageIndex].src}
-          nextSrc={images[(selectedImageIndex + 1) % images.length].src}
-          prevSrc={
-            images[(selectedImageIndex + images.length - 1) % images.length].src
-          }
-          onCloseRequest={() => setShowFullScreen(false)}
-          onMovePrevRequest={() =>
-            setSelectedImageIndex(
-              (selectedImageIndex + images.length - 1) % images.length
-            )
-          }
-          onMoveNextRequest={() =>
-            setSelectedImageIndex((selectedImageIndex + 1) % images.length)
-          }
-          onImageLoad={handleImageLoad}
+          index={selectedImageIndex}
+          open={showFullScreen}
+          close={() => setShowFullScreen(false)}
+          slides={images.map((image) => {
+            return image;
+          })}
+          plugins={[Fullscreen, Video, Zoom]}
         />
-      )}
-      {isLoading && (
-        <div className={styles.loadingOverlay}>
-          <Spinner animation="border" role="status" variant="light" />
-        </div>
       )}
     </Container>
   );

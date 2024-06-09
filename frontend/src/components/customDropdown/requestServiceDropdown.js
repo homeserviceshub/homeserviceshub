@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./index.module.css";
 
-const RequestServiceDropdown = ({ onChange }) => {
+const RequestServiceDropdown = ({ onChange, options }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
-  const options = [
-    "Bathroom Renovation",
-    "Basement Renovation",
-    "Kitchen Renovation",
-    "Master Room Renovation",
-  ];
+  // const options = [
+  //   "Bathroom Renovation",
+  //   "Basement Renovation",
+  //   "Kitchen Renovation",
+  //   "Master Room Renovation",
+  // ];
   const dropdownRef = useRef(null);
 
   const handleOptionChange = (event) => {
@@ -49,7 +49,7 @@ const RequestServiceDropdown = ({ onChange }) => {
         className={`${isOpen ? styles.show : ""} ${styles.dropdownMenu}`}
         //   className={`dropdown-menu ${isOpen ? "show" : ""}`}
       >
-        {options.map((option) => (
+        {options?.map((option) => (
           <label
             key={option}
             className={styles.dropdownItem}

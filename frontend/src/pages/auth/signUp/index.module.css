@@ -24,7 +24,6 @@
 
 .formDesign input {
   padding: 12px;
-  margin-bottom: 15px;
 }
 
 .formDesign input:focus {
@@ -42,7 +41,6 @@
 }
 
 .formDesign .signInLink {
-  /* background: #932093; */
   width: 100%;
   background: linear-gradient(
     180deg,
@@ -57,11 +55,9 @@
   margin-bottom: 15px;
   display: block;
   position: relative;
-  /* transition: all .4s ease-out; */
 }
 
 .formDesign .signInLink:hover {
-  /* background: #117C42; */
   background: linear-gradient(180deg, #1eb262 0%, #09592e 100%);
 }
 
@@ -74,20 +70,6 @@
   width: 24px !important;
   height: 24px !important;
   text-align: center;
-}
-
-.formDesign a {
-  font-family: var(--Inter);
-  font-style: normal;
-  font-weight: 400;
-  font-size: 20px;
-  line-height: 29px;
-  color: var(--color-primary);
-  text-decoration: none;
-}
-
-.formDesign a:hover {
-  color: rgb(5, 141, 0) !important;
 }
 .closeBtn {
   color: white;
@@ -105,4 +87,12 @@
 .closeBtn:hover {
   opacity: 1 !important;
   background-color: rgb(223, 0, 0);
+}
+.error {
+  width: 100%;
+  font-size: 0.875em;
+  color: var(--bs-form-invalid-color);
+}
+.texterror {
+  border-color: var(--bs-form-invalid-border-color);
 }

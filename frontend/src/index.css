@@ -9,6 +9,8 @@ code {
   font-family: "Times New Roman", Times, serif;
 }
 :root {
+  --swiper-navigation-color: rgb(67 204 147);
+  --swiper-theme-color: rgb(67 204 147);
   --color-primary: rgb(67 204 147);
   --color-black: rgb(0, 0, 0);
   --color-white: rgb(255, 255, 255);
@@ -21,6 +23,9 @@ code {
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
+}
+.form-control.is-invalid {
+  background-image: none !important;
 }
 
 a:hover {

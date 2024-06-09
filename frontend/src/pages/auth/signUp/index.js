@@ -10,52 +10,111 @@ import axios from "axios";
 function Signup() {
   const [credField, setCredField] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const [username, setUsername] = useState(null);
-  const [email, setEmail] = useState(null);
-  const [password, setPassword] = useState(null);
-  const [confirmPassword, setConfirmPassword] = useState(null);
-
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    number: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [emailPhoneText, setEmailPhoneText] = useState();
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // function Forgetpassword() {
-  //   navigate("/reset-password", {
-  //     replace: true,
-  //   });
-  // }
   function handleClose() {
     navigate(-1);
   }
 
+  const handleChange = (key, value) => {
+    console.log(formData);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [key]: value,
+    }));
+  };
+
+  // Function to validate form data
+  function validateFormData() {
+    let validationErrors = {};
+
+    if (!formData.username) {
+      validationErrors.username = "Username is required.";
+    }
+
+    if (!formData.email) {
+      validationErrors.email = "Email is required.";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      validationErrors.email = "Email format is invalid.";
+    }
+
+    if (!formData.number) {
+      validationErrors.number = "Phone number is required.";
+    }
+
+    if (!formData.password) {
+      validationErrors.password = "Password is required.";
+    } else if (formData.password.length < 8) {
+      validationErrors.password =
+        "Password must be at least 8 characters long.";
+    }
+
+    if (!formData.confirmPassword) {
+      validationErrors.confirmPassword = "Confirm password is required.";
+    } else if (formData.confirmPassword !== formData.password) {
+      validationErrors.confirmPassword = "Passwords do not match.";
+    }
+
+    return validationErrors;
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
+    setEmailPhoneText("");
+    setErrors({});
+    // Validate form data
+    const validationErrors = validateFormData();
+
+    // If there are validation errors, set them and do not submit the form
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+    setIsSubmitting(true);
+
+    // Make API request to submit the form data
 
     axios
       .post("http://localhost:8000/signup", {
-        username: username,
-        email: email,
-        password: password,
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        number: formData.number,
       })
       .then((response) => {
         if (response.status === 200) {
-          dispatch(CHECKLOGIN(true));
-          navigate("/");
-          console.log(response);
+          if (response.data.message != "New user created successfully.") {
+            setEmailPhoneText(response.data.message);
+            setIsSubmitting(false);
+          } else {
+            console.log(response.data);
+            navigate("/", {
+              replace: true,
+            });
+            setEmailPhoneText("");
+            setIsSubmitting(false);
+            localStorage.setItem("auth", response.data.data._id);
+            dispatch(CHECKLOGIN(true));
+          }
         }
       })
       .catch((error) => {
         console.error("AxiosError:", error);
         console.log(error);
+        setIsSubmitting(false);
       });
-
-    setIsSubmitting(true);
-    // dispatch(
-    //   loginAction(email, password, null, () => {
-    //     setIsSubmitting(false);
-    //   })
-    // );
   }
+  console.log(emailPhoneText);
   return (
     <Container fluid className={styles.containerX}>
       <Row className=" justify-content-center align-items-center h-100">
@@ -72,51 +131,93 @@ function Signup() {
                 <Col md={12}>
                   <h2>Sign in</h2>
                 </Col>
-                <Col md={12}>
+                <Col md={12} className="mb-3">
                   <input
                     type="text"
-                    className="form-control"
+                    className={`form-control ${
+                      errors.username ? "is-invalid" : ""
+                    }`}
                     placeholder="Username"
-                    value={username}
-                    onChange={({ target: { value } }) => setUsername(value)}
+                    value={formData.username}
+                    onChange={({ target: { value } }) =>
+                      setFormData((prevFormData) => ({
+                        ...prevFormData,
+                        username: value,
+                      }))
+                    }
                     autoComplete="off"
                   />
+                  {errors.username && (
+                    <div className="invalid-feedback m-0">
+                      {errors.username}
+                    </div>
+                  )}
                 </Col>
-                <Col md={12}>
+                <Col md={12} className="mb-3">
                   <input
                     type="text"
-                    className="form-control"
+                    className={`form-control ${
+                      errors.email ? "is-invalid" : ""
+                    }`}
                     placeholder="Email Address"
-                    value={email}
-                    onChange={({ target: { value } }) => setEmail(value)}
+                    value={formData.email}
+                    onChange={({ target: { value } }) =>
+                      setFormData((prevFormData) => ({
+                        ...prevFormData,
+                        email: value,
+                      }))
+                    }
                     autoComplete="off"
                   />
+                  {errors.email && (
+                    <div className="invalid-feedback mt-0">{errors.email}</div>
+                  )}
+                  {emailPhoneText === "email already exists" && (
+                    <div className={`mt-0 ${styles.error}`}>
+                      {emailPhoneText}
+                    </div>
+                  )}
                 </Col>
-                <Col md={12} className="position-relative">
+                <Col md={12} className="mb-3">
+                  <input
+                    type="number"
+                    className={`form-control ${
+                      errors.number ? "is-invalid" : ""
+                    }`}
+                    placeholder="Phone Number"
+                    value={formData.number}
+                    onChange={({ target: { value } }) =>
+                      setFormData((prevFormData) => ({
+                        ...prevFormData,
+                        number: value,
+                      }))
+                    }
+                    autoComplete="off"
+                  />
+                  {errors.number && (
+                    <div className="invalid-feedback mt-0">{errors.number}</div>
+                  )}
+
+                  {emailPhoneText === "Phone number already exists" && (
+                    <div className={`mt-0 ${styles.error}`}>
+                      {emailPhoneText}
+                    </div>
+                  )}
+                </Col>
+                <Col md={12} className="position-relative mb-3">
                   <input
                     type={credField ? "text" : "password"}
-                    className="form-control"
+                    className={`form-control ${
+                      errors.password ? "is-invalid" : ""
+                    }`}
                     placeholder="Password"
-                    value={password}
-                    autoComplete="off"
-                    onChange={({ target: { value } }) => setPassword(value)}
-                  />
-                  <span
-                    className={styles.floatingEye}
-                    onClick={() => setCredField(!credField)}
-                  >
-                    {!credField ? <AiFillEyeInvisible /> : <AiFillEye />}
-                  </span>
-                </Col>
-                <Col md={12} className="position-relative">
-                  <input
-                    type={credField ? "text" : "password"}
-                    className="form-control"
-                    placeholder="Confirm Password"
-                    value={confirmPassword}
+                    value={formData.password}
                     autoComplete="off"
                     onChange={({ target: { value } }) =>
-                      setConfirmPassword(value)
+                      setFormData((prevFormData) => ({
+                        ...prevFormData,
+                        password: value,
+                      }))
                     }
                   />
                   <span
@@ -125,13 +226,46 @@ function Signup() {
                   >
                     {!credField ? <AiFillEyeInvisible /> : <AiFillEye />}
                   </span>
+                  {errors.password && (
+                    <div className="invalid-feedback mt-0">
+                      {errors.password}
+                    </div>
+                  )}
+                </Col>
+                <Col md={12} className="position-relative mb-3">
+                  <input
+                    type={credField ? "text" : "password"}
+                    className={`form-control ${
+                      errors.confirmPassword ? "is-invalid" : ""
+                    }`}
+                    placeholder="Confirm Password"
+                    value={formData.confirmPassword}
+                    autoComplete="off"
+                    onChange={({ target: { value } }) =>
+                      setFormData((prevFormData) => ({
+                        ...prevFormData,
+                        confirmPassword: value,
+                      }))
+                    }
+                  />
+                  <span
+                    className={styles.floatingEye}
+                    onClick={() => setCredField(!credField)}
+                  >
+                    {!credField ? <AiFillEyeInvisible /> : <AiFillEye />}
+                  </span>
+                  {errors.confirmPassword && (
+                    <div className="invalid-feedback mt-0">
+                      {errors.confirmPassword}
+                    </div>
+                  )}
                 </Col>
 
                 <Col md={12} className="text-center">
                   <Button
                     type="submit"
                     className={styles.signInLink}
-                    disabled={isSubmitting}
+                    // disabled={isSubmitting}
                   >
                     {isSubmitting ? (
                       <Spinner
@@ -151,4 +285,5 @@ function Signup() {
     </Container>
   );
 }
+
 export default Signup;

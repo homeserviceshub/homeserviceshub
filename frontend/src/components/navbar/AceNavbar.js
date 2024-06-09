@@ -5,22 +5,62 @@ import "./navBar.css";
 import CustomButton from "../customBtn";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import axios from "axios";
 
 const AceNavbar = () => {
   const [dropdown, setDropdown] = useState(false);
   const [changeActive, setChangeActive] = useState("Home");
-  const [loggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const auth = localStorage.getItem("aauth");
+  const [remaining, setRemaining] = useState(0);
+  // const total = useSelector((state) => state.RemainingTasksReducer);
+  // console.log(total);
 
-  const remainingTasks = useSelector((state) => {
-    return state.RemainingTasksReducer;
-  });
+  // const [remainingTasks, setRemainingTasks] = useState(remaining);
+  // console.log(remainingTasks);
 
+  useEffect(() => {
+    if (auth === null || auth === "null") {
+      navigate("/ace/signin");
+      setLoggedIn(false);
+    } else {
+      fetchData();
+      setLoggedIn(true);
+    }
+  }, [auth]);
+  const fetchData = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/getprojectsdata",
+        {
+          clientID: localStorage.getItem("aauth"),
+        }
+      );
+
+      if (response.status === 200) {
+        if (response.data.message === "No Projects Done Yet") {
+          localStorage.setItem("totalProjects", 0);
+        } else {
+          const requestedTasks = response.data.filter(
+            (item) => item.status === "requested"
+          );
+          setRemaining(requestedTasks.length);
+        }
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
   const handleClick = () => {
     setDropdown(!dropdown);
   };
   const GotoSignin = () => {
+    navigate("/ace/signin");
+  };
+  const Logout = () => {
+    localStorage.setItem("aauth", null);
     navigate("/ace/signin");
   };
 
@@ -85,16 +125,17 @@ const AceNavbar = () => {
                 ></span>
                 {item.title}
               </Link>
-              {item.title === "Service Request" && remainingTasks !== 0 && (
-                <span className="newTasks">{remainingTasks}</span>
-              )}
+              {item.title === "Service Request" &&
+                remaining !== 0 &&
+                !isNaN(remaining) && (
+                  <span className="newTasks">{remaining}</span>
+                )}
             </li>
           );
         })}
-
         {loggedIn ? (
-          <li className="item" onClick={GotoSignin}>
-            <CustomButton text={"Profile"} />
+          <li className="item" onClick={Logout}>
+            <CustomButton text={"LOG OUT"} />
           </li>
         ) : (
           <li className="item" onClick={GotoSignin}>

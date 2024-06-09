@@ -19,12 +19,6 @@
   right: 11px;
   font-size: 22px;
 }
-.noImagesMessage {
-  font-size: 3rem;
-  font-weight: 500;
-  text-align: center;
-  padding: 60px;
-}
 .navigationWrapper {
   display: flex;
   gap: 10px;
@@ -59,6 +53,10 @@
   height: 300px;
   font-size: 24px;
   color: gray;
+  /* font-size: 3rem; */
+  font-weight: 500;
+  text-align: center;
+  padding: 60px;
 }
 
 .loadingOverlay {

@@ -12,6 +12,8 @@ import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { CHECKLOGIN } from "../../redux/actions/actionCheckLogin";
 import { GetUserData } from "../../redux/actions/actionGetUserData";
+import axios from "axios";
+import moment from "moment";
 // import moment from "moment";
 
 const CustomerProfile = () => {
@@ -23,18 +25,12 @@ const CustomerProfile = () => {
     password: "",
     joining_date: "",
   });
+  const [userReviews, setUserReviews] = useState([]);
+  const [userRequestData, setUserRequestData] = useState([]);
   const [dummyData, setDummyData] = useState(data);
   const stars = ["1", "2", "3", "4", "5"];
   const list = ["1", "2", "3"];
-  const [bookmarks, setBookmarks] = useState(list);
-  const [categories] = useState([
-    "Architect",
-    "General Constractor",
-    "Painter",
-    "Project Manager",
-    "Builder",
-    "Demolition",
-  ]);
+  const [bookmarks, setBookmarks] = useState([]);
 
   const [selectedFilter, setSelectedFilter] = useState("details");
   const [profileModalShow, setProfileModalShow] = useState(false);
@@ -46,17 +42,67 @@ const CustomerProfile = () => {
   const usersData = useSelector((state) => {
     return state.userDataReducer;
   });
-  console.log(usersData.data, "getting Data");
   useEffect(() => {
     dispatch(GetUserData(userId));
   }, [userId, dispatch]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // setIsLoading(true);
+        const response = await axios.post(
+          "http://localhost:8000/getreviewdata",
+          {
+            id: localStorage.getItem("auth"),
+          }
+        );
+        if (response.status === 200) {
+          // setIsLoading(false);
+          setUserReviews(response.data);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+      try {
+        // setIsLoading(true);
+        const response = await axios.post(
+          "http://localhost:8000/getrequestdata",
+          {
+            customerID: localStorage.getItem("auth"),
+          }
+        );
+        if (response.status === 200) {
+          setUserRequestData(response.data);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+      try {
+        // setIsLoading(true);
+        const response = await axios.post(
+          "http://localhost:8000/getbookmarksdata",
+          {
+            customerID: localStorage.getItem("auth"),
+          }
+        );
+        if (response.status === 200) {
+          if (response.data?.message !== "No Bookmarks Yet") {
+            setBookmarks(response.data);
+          }
+          // setIsLoading(false);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
 
+    fetchData();
+  }, []);
   useEffect(() => {
     const newData = { ...data, ...usersData.data };
     setData(newData);
     setDummyData(newData);
-    console.log(newData, "combined Data");
   }, [usersData.data]);
+
   const handleFormChange = (event) => {
     const { name, value } = event.target;
     setDummyData({
@@ -65,29 +111,117 @@ const CustomerProfile = () => {
     });
   };
   const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setDummyData({
-        ...dummyData,
-        profile_photo: reader.result,
-      });
-    };
-    setData({
+    setDummyData({
       ...dummyData,
-      profile_photo: reader.result,
+      profile_photo: event.target.files[0],
     });
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
+  };
+  const handleClose = () => {
+    setDummyData({
+      ...data,
+    });
+    setProfileModalShow(false);
   };
 
-  const handlechanges = () => {
-    // console.log(formData, "Form Data");
-    setData(dummyData);
+  const handlechanges = async () => {
+    var profileData;
+    if (dummyData.profile_photo) {
+      try {
+        const formData = new FormData();
+        formData.append("media", dummyData.profile_photo);
+
+        const response = await axios.post(
+          "http://localhost:8000/upload",
+          formData
+        );
+
+        if (response.status === 200) {
+          const mediaObject = {
+            path: response.data.filePath.filename,
+            type: dummyData.profile_photo.type.startsWith("image")
+              ? "image"
+              : "video",
+          };
+          profileData = mediaObject;
+          setData((prevData) => ({
+            ...prevData,
+            ...dummyData,
+            profile_photo: mediaObject,
+          }));
+        }
+      } catch (error) {
+        console.error("Error uploading media:", error);
+      }
+    }
+    setData((prevData) => ({
+      ...prevData,
+      ...dummyData,
+      profile_photo: profileData ? profileData : data.profile_photo,
+    }));
+    try {
+      // setIsLoading(true);
+      await axios
+        .post("http://localhost:8000/updateuser", {
+          email: dummyData.email,
+          number: dummyData.number,
+          password: dummyData.password,
+          profile_photo: profileData,
+          username: dummyData.username,
+          id: dummyData._id,
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            alert("Users data updated Successfully");
+          }
+        })
+        .catch((error) => {
+          console.error("AxiosError:", error);
+        });
+    } catch (error) {
+      console.error("Error:", error);
+    }
     setProfileModalShow(false);
+  };
+  // alter changes in this function accordingly
+  // const handleCategoryClicked = (item) => {
+  //   setClickedCategory(item);
+  //   window.scrollTo(0, 0);
+  //   const queryParams = new URLSearchParams();
+  //   dispatch(SELECTEDSERVICE(item));
+  //   for (const key in searchData) {
+  //     if (searchData[key]) {
+  //       queryParams.append(key, searchData[key]);
+  //     }
+  //   }
+  //   console.log(item);
+  //   console.log("before:", searchData.category);
+  //   setSearchData((prevData) => ({
+  //     ...prevData,
+  //     category: item,
+  //   }));
+  //   console.log("after:", searchData.category);
+  //   const url = `/services/service?category=${item}&location=${searchData.location}&sortedBy=${searchData.sortedBy}`;
+  //   navigate(url);
+  // };
+  const bookmarkRemove = (id) => {
+    // setbookmark(!bookmark);
+    try {
+      axios
+        .post("http://localhost:8000/updatebookmark", {
+          clientID: id,
+          customerID: localStorage.getItem("auth"),
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            alert("Bookmark Removed Successfully");
+          }
+        })
+        .catch((error) => {
+          console.error("AxiosError:", error);
+        });
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
   const activeTab = (e) => {
     setSelectedFilter(e.target.title);
@@ -99,9 +233,8 @@ const CustomerProfile = () => {
     setBookmarks(updatedBookmarks);
   };
   const logout = () => {
-    console.log("logout");
     localStorage.setItem("auth", null);
-    console.log(dispatch(CHECKLOGIN(false)));
+
     dispatch(CHECKLOGIN(false));
     navigate("/");
   };
@@ -164,14 +297,6 @@ const CustomerProfile = () => {
                 </div>
               </ScrollLink>
             </div>
-            {/* <div
-              title="Logout"
-              onClick={activeTab}
-              lg={1}
-              className={`${styles.tab}`}
-            >
-              Logout
-            </div> */}
             <div className={styles.btnDiv}>
               <CustomButton
                 text={"logout"}
@@ -189,16 +314,15 @@ const CustomerProfile = () => {
           <div className={styles.imgDiv}>
             {data.profile_photo === null ? (
               <img
-                src="./icons/default-profile-picture-male-icon.svg"
-                width="100%"
-                height="100%"
+                src={
+                  process.env.PUBLIC_URL +
+                  "/icons/default-profile-picture-male-icon.svg"
+                }
                 className={styles.img}
               />
             ) : (
               <img
-                src={data.profile_photo}
-                width="100%"
-                height="100%"
+                src={`http://localhost:8000/images/${data.profile_photo.path}`}
                 className={styles.img}
               />
             )}
@@ -285,93 +409,143 @@ const CustomerProfile = () => {
         </div>
       </Container>
       <Container className="mb-0">
+        <Row id="projects" className="mx-0">
+          <Col lg={12} className={styles.reviewHeading}>
+            <div>My Projects</div>
+          </Col>
+          {userRequestData?.length > 0 ? (
+            userRequestData.map((item, index) => {
+              return <div key={index}>{item.status}</div>;
+            })
+          ) : (
+            <div className={styles.noReviews}>No Reviews Yet!!!</div>
+          )}
+        </Row>
         <Row id="reviews" className="mx-0">
           <Col lg={12} className={styles.reviewHeading}>
-            <div>Reviews(5)</div>
+            <div>My Reviews</div>
           </Col>
-          {stars.map((item, index) => {
-            return <ReviewCardComponent key={index} />;
-          })}
+          {userReviews?.length > 0 ? (
+            <ReviewCardComponent data={userReviews} photosOf={"index"} />
+          ) : (
+            <div className={styles.noReviews}>No Reviews Yet!!!</div>
+          )}
         </Row>
+
         <Row id="bookmarks" className="mx-0">
           <Col lg={12} className={styles.reviewHeading}>
-            <div>Bookmarks({bookmarks.length})</div>
+            <div>Bookmarks({bookmarks?.length})</div>
           </Col>
-          {bookmarks.map((item, index) => {
-            return (
-              <Row className={styles.dynamicRow} key={index} data-aos="fade-up">
-                <Col lg={2}>
-                  {" "}
-                  <img
-                    src="./photos/member5.jpg"
-                    width={160}
-                    height={130}
-                    className={styles.profilePhoto}
-                  />
-                </Col>
-                <Col lg={6}>
-                  <div className={styles.companyName}>Company Name</div>
-                  <div className={styles.companyDetails}>
-                    {" "}
-                    <BsStarFill fill={"gold"} />
-                    <BsStarFill fill={"gold"} />
-                    <BsStarHalf fill={"gold"} />
-                    <BsStar fill={"gold"} />
-                    <BsStar fill={"gold"} />
-                  </div>
-                  <div className={styles.companySmallDetails}>
-                    <div className={styles.companyDetails}>(65)Reviews</div>
-                    <div className={styles.companyDetails}>
-                      6+ Year Experience
+          {bookmarks.length > 0 ? (
+            bookmarks.map((item, index) => {
+              return (
+                <Row
+                  className={styles.dynamicRow}
+                  key={index}
+                  data-aos="fade-up"
+                >
+                  <Col lg={8} className={styles.bookmarkData}>
+                    <div className={styles.bookmarkPhoto}>
+                      <img
+                        src={
+                          item.aceData.profilePhoto
+                            ? `http://localhost:8000/images/${item.aceData.profilePhoto.path}`
+                            : process.env.PUBLIC_URL +
+                              "/icons/default-profile-picture-male-icon.svg"
+                        }
+                        alt="Selected"
+                        width={150}
+                        height={150}
+                        className={styles.profilePhoto}
+                      />
                     </div>
-                  </div>
-                  <div className={styles.companyDetails}>
-                    Thank you for your feedback! We greatly appreciate your
-                    satisfaction with our services. We take pride in delivering
-                    quality work and ensuring customer satisfaction...{" "}
-                    <Link style={{ color: "green" }} to="/companyprofile">
-                      read more
-                    </Link>
-                  </div>
-                </Col>
-                <Col lg={2}>
-                  <img
-                    src="./photos/verified.png"
-                    width={100}
-                    height={100}
-                    className={styles.verifyPhoto}
-                  />
-                </Col>
-                <Col lg={2}>
-                  <div
-                    onClick={() => navigate("/servicerequest")}
-                    className={styles.firstBtn}
-                  >
-                    <CustomButton text={"Request a service"} />
-                  </div>
-                  <div
-                    onClick={() => navigate("/companyprofile")}
-                    className={styles.firstBtn}
-                  >
-                    <CustomButton text={"Profile"} />
-                  </div>
-                  <div onClick={() => handleRemove(index)}>
-                    <CustomButton text={"Remove"} />
-                  </div>
-                </Col>
-                <Col lg={8} className={styles.categoryList}>
-                  Category-{" "}
-                  {categories.map((item, index) => {
-                    return (
-                      <span key={index} className={styles.categories}>
-                        {item}
+                    <div style={{ width: "75%" }}>
+                      <div className={styles.companyName}>
+                        {item.aceData.companyName}
+                      </div>
+                      <div className={styles.companyDetails}>
+                        {[...Array(5)].map((_, idx) => {
+                          const rating = Number(item.aceData?.overallRating);
+                          const fullStars = Math.floor(rating);
+                          const hasHalfStar = rating - fullStars >= 0.5;
+                          return (
+                            <span key={idx}>
+                              {idx < fullStars ? (
+                                <BsStarFill fill="gold" />
+                              ) : idx === fullStars && hasHalfStar ? (
+                                <BsStarHalf fill="gold" />
+                              ) : (
+                                <BsStar fill="gold" />
+                              )}
+                            </span>
+                          );
+                        })}
+                      </div>
+                      <div className={styles.companySmallDetails}>
+                        <div className={styles.companyDetails}>
+                          ({item.aceData.totalReviews}) Reviews
+                        </div>
+                        <div className={styles.companyDetails}>
+                          {new Date().getFullYear() -
+                            item.aceData.yearOfEstablishment}
+                          + Year Experience
+                        </div>
+                      </div>
+                      <div className={styles.companyDetails}>
+                        {item.aceData.brief.length <= 160
+                          ? item.aceData.brief
+                          : `${item.aceData.brief.slice(0, 160)}...`}
+                        <Link
+                          style={{ color: "green" }}
+                          to={`/companyprofile/${item._id}`}
+                        >
+                          read more
+                        </Link>
+                      </div>
+                    </div>
+                  </Col>
+
+                  <Col lg={2} className={styles.verifiedPhotoDiv}></Col>
+
+                  <Col lg={2}>
+                    <div
+                      onClick={() => navigate(`/${item._id}/servicerequest`)}
+                      className={styles.firstBtn}
+                    >
+                      <CustomButton text={"Request a service"} />
+                    </div>
+                    <div
+                      onClick={() => navigate(`/companyprofile/${item._id}`)}
+                      className={styles.firstBtn}
+                    >
+                      <CustomButton text={"Profile"} />
+                    </div>
+                    <div onClick={() => handleRemove(index)}>
+                      <CustomButton
+                        onClick={() => bookmarkRemove(item._id)}
+                        text={"Remove"}
+                      />
+                    </div>
+                  </Col>
+
+                  <Col lg={8} className={styles.categoryList}>
+                    Category:{" "}
+                    {item.aceData.categories.map((cat, catIndex) => (
+                      <span
+                        key={catIndex}
+                        // onClick={() => handleCategoryClicked(cat)}
+                        className={styles.categories}
+                      >
+                        {cat}
                       </span>
-                    );
-                  })}
-                </Col>
-              </Row>
-            );
-          })}
+                    ))}
+                  </Col>
+                </Row>
+              );
+            })
+          ) : (
+            <div className={styles.noReviews}>No Bookmarks Yet!!!</div>
+          )}
         </Row>
       </Container>
 
@@ -379,6 +553,7 @@ const CustomerProfile = () => {
         show={profileModalShow}
         onHide={() => setProfileModalShow(false)}
         handlechanges={handlechanges}
+        handleClose={handleClose}
         handleFormChange={handleFormChange}
         handleImageChange={handleImageChange}
         data={dummyData}
@@ -391,13 +566,10 @@ export default CustomerProfile;
 
 function ProfileModal(props) {
   const [validated, setValidated] = useState(false);
-
   const [formData, setFormData] = useState(
     // Initialize the formData state with the current data
     props.data
   );
-  console.log(props.data);
-  console.log(formData, "formdata");
 
   return (
     <Modal
@@ -476,10 +648,13 @@ function ProfileModal(props) {
           <Row className="mb-3">
             <Form.Group as={Col} md="12">
               <Form.Label>Joining Data</Form.Label>
+
               <Form.Control
                 type="text"
                 placeholder=""
-                value={formData.joining_date}
+                value={moment(props.data.joiningDate).format(
+                  "Do MMMM YYYY, h:mm:ss A"
+                )}
                 disabled
               />
               <Form.Control.Feedback type="invalid">
@@ -490,7 +665,11 @@ function ProfileModal(props) {
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <CustomButton text={"Close"} onClick={props.onHide} width={"auto"} />
+        <CustomButton
+          text={"Close"}
+          onClick={() => props.handleClose()}
+          width={"auto"}
+        />
         <CustomButton
           text={"Save Changes"}
           onClick={() => props.handlechanges(formData)}

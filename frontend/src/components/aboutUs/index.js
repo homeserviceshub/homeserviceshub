@@ -194,7 +194,7 @@ const AboutUsComponent = () => {
         <div className={styles.members}>
           <div className={styles.member}>
             <img
-              src="./photos/ceoimage.jpg"
+              src={process.env.PUBLIC_URL + "/photos/ceoimage.jpg"}
               width={250}
               height={250}
               alt="CEO/Owner"
@@ -207,7 +207,7 @@ const AboutUsComponent = () => {
               return (
                 <Col lg={3} className={styles.member} key={index}>
                   <img
-                    src={item.img}
+                    src={process.env.PUBLIC_URL + item.img}
                     width={200}
                     height={200}
                     alt="Member"

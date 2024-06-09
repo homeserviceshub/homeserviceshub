@@ -11,5 +11,6 @@ getRoute.use(bodyParser.urlencoded({ extended: true }));
 
 const getController = require("../controllers/getController");
 getRoute.get("/usersData", getController.usersData);
+// getRoute.get("/allacedata", getController.allAceData);
 
 module.exports = getRoute;

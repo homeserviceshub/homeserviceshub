@@ -18,11 +18,10 @@
 
 .companyProfileBackgroundPhoto {
   background: radial-gradient(
-      circle,
-      rgba(0, 0, 0, 0.2) 0%,
-      rgba(0, 0, 0, 0.6) 100%
-    ),
-    url("/public/photos/companyBackgroundPhoto.jpg");
+    circle,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
 
   background-repeat: no-repeat;
   background-position: center;
@@ -41,6 +40,8 @@
   width: 200px;
   height: 200px;
   border-radius: 12px;
+  object-fit: cover;
+  object-position: center;
 }
 .profileMainCol {
   display: flex;
@@ -119,6 +120,7 @@
 .overviewCol {
   font-weight: 500;
   padding: 20px;
+  text-align: justify;
 }
 .overviewCol2 {
   padding: 20px;
@@ -158,6 +160,9 @@
   font-size: 1rem;
   font-weight: 500;
   width: 160px;
+  display: flex;
+  gap: 3px;
+  align-items: center;
 }
 .ratingDiv12 {
   font-size: 4rem;
@@ -190,13 +195,13 @@
 .nameInDetailsInner {
   font-size: 3rem;
   font-weight: 500;
-  padding: 0px;
   color: gray;
 }
 .allDetails {
   color: gray;
   cursor: default;
   margin: 0px;
+  gap: 15px;
 }
 .detailDiv {
   padding-bottom: 15px;
@@ -224,17 +229,87 @@
 .scrollLink:hover {
   color: white !important;
 }
+.allStars {
+  font-size: large;
+}
+.card {
+  transition: transform 0.3s ease-in-out;
+}
 
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card .card-img-top {
+  height: 300px;
+}
+.noImagesMessage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  font-size: 24px;
+  color: gray;
+  font-weight: 500;
+  text-align: center;
+  padding: 60px;
+}
+.title {
+  border: 1px solid var(--color-primary);
+  width: 100%;
+  outline: none;
+  padding: 5px;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.noReviews {
+  display: flex;
+  font-size: 3rem;
+  font-weight: 500;
+  padding: 50px 20px;
+  justify-content: center;
+  color: grey;
+  background-color: white;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  border-radius: 6px;
+}
+.spinnerDiv {
+  display: flex;
+  justify-content: center;
+  padding: 10rem 0px;
+}
+.signInLoader {
+  font-size: 15px;
+  width: 24px !important;
+  height: 24px !important;
+  text-align: center;
+}
 @media screen and (max-width: 767px) {
-  .companyName {
+  .companyName,
+  .noReviews,
+  .nameInDetailsInner {
     font-size: 2rem;
   }
+  /* .noReviews{
+    font-size: 2rem;
+  } */
   .tabs {
-    margin: 0px 11px;
-    font-size: 1rem;
+    margin: 0px;
+    font-size: 0.8rem;
     flex-wrap: wrap;
   }
   .profileRow {
     text-align: center;
+  }
+  .writeReview {
+    display: none;
+  }
+}
+@media screen and (max-width: 992px) {
+  .profilebtns {
+    padding: 40px 15px;
   }
 }

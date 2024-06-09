@@ -12,6 +12,24 @@
   outline: none;
   box-shadow: 0 0 2px rgb(95, 183, 130);
 }
+.empty,
+.empty:focus-visible,
+.empty:focus {
+  border: 1px solid red;
+  outline: none;
+  box-shadow: 0 0 2px red;
+}
+.spinnerDiv {
+  display: flex;
+  justify-content: center;
+  padding: 10rem 0px;
+}
+.signInLoader {
+  font-size: 15px;
+  width: 24px !important;
+  height: 24px !important;
+  text-align: center;
+}
 .nearText {
   align-items: center;
   display: flex;
@@ -63,6 +81,7 @@
 }
 .profilePhoto {
   border-radius: 12px;
+  object-fit: cover;
 }
 .verifiedPhotoDiv {
   display: flex;
@@ -150,6 +169,13 @@
 }
 .categories:hover {
   color: green;
+}
+.bothBtns {
+  margin: auto;
+  justify-content: space-evenly;
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 @media screen and (max-width: 767px) {

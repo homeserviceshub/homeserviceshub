@@ -58,4 +58,5 @@
   display: flex;
   gap: 5px;
   padding-top: 15px;
+  justify-content: flex-end;
 }

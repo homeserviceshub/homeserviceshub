@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
+import { BsStar, BsStarHalf, BsStarFill } from "react-icons/bs";
 import styles from "./index.module.css";
 import AOS from "aos";
 
@@ -18,7 +18,10 @@ const HomePageReviews = () => {
           {" "}
           <div className={styles.cardImgDiv}>
             <img
-              src="./icons/default-profile-picture-male-icon.svg"
+              src={
+                process.env.PUBLIC_URL +
+                "/icons/default-profile-picture-male-icon.svg"
+              }
               alt="text"
               width="100px"
               height="100px"
@@ -29,20 +32,25 @@ const HomePageReviews = () => {
             "We use them for most of our home needs. Very reliable and always
             get great results"
           </div>
-          <div className={styles.reviewBy}>-Harman Sidhu(Punjab,India)</div>
+          <div className={styles.reviewBy}>
+            -Harman Sidhu(Amritsar,Punjab,India)
+          </div>
           <div className={styles.rating}>
             <BsStarFill />
             <BsStarFill />
             <BsStarFill />
-            <BsStarHalf />
-            <BsStar />
+            <BsStarFill />
+            <BsStarFill />
           </div>
         </Col>
         <Col className={styles.oneCard} lg={5} data-aos="zoom-in">
           {" "}
           <div className={styles.cardImgDiv}>
             <img
-              src="./icons/default-profile-picture-male-icon.svg"
+              src={
+                process.env.PUBLIC_URL +
+                "/icons/default-profile-picture-male-icon.svg"
+              }
               alt="text"
               width="100px"
               height="100px"
@@ -54,20 +62,25 @@ const HomePageReviews = () => {
             replace an aging hot water tank...choice did not disapponit, Duke's
             Plumbing in Calgary provided me with excellent service is all ways!"
           </div>
-          <div className={styles.reviewBy}>-Harman Sidhu(Punjab,India)</div>
+          <div className={styles.reviewBy}>
+            -Harvinder Singh(Amritsar,Punjab,India)
+          </div>
           <div className={styles.rating}>
             <BsStarFill />
             <BsStarFill />
             <BsStarFill />
-            <BsStarHalf />
-            <BsStar />
+            <BsStarFill />
+            <BsStarFill />
           </div>
         </Col>
         <Col className={styles.oneCard} lg={5} data-aos="zoom-in">
           {" "}
           <div className={styles.cardImgDiv}>
             <img
-              src="./icons/default-profile-picture-male-icon.svg"
+              src={
+                process.env.PUBLIC_URL +
+                "/icons/default-profile-picture-male-icon.svg"
+              }
               alt="text"
               width="100px"
               height="100px"
@@ -79,20 +92,25 @@ const HomePageReviews = () => {
             really helpful contractor through this website. Will absolutely be
             using HomeStars when we next need work done at home"
           </div>
-          <div className={styles.reviewBy}>-Harman Sidhu(Punjab,India)</div>
+          <div className={styles.reviewBy}>
+            -Charnjit Kaur(Muktsar,Punjab,India)
+          </div>
           <div className={styles.rating}>
             <BsStarFill />
             <BsStarFill />
             <BsStarFill />
-            <BsStarHalf />
-            <BsStar />
+            <BsStarFill />
+            <BsStarFill />
           </div>
         </Col>
         <Col className={styles.oneCard} lg={5} data-aos="zoom-in">
           {" "}
           <div className={styles.cardImgDiv}>
             <img
-              src="./icons/default-profile-picture-male-icon.svg"
+              src={
+                process.env.PUBLIC_URL +
+                "/icons/default-profile-picture-male-icon.svg"
+              }
               alt="text"
               width="100px"
               height="100px"
@@ -105,13 +123,15 @@ const HomePageReviews = () => {
             see what kind of pricing is out there and people's experience. I
             found exactly what I wanted and he did a great job..."
           </div>
-          <div className={styles.reviewBy}>-Harman Sidhu(Punjab,India)</div>
+          <div className={styles.reviewBy}>
+            -Yuvraj Singh(Ludhiana,Punjab,India)
+          </div>
           <div className={styles.rating}>
             <BsStarFill />
             <BsStarFill />
             <BsStarFill />
-            <BsStarHalf />
-            <BsStar />
+            <BsStarFill />
+            <BsStarFill />
           </div>
         </Col>
       </Row>

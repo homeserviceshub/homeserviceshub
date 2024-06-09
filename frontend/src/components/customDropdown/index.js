@@ -3,12 +3,13 @@ import styles from "./index.module.css";
 
 const CustomeDropdown = ({ onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("Avg Customer Rating");
+  const [selectedOption, setSelectedOption] = useState("Top Customer Ratings");
   const options = [
-    "Avg Customer Rating",
-    "Ace Score",
-    "Recently Reviewed",
-    "Best of House Makers",
+    "Top Customer Ratings",
+    "Recent Customer Ratings",
+    // "Responsiveness Rankings",
+    // "Reputation Rankings",
+    "Most Projects Completed",
   ];
   const dropdownRef = useRef(null);
 

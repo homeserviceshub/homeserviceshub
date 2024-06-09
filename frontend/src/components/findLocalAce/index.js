@@ -16,20 +16,24 @@ const FindLocalAce = () => {
         <h5 data-aos="fade-up" className={styles.smallHeading}>
           Stop calling around. Home Makers sends Ace's straight to your inbox.
         </h5>
-        <Row data-aos="fade-up" className={styles.list}>
+        <Row className={styles.list}>
           <Col>
-            Communicate one-on-one with qualified Ace's interested in your
-            project.
+            <ul>
+              <li data-aos="fade-up">
+                {" "}
+                Communicate one-on-one with qualified Ace's interested in your
+                project.
+              </li>
+              <li data-aos="fade-up">
+                Discuss all aspects of the project, including pricing and
+                estimated timelines.
+              </li>
+              <li data-aos="fade-up">
+                Confidently select the right expert for your project.
+              </li>
+              <li data-aos="fade-up">Receive the best price guaranteed</li>
+            </ul>
           </Col>
-        </Row>
-        <Row data-aos="fade-up" className={styles.list}>
-          <Col>
-            Discuss all aspects of the project, including pricing and estimated
-            timelines.
-          </Col>
-        </Row>
-        <Row data-aos="fade-up" className={styles.list}>
-          <Col>Confidently select the right expert for your project.</Col>
         </Row>
       </Container>
     </div>

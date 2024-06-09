@@ -1,91 +1,154 @@
 import React, { useEffect, useState } from "react";
 import { Card } from "react-bootstrap";
 import styles from "./index.module.css";
-import { BsStarFill } from "react-icons/bs";
+import { BsStar, BsStarFill } from "react-icons/bs";
 import AOS from "aos";
+import moment from "moment";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-// const ReviewCardComponent = ({ photo, title, stars, date, description }) => {
-const ReviewCardComponent = () => {
+const ReviewCardComponent = ({ data, photosOf }) => {
+  const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
-  const photo = "./icons/default-profile-picture-male-icon.svg";
-  const title = "Bathroom Renovation";
-  const stars = [1, 2, 3, 4, 5];
-  const date = "7/10/2023";
-  const description = `Agora Design Build expertly handled two renovations flawlessly. They completed both projects on time 
-  and on budget. They provided excellent service and professional installers who were on-site on time, and were respectful 
-  of our home. I intend to hire them again for future projects. I have told all family and friends of this company.This 
-  company expertly handled two renovations flawlessly. They completed both projects on time and on budget. They provided 
-  excellent service and professional installers who were on-site on time, and were respectful of our home. I intend to 
-  hire them again for future projects. I have told all family and friends of this company.
-  The final results exceeded our expectations and we absolutely love our updated main bath, ensuite, and basement powder 
-  room. We loved working with the Agora Design Build team and look forward to our next project. We definitely recommend.`;
+  const [reviewTo, setReviewTo] = useState([]);
+  const [reviewBy, setReviewBy] = useState([]);
+  const dispatch = useDispatch();
+  const photo = "/icons/default-profile-picture-male-icon.svg";
+
+  const reviewByUserIds = [...new Set(data.map((item) => item.reviewBy))];
+  const reviewToUserIds = [...new Set(data.map((item) => item.reviewTo))];
+
   useEffect(() => {
+    const getReviewsData = async () => {
+      try {
+        const [reviewToResponse, reviewByResponse] = await Promise.all([
+          axios.post("http://localhost:8000/reviewdatarequest", {
+            id: reviewToUserIds,
+          }),
+          axios.post("http://localhost:8000/reviewdatarequest", {
+            id: reviewByUserIds,
+          }),
+        ]);
+
+        if (reviewToResponse.status === 200) {
+          setReviewTo(reviewToResponse.data);
+        }
+
+        if (reviewByResponse.status === 200) {
+          setReviewBy(reviewByResponse.data);
+        }
+      } catch (error) {
+        console.error("AxiosError:", error);
+      }
+    };
+
     AOS.init();
+    getReviewsData();
   }, []);
+
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
   };
+
   return (
     <>
-      <Card className={styles.dynamicCard} data-aos="fade-up">
-        <div className={styles.upperColumn}>
-          <Card.Img src={photo} className={styles.cardImg} />
-          <Card.Body className={styles.cardBody}>
-            <Card.Title className={styles.cardTitle}>{title}</Card.Title>
-            <Card.Text className={styles.stars}>
-              {stars.map((item, index) => (
-                <span key={index}>
-                  <BsStarFill fill="gold" />
-                </span>
-              ))}
-            </Card.Text>
-            <Card.Subtitle className="mb-2 text-muted">{date}</Card.Subtitle>
-            <Card.Text className={styles.cardText}>
-              {isExpanded ? description : `${description.slice(0, 315)}... `}
-              <span
-                className={styles.readMore}
-                variant="link"
-                onClick={toggleExpand}
-              >
-                {isExpanded ? " Read Less" : "Read More"}
-              </span>
-            </Card.Text>
-          </Card.Body>
-        </div>
-      </Card>
-
-      {/* <Card className={styles.dynamicCard}>
-        <div className={styles.upperColumn}>
-          <Card.Img src={photo} className={styles.cardImg} />
-          <Card.Title className={styles.cardTitle}>
-            <div>{name}</div>{" "}
-            <div>
-              <Card.Subtitle className="mb-2 text-muted">
-                Project Done on {date}
-              </Card.Subtitle>
-              <Card.Subtitle className="mb-2 text-muted">
-                Payment Mode Cash
-              </Card.Subtitle>
-            </div>
-          </Card.Title>
-        </div>
-        <div className={styles.lowerColumn}>
-          <div className={styles.writeReview}>
-            {reviewed ? (
-              <button className={styles.requestedBtn}>Reviewed</button>
-            ) : requested ? (
-              <button className={styles.requestedBtn}>
-                Requested a review
-              </button>
+      {data.map((reviewData, index) => (
+        <Card key={index} className={styles.dynamicCard} data-aos="fade-up">
+          <div className={styles.upperColumn}>
+            {photosOf === "reviewer" ? (
+              <Card.Img
+                src={
+                  reviewBy.find((item) => item._id === reviewData.reviewBy)
+                    ?.profile_photo
+                    ? `http://localhost:8000/images/${
+                        reviewBy.find(
+                          (item) => item._id === reviewData.reviewBy
+                        )?.profile_photo?.path
+                      }`
+                    : process.env.PUBLIC_URL + photo
+                }
+                className={styles.cardImg}
+              />
             ) : (
-              <CustomButton
-                text={"Request a Review"}
-                onClick={() => setRequested(true)}
+              <Card.Img
+                src={
+                  reviewTo.find((item) => item._id === reviewData.reviewTo)
+                    ?.aceData?.profilePhoto
+                    ? `http://localhost:8000/images/${
+                        reviewTo.find(
+                          (item) => item._id === reviewData.reviewTo
+                        )?.aceData?.profilePhoto?.path
+                      }`
+                    : process.env.PUBLIC_URL + photo
+                }
+                className={styles.cardImg}
+                onClick={() =>
+                  navigate(
+                    `/companyprofile/${
+                      reviewTo.find((item) => item._id === reviewData.reviewTo)
+                        ._id
+                    }`
+                  )
+                }
               />
             )}
+
+            <Card.Body className={styles.cardBody}>
+              <Card.Title
+                className={styles.cardTitle}
+                onClick={() =>
+                  photosOf === "reviewer"
+                    ? ""
+                    : navigate(
+                        `/companyprofile/${
+                          reviewTo.find(
+                            (item) => item._id === reviewData.reviewTo
+                          )._id
+                        }`
+                      )
+                }
+              >
+                {reviewData.reviewTitle
+                  ? reviewData.reviewTitle
+                  : "Dummy Title"}
+              </Card.Title>
+              <Card.Text className={styles.stars}>
+                {[...Array(5)].map((_, index) => (
+                  <span key={index}>
+                    {index < Number(reviewData?.stars) ? (
+                      <BsStarFill fill="gold" />
+                    ) : (
+                      <BsStar fill="gold" />
+                    )}
+                  </span>
+                ))}
+              </Card.Text>
+              <div>
+                <Card.Subtitle className="mb-2 text-muted">
+                  {moment(reviewData?.reviewDate).format(
+                    "MMMM Do YYYY, h:mm:ss a"
+                  )}
+                </Card.Subtitle>
+              </div>
+              <Card.Text className={styles.cardText}>
+                {reviewData?.reviewDescription.length <= 310 || isExpanded
+                  ? reviewData?.reviewDescription
+                  : `${reviewData?.reviewDescription.slice(0, 310)}... `}
+                {reviewData?.reviewDescription.length > 310 && (
+                  <span
+                    className={styles.readMore}
+                    variant="link"
+                    onClick={toggleExpand}
+                  >
+                    {isExpanded ? " Read Less" : "Read More"}
+                  </span>
+                )}
+              </Card.Text>
+            </Card.Body>
           </div>
-        </div>
-      </Card> */}
+        </Card>
+      ))}
     </>
   );
 };

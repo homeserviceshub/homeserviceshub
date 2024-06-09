@@ -71,6 +71,15 @@
 @media screen and (max-width: 767px) {
   .bothIcons {
     gap: 20px;
+    justify-content: space-evenly;
+  }
+  .iconHome {
+    padding: 6px;
+    width: 110px;
+  }
+  .iconBuilding {
+    padding: 18px !important;
+    width: 110px;
   }
   .main {
     padding: 20px;

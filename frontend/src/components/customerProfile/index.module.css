@@ -122,8 +122,18 @@
   border-radius: 12px;
   margin: 10px 0px;
 }
+.bookmarkData {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+.bookmarkPhoto {
+  display: flex;
+  padding-top: 10px;
+}
 .profilePhoto {
-  border-radius: 12px;
+  border-radius: 6px;
+  object-fit: cover;
 }
 .companyName {
   font-size: 1.5rem;
@@ -144,8 +154,27 @@
 .btnDiv {
   margin: auto 5px auto 0px;
 }
+.noReviews {
+  background-color: white;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  font-size: 20px;
+  color: gray;
+  font-size: 3rem;
+  font-weight: 500;
+  text-align: center;
+  padding: 60px;
+  margin-bottom: 10px;
+}
 
 @media screen and (max-width: 767px) {
+  .noReviews {
+    height: 100px;
+    font-size: 20px;
+  }
   .tabs {
     font-size: 0.8rem;
   }
@@ -155,5 +184,38 @@
   .img {
     width: 200px;
     height: 200px;
+  }
+  .companySmallDetails {
+    justify-content: center;
+    flex-wrap: wrap;
+    padding-bottom: 5px;
+    gap: 0px;
+    flex-direction: column;
+  }
+  .bookmarkData {
+    justify-content: center;
+    padding-bottom: 15px;
+  }
+  .tab {
+    padding: 10px 7px;
+  }
+}
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+  .bookmarkData {
+    flex-wrap: nowrap;
+  }
+}
+@media screen and (max-width: 991px) {
+  .companySmallDetails {
+    justify-content: center;
+    flex-wrap: wrap;
+    padding-bottom: 5px;
+    gap: 0px;
+    flex-direction: column;
+  }
+  .bookmarkData {
+    justify-content: center;
+    padding-bottom: 15px;
+    text-align: center;
   }
 }
