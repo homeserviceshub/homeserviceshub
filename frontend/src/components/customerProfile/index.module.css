@@ -118,9 +118,23 @@
 }
 .dynamicRow {
   background-color: white;
-  padding: 20px 9px 9px 9px;
+  padding: 20px 9px 9px 4px;
   border-radius: 12px;
   margin: 10px 0px;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.discription {
+  font-size: 1.2rem;
+  line-height: 24px;
+  padding: 10px 0px;
+}
+.data {
+  padding: 10px 0px;
+  font-size: 1.2rem;
 }
 .bookmarkData {
   display: flex;
@@ -148,11 +162,26 @@
 .verifyPhoto {
   border-radius: 12px;
 }
+.btns {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+}
 .firstBtn {
   margin-bottom: 20px;
 }
 .btnDiv {
   margin: auto 5px auto 0px;
+}
+.customBtn {
+  background-color: var(--color-primary);
+  color: white;
+  cursor: not-allowed;
+}
+.redBtn {
+  background-color: red;
+  color: white;
+  cursor: not-allowed;
 }
 .noReviews {
   background-color: white;
@@ -176,10 +205,13 @@
     font-size: 20px;
   }
   .tabs {
-    font-size: 0.8rem;
+    font-size: 0.6rem;
   }
   .btnDiv {
     margin: 1px 5px 1px 0px;
+  }
+  .btn {
+    height: 30px !important;
   }
   .img {
     width: 200px;

@@ -9,20 +9,22 @@ const userData = (userId) => ({
 
 export const GetUserData = (userId) => {
   return (dispatch) => {
-    // Fetch user data based on userID and store it in the Redux store
-    axios
-      .post("http://localhost:8000/userdata/", {
-        _id: userId,
-      })
-      .then((response) => {
-        // Assuming the response.data contains user data
-        if (response.data.length > 0) {
-          const newData = response.data[0]; // Assuming you want the first item from the array
-          dispatch(userData(newData));
-        }
-      })
-      .catch((error) => {
-        // Handle error, if any
-      });
+    if (userId) {
+      // Fetch user data based on userID and store it in the Redux store
+      axios
+        .post("/api/userdata/", {
+          _id: userId,
+        })
+        .then((response) => {
+          // Assuming the response.data contains user data
+          if (response.data.length > 0) {
+            const newData = response.data[0]; // Assuming you want the first item from the array
+            dispatch(userData(newData));
+          }
+        })
+        .catch((error) => {
+          // Handle error, if any
+        });
+    }
   };
 };

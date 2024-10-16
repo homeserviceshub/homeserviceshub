@@ -4,7 +4,6 @@ import { FaTimes, FaBars } from "react-icons/fa";
 import "./navBar.css";
 import CustomButton from "../customBtn";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import axios from "axios";
 
 const AceNavbar = () => {
@@ -13,31 +12,24 @@ const AceNavbar = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const auth = localStorage.getItem("aauth");
   const [remaining, setRemaining] = useState(0);
-  // const total = useSelector((state) => state.RemainingTasksReducer);
-  // console.log(total);
-
-  // const [remainingTasks, setRemainingTasks] = useState(remaining);
-  // console.log(remainingTasks);
+  const auth = localStorage.getItem("aauth");
 
   useEffect(() => {
     if (auth === null || auth === "null") {
       navigate("/ace/signin");
       setLoggedIn(false);
     } else {
-      fetchData();
       setLoggedIn(true);
+      fetchData();
     }
-  }, [auth]);
+  }, [auth, navigate]);
+
   const fetchData = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:8000/getprojectsdata",
-        {
-          clientID: localStorage.getItem("aauth"),
-        }
-      );
+      const response = await axios.post("/api/getprojectsdata", {
+        clientID: localStorage.getItem("aauth"),
+      });
 
       if (response.status === 200) {
         if (response.data.message === "No Projects Done Yet") {
@@ -53,14 +45,18 @@ const AceNavbar = () => {
       console.error("Error:", error);
     }
   };
+
   const handleClick = () => {
     setDropdown(!dropdown);
   };
+
   const GotoSignin = () => {
     navigate("/ace/signin");
   };
+
   const Logout = () => {
     localStorage.setItem("aauth", null);
+    setLoggedIn(false);
     navigate("/ace/signin");
   };
 
@@ -69,7 +65,9 @@ const AceNavbar = () => {
     if (window.innerWidth <= 768) {
       setDropdown(false); // Collapse the navbar on mobile devices
     }
+    navigate(item.url);
   };
+
   useEffect(() => {
     const currentPath = location.pathname;
     const activeItem = aceMenuItems.find((item) => item.url === currentPath);
@@ -92,9 +90,9 @@ const AceNavbar = () => {
         >
           House Maker
         </div>
-        <div className="logoSlag"> You Think We Build</div>
+        <div className="logoSlag">You Think We Build</div>
       </div>
-      <div className="menu-icon" onClick={() => handleClick()}>
+      <div className="menu-icon" onClick={handleClick}>
         <span>
           {dropdown ? (
             <FaTimes fill="var(--color-primary)" />
@@ -104,35 +102,31 @@ const AceNavbar = () => {
         </span>
       </div>
       <ul className={dropdown ? "nav-menu active" : "nav-menu"}>
-        {aceMenuItems.map((item, index) => {
-          return (
-            <li
-              key={index}
-              className="item"
-              onClick={() => {
-                handleActiveRoute(item);
+        {aceMenuItems.map((item, index) => (
+          <li
+            key={index}
+            className="item"
+            onClick={() => handleActiveRoute(item)}
+          >
+            <Link
+              className={item.cName}
+              style={{
+                color: changeActive === item.title && "var(--color-primary)",
               }}
+              to={item.url}
             >
-              <Link
-                className={item.cName}
-                style={{
-                  color: changeActive === item.title && "var(--color-primary)",
-                }}
-                to={item.url}
-              >
-                <span
-                  className={changeActive === item.title ? "itemSpan" : ""}
-                ></span>
-                {item.title}
-              </Link>
-              {item.title === "Service Request" &&
-                remaining !== 0 &&
-                !isNaN(remaining) && (
-                  <span className="newTasks">{remaining}</span>
-                )}
-            </li>
-          );
-        })}
+              <span
+                className={changeActive === item.title ? "itemSpan" : ""}
+              ></span>
+              {item.title}
+            </Link>
+            {item.title === "Service Request" &&
+              remaining !== 0 &&
+              !isNaN(remaining) && (
+                <span className="newTasks">{remaining}</span>
+              )}
+          </li>
+        ))}
         {loggedIn ? (
           <li className="item" onClick={Logout}>
             <CustomButton text={"LOG OUT"} />

@@ -26,41 +26,56 @@ const AceProfile = () => {
   const [aceData, setAceData] = useState();
   const navigate = useNavigate();
   const [discription] = useState(
-    "Here is the breif information about out company. hello there we are home builder and we are professional in renovation.We are just a small group of 10 people and looking forward to work with you guys. there is no rush you can check our website rating from the most trusted website for home renovation and then decide wheather you want the best of an advice of an old friend.We are good in bathroom reno, kitched reno and basement renovation. Just fill up some details and we will reply you as soon as possible."
+    "Here you can write about your company, specify skills, service areas, services or about your team. Remember word limit is 1000 words"
   );
-
+  const auth = localStorage.getItem("aauth");
+  const [loggedIn, setLoggedIn] = useState();
   const [dummyData, setDummyData] = useState(aceData);
+
   useEffect(() => {
+    if (auth === null || auth === "null") {
+      navigate("/ace/signin");
+      setLoggedIn(false);
+    } else {
+      setLoggedIn(true);
+      fetchData();
+    }
+  }, [auth, navigate]);
+
+  const fetchData = async () => {
     const id = localStorage.getItem("aauth");
+
     if (id) {
+      const source = axios.CancelToken.source();
       try {
-        axios
-          .post("http://localhost:8000/acedata", {
+        const response = await axios.post(
+          "/api/acedata",
+          {
             id: id,
-          })
-          .then((response) => {
-            if (response.status === 200) {
-              if (response.data.message) {
-                console.log(response.data.message);
-              } else {
-                setAceData(response.data.aceData);
-                setDummyData(response.data.aceData);
-              }
-            }
-          })
-          .catch((error) => {
-            console.error("AxiosError:", error);
-            console.log(error);
-          });
+          },
+          { cancelToken: source.token }
+        );
+
+        if (response.status === 200) {
+          setAceData(response.data.aceData);
+          setDummyData(response.data.aceData);
+        }
       } catch (error) {
-        console.error("Error:", error);
+        if (axios.isCancel(error)) {
+          console.log("Request canceled", error.message);
+        } else {
+          console.error("Error:", error);
+        }
       }
+      return () => {
+        source.cancel("Operation canceled by the user.");
+      };
     } else {
       navigate("/ace/signin", {
         replace: true,
       });
     }
-  }, []);
+  };
   const [selectedImage, setSelectedImage] = useState(null);
   const handleFormChange = (event) => {
     const { name, value } = event.target;
@@ -114,10 +129,7 @@ const AceProfile = () => {
         const formData = new FormData();
         formData.append("media", dummyData.profilePhoto);
 
-        const response = await axios.post(
-          "http://localhost:8000/upload",
-          formData
-        );
+        const response = await axios.post("/api/upload", formData);
 
         if (response.status === 200) {
           const mediaObject = {
@@ -146,7 +158,7 @@ const AceProfile = () => {
     // Update user data on the backend
     try {
       await axios
-        .post("http://localhost:8000/updateaceuser", {
+        .post("/api/updateaceuser", {
           data: {
             ...dummyData,
             profilePhoto: data,
@@ -157,6 +169,7 @@ const AceProfile = () => {
           if (response.status === 200) {
             console.log(response.data);
             alert("User data updated successfully");
+            fetchData();
           }
         })
         .catch((error) => {
@@ -182,9 +195,10 @@ const AceProfile = () => {
           <Row className={styles.complanyProfilePhotoRow}>
             <Col lg={2} className={styles.companyProfilePhoto}>
               <div>
-                {aceData?.profilePhoto ? (
+                {aceData?.profilePhoto &&
+                aceData?.profilePhoto?.path?.length > 0 ? (
                   <img
-                    src={`http://localhost:8000/images/${aceData.profilePhoto.path}`}
+                    src={`/images/${aceData.profilePhoto.path}`}
                     alt="Selected"
                     width={"350px"}
                     height={"350px"}
@@ -219,7 +233,10 @@ const AceProfile = () => {
             </Col>
             <Col lg={3} className={styles.profilebtns}>
               <div className={styles.profilebtn}>
-                <CustomButton text={"See Plans"} />
+                <CustomButton
+                  text={"See Plans"}
+                  onClick={() => navigate("/ace/plans")}
+                />
               </div>
               <div className={styles.profilebtn}>
                 <CustomButton
@@ -227,12 +244,12 @@ const AceProfile = () => {
                   onClick={() => setProfileModalShow(true)}
                 />
               </div>
-              <div className={styles.profilebtn}>
+              {/* <div className={styles.profilebtn}>
                 <CustomButton
                   text={"Customer Dashboard"}
                   onClick={() => setProfileModalShow(true)}
                 />
-              </div>
+              </div> */}
             </Col>
           </Row>
         </Container>
@@ -240,6 +257,33 @@ const AceProfile = () => {
 
       <Container className={styles.containerY}>
         <Row id="overview">
+          {aceData?.idProof?.PhoneVerification !== "done" ? (
+            <Col lg={12} className={`${styles.overview} `}>
+              <div
+                className={`${styles.borders} w-auto d-flex ${styles.verificationDiv}`}
+              >
+                <div className="m-0">
+                  <h5>Enhance Your Ace Profile with Verification!</h5>
+                  <p className="m-0">
+                    Complete verification to boost your profile visibility and
+                    attract more clients. Click VERIFY now to get started!
+                  </p>
+                </div>
+                <div>
+                  {" "}
+                  <CustomButton
+                    text="Verify Now"
+                    width={"auto"}
+                    height={"auto"}
+                    onClick={() => navigate("/ace/verification")}
+                  />{" "}
+                </div>
+              </div>
+            </Col>
+          ) : (
+            ""
+          )}
+
           <Col lg={8} className={styles.overview}>
             <Row className={`${styles.overviewRow} m-0`}>
               <Col className={`${styles.overviewCol} ${styles.borders}`}>
@@ -728,7 +772,6 @@ function DetailModal(props) {
                 name="categories"
                 onChange={props.handleFormChange}
               />
-              {console.log(props?.data?.categories)}
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
           </Row>

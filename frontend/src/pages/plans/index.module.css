@@ -1,0 +1,28 @@
+.planRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+@media (max-width: 1999px) and (min-width: 1300px) {
+  .planRow {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 1299px) and (min-width: 1000px) {
+  .planRow {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 999px) and (min-width: 768px) {
+  .planRow {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .planRow {
+    grid-template-columns: 1fr;
+  }
+}

@@ -25,6 +25,9 @@ import RequestaService from "../pages/requestAservice";
 import NewReview from "../pages/newReview";
 import PrivateRoute from "./privateRoute";
 import AuthCheckRoute from "./authCheckRoute";
+import Verification from "../pages/ace/verification";
+import Plans from "../pages/plans";
+import AceCheckRoute from "./aceCheckRoute";
 
 export default function AppRoutes() {
   return (
@@ -57,14 +60,19 @@ export default function AppRoutes() {
           </Route>
         </Route>
         <Route element={<Layout2 />}>
-          <Route path="/ace">
-            <Route path="/ace/reviews" element={<AceReviews />} />
-            <Route path="/ace/profile" element={<AceProfile />} />
-            <Route path="/ace/gallery" element={<AceGallery />} />
-            <Route path="/ace/request" element={<ServiceRequest />} />
+          <Route element={<AceCheckRoute />}>
+            <Route path="/ace">
+              <Route path="/ace/reviews" element={<AceReviews />} />
+              <Route path="/ace/profile" element={<AceProfile />} />
+              <Route path="/ace/gallery" element={<AceGallery />} />
+              <Route path="/ace/request" element={<ServiceRequest />} />
+              <Route path="/ace/plans" element={<Plans />} />
+            </Route>
           </Route>
+
           <Route path="*" element={<PageNotFound />} />
         </Route>
+        <Route path="/ace/verification" element={<Verification />} />
       </Routes>
     </HashRouter>
   );

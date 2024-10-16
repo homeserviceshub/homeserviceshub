@@ -46,6 +46,8 @@
   visibility: hidden;
   transform: translateY(-10px);
   transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+  max-height: 200px;
+  overflow-y: auto;
 }
 
 .dropdown.show .dropdownMenu {
@@ -74,17 +76,21 @@
   color: var(--color-primary);
 }
 .input {
-  margin-right: 10px;
+  margin-right: 10px !important;
+  padding: 0 !important;
+  margin-bottom: 0 !important;
 }
 /* Hide the default radio button */
-input[type="radio"] {
+input[type="radio"],
+input[type="checkbox"] {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
 }
 
 /* Create a custom radio button style */
-input[type="radio"]::before {
+input[type="radio"]::before,
+input[type="checkbox"]::before {
   content: "";
   display: inline-block;
   width: 16px;
@@ -97,7 +103,8 @@ input[type="radio"]::before {
 }
 
 /* Style the radio button when checked */
-input[type="radio"]:checked::before {
+input[type="radio"]:checked::before,
+input[type="checkbox"]:checked::before {
   background-color: var(
     --color-primary
   ); /* Custom color for checked radio button */

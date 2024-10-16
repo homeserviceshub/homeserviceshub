@@ -34,7 +34,7 @@ const RequestaService = () => {
   const fetchData = async () => {
     try {
       // Fetch user data
-      const userResponse = await axios.post("http://localhost:8000/userdata", {
+      const userResponse = await axios.post("/api/userdata", {
         _id: clientID,
       });
       if (userResponse.status === 200) {
@@ -140,7 +140,7 @@ const RequestaService = () => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:8000/serviceRequest", {
+      .post("/api/serviceRequest", {
         fromDetails: fromDetails,
       })
       .then((response) => {
@@ -161,12 +161,12 @@ const RequestaService = () => {
     <div className="mx-3">
       <div className={styles.headingDiv}>
         <div className={styles.mainHeading}>
-          Share the details of your exciting Bathroom Remodel project with us
+          Share the details of your project with us
         </div>
-        <h5 className={styles.smallHeading}>
+        {/* <h5 className={styles.smallHeading}>
           Share some project details with us, and we'll find suitable
           professionals for you to compare and choose from.
-        </h5>
+        </h5> */}
       </div>
       <div className={styles.main} id="firstCard" data-aos="fade-up">
         <div className={styles.heading}>Dear user, fill your basic details</div>

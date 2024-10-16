@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Col, Container, Row, Spinner, Form } from "react-bootstrap";
+import {
+  Col,
+  Container,
+  Row,
+  Spinner,
+  Form,
+  Modal,
+  Button,
+} from "react-bootstrap";
 import CustomButton from "../../components/customBtn";
 import styles from "./index.module.css";
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
@@ -29,10 +37,11 @@ function Service() {
   const [clickedCategory, setClickedCategory] = useState(false);
   const [totalCategories, setTotalCategories] = useState(null);
   const [totalCompanies, setTotalCompanies] = useState(null);
+  const [loginModal, setLoginModal] = useState(false);
 
   const [searchData, setSearchData] = useState({
     category: clickedData || searchParams.get("category") || "",
-    location: searchParams.get("location") || "",
+    location: searchParams.get("location") || "Punjab",
     sortedBy: searchParams.get("sortedBy") || "Top Customer Ratings",
   });
   const handleNavigation = (city) => {
@@ -92,15 +101,12 @@ function Service() {
       }
 
       // Fetch category data
-      const categoryResponse = await axios.post(
-        `http://localhost:8000/filtercategorydata`,
-        {
-          pageNumber: 1,
-          pageSize: 5,
-          ...queryParams,
-          authId: authToken,
-        }
-      );
+      const categoryResponse = await axios.post(`/api/filtercategorydata`, {
+        pageNumber: 1,
+        pageSize: 5,
+        ...queryParams,
+        authId: authToken,
+      });
 
       if (categoryResponse.status === 200) {
         setAllAceCategoryData(categoryResponse.data.users);
@@ -121,15 +127,12 @@ function Service() {
       }
 
       // Fetch company data
-      const companyResponse = await axios.post(
-        `http://localhost:8000/filtercompanydata`,
-        {
-          pageNumber: 1,
-          pageSize: 5,
-          ...queryParams,
-          authId: authToken,
-        }
-      );
+      const companyResponse = await axios.post(`/api/filtercompanydata`, {
+        pageNumber: 1,
+        pageSize: 5,
+        ...queryParams,
+        authId: authToken,
+      });
 
       if (companyResponse.status === 200) {
         setAllAceCompanyData(companyResponse.data.users);
@@ -168,15 +171,12 @@ function Service() {
         queryParams.sortedBy = searchData.sortedBy;
       }
 
-      const response = await axios.post(
-        `http://localhost:8000/filtercategorydata`,
-        {
-          pageNumber,
-          pageSize,
-          ...queryParams,
-          authId: authToken,
-        }
-      );
+      const response = await axios.post(`/api/filtercategorydata`, {
+        pageNumber,
+        pageSize,
+        ...queryParams,
+        authId: authToken,
+      });
 
       if (response.status === 200) {
         setAllAceCategoryData((prevData) => {
@@ -199,6 +199,7 @@ function Service() {
   const loadMoreCompanyData = async () => {
     setPageNumber((prevPageNumber) => prevPageNumber + 1);
     // setIsLoading(true);
+    const authToken = localStorage.getItem("auth");
     try {
       const queryParams = {};
       if (searchData.category) {
@@ -211,15 +212,12 @@ function Service() {
         queryParams.sortedBy = searchData.sortedBy;
       }
 
-      const response = await axios.post(
-        `http://localhost:8000/filtercompanydata`,
-        {
-          pageNumber,
-          pageSize,
-          ...queryParams,
-          authId: authToken,
-        }
-      );
+      const response = await axios.post(`/api/filtercompanydata`, {
+        pageNumber,
+        pageSize,
+        ...queryParams,
+        authId: authToken,
+      });
 
       if (response.status === 200) {
         // setIsLoading(false);
@@ -286,6 +284,15 @@ function Service() {
     console.log("after:", searchData.category);
     const url = `/services/service?category=${item}&location=${searchData.location}&sortedBy=${searchData.sortedBy}`;
     navigate(url);
+  };
+  const handleLogin = () => {
+    navigate(`/signin`);
+  };
+  const handleRequestService = (item) => {
+    const authToken = localStorage.getItem("auth");
+    if (authToken) {
+      navigate(`/${item._id}/servicerequest`);
+    } else setLoginModal(true);
   };
   return (
     <>
@@ -408,61 +415,67 @@ function Service() {
                         key={index}
                         data-aos="fade-up"
                       >
-                        <Col lg={2}>
-                          <img
-                            src={
-                              item.aceData.profilePhoto
-                                ? `http://localhost:8000/images/${item.aceData.profilePhoto.path}`
-                                : process.env.PUBLIC_URL +
-                                  "/icons/default-profile-picture-male-icon.svg"
-                            }
-                            onClick={() =>
-                              navigate(`/companyprofile/${item._id}`)
-                            }
-                            width={160}
-                            height={130}
-                            className={styles.profilePhoto}
-                          />
-                        </Col>
                         <Col lg={6}>
-                          <div
-                            className={styles.companyName}
-                            onClick={() =>
-                              navigate(`/companyprofile/${item._id}`)
-                            }
-                          >
-                            {item.aceData.companyName}
-                          </div>
-                          <div className={styles.companyDetails}>
-                            {[...Array(5)].map((_, index) => {
-                              const rating = Number(
-                                item.aceData?.overallRating
-                              );
-                              const fullStars = Math.floor(rating);
-                              const hasHalfStar = rating - fullStars >= 0.5;
-                              return (
-                                <span key={index}>
-                                  {index < fullStars ? (
-                                    <BsStarFill fill="gold" />
-                                  ) : index === fullStars && hasHalfStar ? (
-                                    <BsStarHalf fill="gold" />
-                                  ) : (
-                                    <BsStar fill="gold" />
-                                  )}
-                                </span>
-                              );
-                            })}
-                          </div>
-                          <div className={styles.companySmallDetails}>
-                            <div className={styles.companyDetails}>
-                              ({item.aceData.totalReviews}) Reviews
+                          <div className={styles.upperDiv}>
+                            <div>
+                              <img
+                                src={
+                                  item.aceData.profilePhoto
+                                    ? `/images/${item.aceData.profilePhoto.path}`
+                                    : process.env.PUBLIC_URL +
+                                      "/icons/default-profile-picture-male-icon.svg"
+                                }
+                                onClick={() =>
+                                  navigate(`/companyprofile/${item._id}`)
+                                }
+                                width={100}
+                                height={100}
+                                className={styles.profilePhoto}
+                              />
                             </div>
-                            <div className={styles.companyDetails}>
-                              {new Date().getFullYear() -
-                                item.aceData.yearOfEstablishment}
-                              + Year Experience
+                            <div>
+                              <div
+                                className={styles.companyName}
+                                onClick={() =>
+                                  navigate(`/companyprofile/${item._id}`)
+                                }
+                              >
+                                {item.aceData.companyName}
+                              </div>
+                              <div>{item.aceData.location}</div>
+                              <div className={styles.companySmallDetails}>
+                                <div className={styles.companyDetails}>
+                                  ({item.aceData.totalReviews}) Reviews
+                                </div>
+                                <div className={styles.companyDetails}>
+                                  {new Date().getFullYear() -
+                                    item.aceData.yearOfEstablishment}
+                                  + Year Experience
+                                </div>
+                              </div>
+                              <div className={styles.companyDetails}>
+                                {[...Array(5)].map((_, index) => {
+                                  const rating = Number(
+                                    item.aceData?.overallRating
+                                  );
+                                  const fullStars = Math.floor(rating);
+                                  const hasHalfStar = rating - fullStars >= 0.5;
+                                  return (
+                                    <span key={index}>
+                                      {index < fullStars ? (
+                                        <BsStarFill fill="gold" />
+                                      ) : index === fullStars && hasHalfStar ? (
+                                        <BsStarHalf fill="gold" />
+                                      ) : (
+                                        <BsStar fill="gold" />
+                                      )}
+                                    </span>
+                                  );
+                                })}
+                              </div>
                             </div>
                           </div>
+                          <h4 className="m-0">About</h4>
                           <div className={styles.companyDetails}>
                             {item.aceData.brief.length <= 160
                               ? item.aceData.brief
@@ -474,15 +487,41 @@ function Service() {
                               read more
                             </Link>
                           </div>
+                          <Col lg={8} className={styles.categoryList}>
+                            Categories: {"  "}
+                            {item.aceData.categories.map((category, index) => (
+                              <span
+                                key={index}
+                                onClick={() => handleCategoryClicked(category)}
+                                className={styles.categories}
+                              >
+                                {category
+                                  .toLowerCase()
+                                  .charAt(0)
+                                  .toUpperCase() +
+                                  category.toLowerCase().slice(1) +
+                                  (index + 1 === item.aceData.categories.length
+                                    ? "."
+                                    : ", ")}
+                              </span>
+                            ))}
+                          </Col>
                         </Col>
-                        <Col lg={2} className={styles.verifiedPhotoDiv}></Col>
+                        <Col lg={3} className={styles.verifiedPhotoDiv}>
+                          <img
+                            src={
+                              process.env.PUBLIC_URL + "/photos/VerifiedAce.png"
+                            }
+                            width={150}
+                            height={130}
+                            className={styles.verify}
+                          />
+                        </Col>
                         <Col lg={2} className={styles.bothBtns}>
                           <CustomButton
                             text="Request a service"
                             height="auto"
-                            onClick={() =>
-                              navigate(`/${item._id}/servicerequest`)
-                            }
+                            onClick={() => handleRequestService(item)}
                           />
                           <CustomButton
                             text="Profile"
@@ -491,18 +530,6 @@ function Service() {
                               navigate(`/companyprofile/${item._id}`)
                             }
                           />
-                        </Col>
-                        <Col lg={8} className={styles.categoryList}>
-                          Category:{" "}
-                          {item.aceData.categories.map((category, index) => (
-                            <span
-                              key={index}
-                              onClick={() => handleCategoryClicked(category)}
-                              className={styles.categories}
-                            >
-                              {category}
-                            </span>
-                          ))}
                         </Col>
                       </Row>
                     ))}
@@ -561,51 +588,67 @@ function Service() {
                       key={index}
                       data-aos="fade-up"
                     >
-                      <Col lg={2}>
-                        <img
-                          src={
-                            item.aceData.profilePhoto
-                              ? `http://localhost:8000/images/${item.aceData.profilePhoto.path}`
-                              : process.env.PUBLIC_URL +
-                                "/icons/default-profile-picture-male-icon.svg"
-                          }
-                          width={160}
-                          height={130}
-                          className={styles.profilePhoto}
-                        />
-                      </Col>
                       <Col lg={6}>
-                        <div className={styles.companyName}>
-                          {item.aceData.companyName}
-                        </div>
-                        <div className={styles.companyDetails}>
-                          {[...Array(5)].map((_, index) => {
-                            const rating = Number(item.aceData?.overallRating);
-                            const fullStars = Math.floor(rating);
-                            const hasHalfStar = rating - fullStars >= 0.5;
-                            return (
-                              <span key={index}>
-                                {index < fullStars ? (
-                                  <BsStarFill fill="gold" />
-                                ) : index === fullStars && hasHalfStar ? (
-                                  <BsStarHalf fill="gold" />
-                                ) : (
-                                  <BsStar fill="gold" />
-                                )}
-                              </span>
-                            );
-                          })}
-                        </div>
-                        <div className={styles.companySmallDetails}>
-                          <div className={styles.companyDetails}>
-                            ({item.aceData.totalReviews}) Reviews
+                        <div className={styles.upperDiv}>
+                          <div>
+                            <img
+                              src={
+                                item.aceData.profilePhoto
+                                  ? `/images/${item.aceData.profilePhoto.path}`
+                                  : process.env.PUBLIC_URL +
+                                    "/icons/default-profile-picture-male-icon.svg"
+                              }
+                              onClick={() =>
+                                navigate(`/companyprofile/${item._id}`)
+                              }
+                              width={100}
+                              height={100}
+                              className={styles.profilePhoto}
+                            />
                           </div>
-                          <div className={styles.companyDetails}>
-                            {new Date().getFullYear() -
-                              item.aceData.yearOfEstablishment}
-                            + Year Experience
+                          <div>
+                            <div
+                              className={styles.companyName}
+                              onClick={() =>
+                                navigate(`/companyprofile/${item._id}`)
+                              }
+                            >
+                              {item.aceData.companyName}
+                            </div>
+                            <div>{item.aceData.location}</div>
+                            <div className={styles.companySmallDetails}>
+                              <div className={styles.companyDetails}>
+                                ({item.aceData.totalReviews}) Reviews
+                              </div>
+                              <div className={styles.companyDetails}>
+                                {new Date().getFullYear() -
+                                  item.aceData.yearOfEstablishment}
+                                + Year Experience
+                              </div>
+                            </div>
+                            <div className={styles.companyDetails}>
+                              {[...Array(5)].map((_, index) => {
+                                const rating = Number(
+                                  item.aceData?.overallRating
+                                );
+                                const fullStars = Math.floor(rating);
+                                const hasHalfStar = rating - fullStars >= 0.5;
+                                return (
+                                  <span key={index}>
+                                    {index < fullStars ? (
+                                      <BsStarFill fill="gold" />
+                                    ) : index === fullStars && hasHalfStar ? (
+                                      <BsStarHalf fill="gold" />
+                                    ) : (
+                                      <BsStar fill="gold" />
+                                    )}
+                                  </span>
+                                );
+                              })}
+                            </div>
                           </div>
                         </div>
+                        <h4 className="m-0">About</h4>
                         <div className={styles.companyDetails}>
                           {item.aceData.brief.length <= 160
                             ? item.aceData.brief
@@ -617,15 +660,38 @@ function Service() {
                             read more
                           </Link>
                         </div>
+                        <Col lg={8} className={styles.categoryList}>
+                          Categories: {"  "}
+                          {item.aceData.categories.map((category, index) => (
+                            <span
+                              key={index}
+                              onClick={() => handleCategoryClicked(category)}
+                              className={styles.categories}
+                            >
+                              {category.toLowerCase().charAt(0).toUpperCase() +
+                                category.toLowerCase().slice(1) +
+                                (index + 1 === item.aceData.categories.length
+                                  ? "."
+                                  : ", ")}
+                            </span>
+                          ))}
+                        </Col>
                       </Col>
-                      <Col lg={2} className={styles.verifiedPhotoDiv}></Col>
+                      <Col lg={3} className={styles.verifiedPhotoDiv}>
+                        <img
+                          src={
+                            process.env.PUBLIC_URL + "/photos/VerifiedAce.png"
+                          }
+                          width={150}
+                          height={130}
+                          className={styles.verify}
+                        />
+                      </Col>
                       <Col lg={2} className={styles.bothBtns}>
                         <CustomButton
                           text="Request a service"
                           height="auto"
-                          onClick={() =>
-                            navigate(`/${item._id}/servicerequest`)
-                          }
+                          onClick={() => handleRequestService(item)}
                         />
                         <CustomButton
                           text="Profile"
@@ -634,18 +700,6 @@ function Service() {
                             navigate(`/companyprofile/${item._id}`)
                           }
                         />
-                      </Col>
-                      <Col lg={8} className={styles.categoryList}>
-                        Category:{" "}
-                        {item.aceData.categories.map((category, index) => (
-                          <span
-                            key={index}
-                            onClick={() => handleCategoryClicked(category)}
-                            className={styles.categories}
-                          >
-                            {category}
-                          </span>
-                        ))}
                       </Col>
                     </Row>
                   ))}
@@ -694,8 +748,36 @@ function Service() {
             </div>
           )}
         </Container>
+        <LoginModal
+          show={loginModal}
+          onHide={() => setLoginModal(false)}
+          handleLogin={handleLogin}
+        />
       </div>
     </>
+  );
+}
+function LoginModal(props) {
+  return (
+    <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+          Login First
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <h4>Oops this feature cannot be used without being registered</h4>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={props.onHide}>Close</Button>
+        <Button onClick={props.handleLogin}>Sign Up/Login</Button>
+      </Modal.Footer>
+    </Modal>
   );
 }
 

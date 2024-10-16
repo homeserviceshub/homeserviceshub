@@ -23,10 +23,10 @@ const ReviewCardComponent = ({ data, photosOf }) => {
     const getReviewsData = async () => {
       try {
         const [reviewToResponse, reviewByResponse] = await Promise.all([
-          axios.post("http://localhost:8000/reviewdatarequest", {
+          axios.post("/api/reviewdatarequest", {
             id: reviewToUserIds,
           }),
-          axios.post("http://localhost:8000/reviewdatarequest", {
+          axios.post("/api/reviewdatarequest", {
             id: reviewByUserIds,
           }),
         ]);
@@ -53,102 +53,105 @@ const ReviewCardComponent = ({ data, photosOf }) => {
 
   return (
     <>
-      {data.map((reviewData, index) => (
-        <Card key={index} className={styles.dynamicCard} data-aos="fade-up">
-          <div className={styles.upperColumn}>
-            {photosOf === "reviewer" ? (
-              <Card.Img
-                src={
-                  reviewBy.find((item) => item._id === reviewData.reviewBy)
-                    ?.profile_photo
-                    ? `http://localhost:8000/images/${
-                        reviewBy.find(
-                          (item) => item._id === reviewData.reviewBy
-                        )?.profile_photo?.path
-                      }`
-                    : process.env.PUBLIC_URL + photo
-                }
-                className={styles.cardImg}
-              />
-            ) : (
-              <Card.Img
-                src={
-                  reviewTo.find((item) => item._id === reviewData.reviewTo)
-                    ?.aceData?.profilePhoto
-                    ? `http://localhost:8000/images/${
-                        reviewTo.find(
-                          (item) => item._id === reviewData.reviewTo
-                        )?.aceData?.profilePhoto?.path
-                      }`
-                    : process.env.PUBLIC_URL + photo
-                }
-                className={styles.cardImg}
-                onClick={() =>
-                  navigate(
-                    `/companyprofile/${
-                      reviewTo.find((item) => item._id === reviewData.reviewTo)
-                        ._id
-                    }`
-                  )
-                }
-              />
-            )}
-
-            <Card.Body className={styles.cardBody}>
-              <Card.Title
-                className={styles.cardTitle}
-                onClick={() =>
-                  photosOf === "reviewer"
-                    ? ""
-                    : navigate(
-                        `/companyprofile/${
+      {data
+        .sort((a, b) => new Date(b.reviewDate) - new Date(a.reviewDate))
+        .map((reviewData, index) => (
+          <Card key={index} className={styles.dynamicCard} data-aos="fade-up">
+            <div className={styles.upperColumn}>
+              {photosOf === "reviewer" ? (
+                <Card.Img
+                  src={
+                    reviewBy.find((item) => item._id === reviewData.reviewBy)
+                      ?.profile_photo
+                      ? `/images/${
+                          reviewBy.find(
+                            (item) => item._id === reviewData.reviewBy
+                          )?.profile_photo?.path
+                        }`
+                      : process.env.PUBLIC_URL + photo
+                  }
+                  className={styles.cardImg}
+                />
+              ) : (
+                <Card.Img
+                  src={
+                    reviewTo.find((item) => item._id === reviewData.reviewTo)
+                      ?.aceData?.profilePhoto
+                      ? `/images/${
                           reviewTo.find(
                             (item) => item._id === reviewData.reviewTo
-                          )._id
+                          )?.aceData?.profilePhoto?.path
                         }`
-                      )
-                }
-              >
-                {reviewData.reviewTitle
-                  ? reviewData.reviewTitle
-                  : "Dummy Title"}
-              </Card.Title>
-              <Card.Text className={styles.stars}>
-                {[...Array(5)].map((_, index) => (
-                  <span key={index}>
-                    {index < Number(reviewData?.stars) ? (
-                      <BsStarFill fill="gold" />
-                    ) : (
-                      <BsStar fill="gold" />
+                      : process.env.PUBLIC_URL + photo
+                  }
+                  className={styles.cardImg}
+                  onClick={() =>
+                    navigate(
+                      `/companyprofile/${
+                        reviewTo.find(
+                          (item) => item._id === reviewData.reviewTo
+                        )._id
+                      }`
+                    )
+                  }
+                />
+              )}
+
+              <Card.Body className={styles.cardBody}>
+                <Card.Title
+                  className={styles.cardTitle}
+                  onClick={() =>
+                    photosOf === "reviewer"
+                      ? ""
+                      : navigate(
+                          `/companyprofile/${
+                            reviewTo.find(
+                              (item) => item._id === reviewData.reviewTo
+                            )._id
+                          }`
+                        )
+                  }
+                >
+                  {reviewData.reviewTitle
+                    ? reviewData.reviewTitle
+                    : "Dummy Title"}
+                </Card.Title>
+                <Card.Text className={styles.stars}>
+                  {[...Array(5)].map((_, index) => (
+                    <span key={index}>
+                      {index < Number(reviewData?.stars) ? (
+                        <BsStarFill fill="gold" />
+                      ) : (
+                        <BsStar fill="gold" />
+                      )}
+                    </span>
+                  ))}
+                </Card.Text>
+                <div>
+                  <Card.Subtitle className="mb-2 text-muted">
+                    {moment(reviewData?.reviewDate).format(
+                      "MMMM Do YYYY, h:mm:ss a"
                     )}
-                  </span>
-                ))}
-              </Card.Text>
-              <div>
-                <Card.Subtitle className="mb-2 text-muted">
-                  {moment(reviewData?.reviewDate).format(
-                    "MMMM Do YYYY, h:mm:ss a"
+                  </Card.Subtitle>
+                </div>
+                <Card.Text className={styles.cardText}>
+                  {reviewData?.reviewDescription.length <= 310 || isExpanded
+                    ? reviewData?.reviewDescription
+                    : `${reviewData?.reviewDescription.slice(0, 310)}... `}
+                  {reviewData?.reviewDescription.length > 310 && (
+                    <span
+                      className={styles.readMore}
+                      variant="link"
+                      onClick={toggleExpand}
+                    >
+                      {isExpanded ? " Read Less" : "Read More"}
+                    </span>
                   )}
-                </Card.Subtitle>
-              </div>
-              <Card.Text className={styles.cardText}>
-                {reviewData?.reviewDescription.length <= 310 || isExpanded
-                  ? reviewData?.reviewDescription
-                  : `${reviewData?.reviewDescription.slice(0, 310)}... `}
-                {reviewData?.reviewDescription.length > 310 && (
-                  <span
-                    className={styles.readMore}
-                    variant="link"
-                    onClick={toggleExpand}
-                  >
-                    {isExpanded ? " Read Less" : "Read More"}
-                  </span>
-                )}
-              </Card.Text>
-            </Card.Body>
-          </div>
-        </Card>
-      ))}
+                </Card.Text>
+              </Card.Body>
+            </div>
+          </Card>
+        ))}
     </>
   );
 };

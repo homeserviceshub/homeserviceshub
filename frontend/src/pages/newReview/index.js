@@ -42,7 +42,7 @@ const NewReview = () => {
       setCheckStars(true);
       try {
         axios
-          .post("http://localhost:8000/newreview", {
+          .post("/api/newreview", {
             reviewData: reviewData,
           })
           .then((response) => {

@@ -1,13 +1,5 @@
 import React, { useState, useRef } from "react";
-import {
-  Card,
-  Container,
-  Row,
-  Col,
-  Button,
-  Spinner,
-  Modal,
-} from "react-bootstrap";
+import { Card, Container, Row, Col, Button, Modal } from "react-bootstrap";
 import { FaEdit } from "react-icons/fa";
 import styles from "./index.module.css";
 import CustomButton, { CustomRedButton } from "../../../components/customBtn";
@@ -15,11 +7,13 @@ import Lightbox from "yet-another-react-lightbox";
 import { Fullscreen, Video, Zoom } from "yet-another-react-lightbox/plugins";
 import axios from "axios";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AceGallery = () => {
   const [images, setImages] = useState([
     // Photos will be added here
   ]);
+  const navigate = useNavigate();
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
   const [aceData, setAceData] = useState();
@@ -28,7 +22,7 @@ const AceGallery = () => {
     if (id) {
       try {
         axios
-          .post("http://localhost:8000/acedata", {
+          .post("/api/acedata", {
             id: id,
           })
           .then((response) => {
@@ -76,10 +70,11 @@ const AceGallery = () => {
       const formData = new FormData();
       formData.append("media", file);
 
-      const response = await axios.post(
-        "http://localhost:8000/upload",
-        formData
-      );
+      const response = await axios.post("/api/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       if (response.status === 200) {
         const mediaObject = {
@@ -100,7 +95,7 @@ const AceGallery = () => {
           ],
         };
 
-        await axios.post("http://localhost:8000/updateaceuser", {
+        await axios.post("/api/updateaceuser", {
           data: updatedAceData,
           id: localStorage.getItem("aauth"),
         });
@@ -129,7 +124,7 @@ const AceGallery = () => {
 
       setAceData(updatedAceData);
 
-      await axios.post("http://localhost:8000/updateaceuser", {
+      await axios.post("/api/updateaceuser", {
         data: updatedAceData,
         id: localStorage.getItem("aauth"),
       });
@@ -140,13 +135,32 @@ const AceGallery = () => {
     }
     setDeleteModal(false);
   };
-  const handleEditTitle = (index) => {
+  const handleEditTitle = async (index) => {
     const updatedImages = [...images];
     updatedImages[index].editable = !updatedImages[index].editable;
     setImages(updatedImages);
+
+    // If the title is no longer editable, send the update to the backend
+    if (!updatedImages[index].editable) {
+      try {
+        const updatedAceData = {
+          ...aceData,
+          media: updatedImages,
+        };
+
+        await axios.post("/api/updateacetitle", {
+          data: updatedAceData,
+          id: localStorage.getItem("aauth"),
+        });
+
+        setAceData(updatedAceData);
+        alert("Title updated successfully");
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
   };
   const handleTitleChange = (event, index) => {
-    //updating on backend is pending
     const updatedImages = [...images];
     updatedImages[index].title = event.target.value;
     setImages(updatedImages);
@@ -169,7 +183,7 @@ const AceGallery = () => {
               <Card className={styles.card}>
                 <Card.Img
                   variant="top"
-                  src={`http://localhost:8000/images/${image.src.path}`}
+                  src={`/images/${image.src.path}`}
                   alt={image.title}
                   onClick={() => handleImageClick(index)}
                 />
@@ -191,7 +205,6 @@ const AceGallery = () => {
                   </div>
                   <CustomRedButton
                     text={"Remove"}
-                    // width={"auto"}
                     onClick={() => {
                       setDeleteIndex(index);
                       setDeleteModal(true);
@@ -221,7 +234,7 @@ const AceGallery = () => {
           open={showFullScreen}
           close={() => setShowFullScreen(false)}
           slides={images.map((image) => ({
-            src: `http://localhost:8000/images/${image.src.path}`,
+            src: `/images/${image.src.path}`,
             title: image.title,
           }))}
           plugins={[Fullscreen, Video, Zoom]}
@@ -252,7 +265,11 @@ function DeleteModal(props) {
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={props.onHide}>Close</Button>
-        <Button onClick={props.handleRemoveImage}>Delete</Button>
+        <CustomRedButton
+          width={"auto"}
+          text={"Delete"}
+          onClick={props.handleRemoveImage}
+        />
       </Modal.Footer>
     </Modal>
   );

@@ -64,6 +64,16 @@
 .container {
   margin: 0px auto 0px auto;
 }
+.cardUpperDiv {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.upperDiv {
+  display: flex;
+  gap: 10px;
+  padding-bottom: 6px;
+}
 .dynamicHeading {
   font-size: 2.5rem;
   margin-bottom: 10px;
@@ -98,7 +108,6 @@
 .categoryList {
   display: flex;
   align-items: flex-end;
-
   font-size: 0.9rem;
   gap: 5px;
   flex-wrap: wrap;
@@ -106,8 +115,14 @@
 .companyName {
   font-size: 1.5rem;
   font-weight: 600;
+  line-height: 19px;
+  padding-bottom: 5px;
 }
-
+.verify {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .companySmallDetails {
   font-size: 0.8rem;
   display: flex;
@@ -164,11 +179,12 @@
 }
 .categories {
   color: var(--color-primary);
-  text-decoration: underline;
+
   cursor: pointer;
 }
 .categories:hover {
   color: green;
+  text-decoration: underline;
 }
 .bothBtns {
   margin: auto;

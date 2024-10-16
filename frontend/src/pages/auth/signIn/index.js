@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { Form, Container, Row, Col, Button, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -17,7 +17,6 @@ function SignIn() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   function Forgetpassword() {
     navigate("/reset-password", {
       replace: true,
@@ -37,7 +36,7 @@ function SignIn() {
     setIsSubmitting(true);
 
     axios
-      .post("http://localhost:8000/login", {
+      .post("/api/login", {
         email: email,
         password: password,
       })
@@ -51,7 +50,6 @@ function SignIn() {
           console.log(response.data.message, "yaaaa");
         } else {
           setError(false);
-          console.log(response.data, "gl bngi");
           localStorage.setItem("auth", response.data[0]._id);
           dispatch(CHECKLOGIN(true));
           navigate("/");

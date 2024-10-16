@@ -17,12 +17,12 @@ const AuthCheckRoute = () => {
       dispatch(CHECKLOGIN(false));
     }
   }, []);
-  useEffect(() => {
-    axios
-      .get("http://localhost:8000/usersData")
-      // .then((res) => console.log(res.data))
-      .catch((err) => console.log(err));
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get("/usersData")
+  //     // .then((res) => console.log(res.data))
+  //     .catch((err) => console.log(err));
+  // }, []);
   return <Outlet />;
 };
 

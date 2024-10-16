@@ -1,0 +1,15 @@
+.formHeading {
+  font-size: 1.5rem;
+}
+.inputField {
+  border: 1px solid rgb(127 127 127);
+  border-radius: 6px;
+  width: 100%;
+  padding: 5px 10px;
+  position: relative;
+}
+.inputField:focus {
+  border: 1px solid rgb(95, 183, 130);
+  outline: none;
+  box-shadow: 0 0 0 0.25rem rgb(95, 183, 130, 30%);
+}

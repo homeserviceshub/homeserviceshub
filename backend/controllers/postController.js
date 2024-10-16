@@ -3,6 +3,7 @@ const reviewsModel = require("../models/reviewsModel");
 const serviceRequestModel = require("../models/serviceRequestModel");
 const bookmarksModel = require("../models/bookmarkModel");
 const nodemailer = require("nodemailer");
+const cron = require("node-cron");
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -22,11 +23,36 @@ const sendEmail = async (to, subject, html) => {
 
   try {
     await transporter.sendMail(mailOptions);
-    console.log("Email sent successfully");
+    // console.log("Email sent successfully");
   } catch (error) {
     console.error("Error sending email:", error);
   }
 };
+
+// Schedule task to run daily at midnight
+cron.schedule("0 0 * * *", async () => {
+  console.log("Running daily subscription reset check");
+
+  const now = new Date();
+
+  try {
+    const users = await usersModel.find({
+      "aceData.subscriptionPlan.expirationDate": { $lte: now },
+    });
+
+    for (const user of users) {
+      user.aceData.taskAcceptanceLimit = 3;
+      user.aceData.maxConcurrentTasks = 1;
+      user.aceData.subscriptionPlan.expirationDate = null; // Clear expiration date
+
+      await user.save();
+
+      console.log(`Reset subscription for user ${user._id}`);
+    }
+  } catch (error) {
+    console.error("Error resetting subscriptions:", error);
+  }
+});
 
 // Function to generate a random OTP
 const generateOTP = () => {
@@ -80,14 +106,25 @@ const signUp = async (req, res) => {
 const login = async (req, res) => {
   try {
     const emailOrNumber = req.body.email;
-    let query = {
-      $or: [{ email: emailOrNumber }, { number: emailOrNumber }],
-    };
+    if (emailOrNumber !== null) {
+      let query = {
+        $or: [{ email: emailOrNumber }, { number: emailOrNumber }],
+      };
 
-    const users = await usersModel.find(query);
-
-    if (users.length > 0) {
-      return res.json(users);
+      const user = await usersModel.find(query);
+      if (user) {
+        // Check if password is correct
+        if (user[0].password === req.body.password) {
+          // If password is correct, return user exist
+          return res.json(user);
+        } else {
+          // If password is incorrect, return an error message
+          return res.json({ message: "Incorrect password" });
+        }
+      } else {
+        // If email is not found, return an error message
+        return res.json({ message: "Email not found" });
+      }
     } else {
       return res.json({ message: "No User Found" });
     }
@@ -158,7 +195,7 @@ const updateBookmark = async (req, res) => {
       const newBookmark = new bookmarksModel({
         customerID: req.body.customerID,
         clientID: req.body.clientID,
-        // Add any other fields as needed
+        bookmarkDate: new Date(),
       });
       await newBookmark.save();
       res.json({ message: "Bookmark added successfully" });
@@ -184,31 +221,53 @@ const getreviews = async (req, res) => {
   }
 };
 const getprojectsdata = async (req, res) => {
-  const { customerID, clientID } = req.body;
+  const { customerID, clientID, from, to } = req.body;
+  if (from && to) {
+    try {
+      let projects;
+      if (customerID) {
+        projects = await serviceRequestModel.find({
+          customerID: customerID,
+        });
+      } else {
+        projects = await serviceRequestModel.find({
+          clientID: clientID,
+          requestDate: {
+            $gte: new Date(from),
+            $lte: new Date(to),
+          }, // Filter by createdAt date field within the specified range
+        });
+      }
 
-  try {
-    let projects;
-    if (customerID) {
-      projects = await serviceRequestModel.find({
-        customerID: customerID,
-        status: "requested",
-      });
-    } else {
-      projects = await serviceRequestModel.find({
-        clientID: clientID,
-        status: {
-          $ne: "rejected",
-        },
-      });
+      if (projects.length === 0) {
+        return res.json({ message: "No Projects Done Yet" });
+      }
+      return res.json(projects);
+    } catch (error) {
+      console.error("Error:", error);
+      return res.status(500).json({ message: "Internal Server Error" });
     }
+  } else {
+    try {
+      let projects;
+      if (customerID) {
+        projects = await serviceRequestModel.find({
+          customerID: customerID,
+        });
+      } else {
+        projects = await serviceRequestModel.find({
+          clientID: clientID,
+        });
+      }
 
-    if (projects.length === 0) {
-      return res.json({ message: "No Projects Done Yet" });
+      if (projects.length === 0) {
+        return res.json({ message: "No Projects Done Yet" });
+      }
+      return res.json(projects);
+    } catch (error) {
+      console.error("Error:", error);
+      return res.status(500).json({ message: "Internal Server Error" });
     }
-    return res.json(projects);
-  } catch (error) {
-    console.error("Error:", error);
-    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 const getProjectsDone = async (req, res) => {
@@ -228,14 +287,18 @@ const getProjectsDone = async (req, res) => {
   }
 };
 const getUserData = async (req, res) => {
-  try {
-    const users = await usersModel.find({
-      _id: req.body._id,
-    });
-    return res.json(users);
-  } catch (error) {
-    console.error("Error:", error);
-  }
+  const { _id } = req.body;
+  if (!_id || _id === "null" || _id === null) {
+    return res.status(400).json({ message: "Invalid ID Or No ID" });
+  } else
+    try {
+      const users = await usersModel.find({
+        _id: req.body._id,
+      });
+      return res.json(users);
+    } catch (error) {
+      console.error("Error:", error);
+    }
 };
 const updateuser = async (req, res) => {
   const { id } = req.body;
@@ -254,31 +317,6 @@ const updateuser = async (req, res) => {
     res.status(200).json({ message: "User updated successfully" });
   } catch (error) {
     res.status(400).send({ success: false, message: error.message });
-  }
-};
-const updateaceuser = async (req, res) => {
-  const { id, data } = req.body;
-
-  try {
-    const user = await usersModel.findById(id);
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-    //uploading photo is not working
-
-    user.aceData = data;
-
-    // Save the updated user
-    await user.save();
-    return res
-      .status(200)
-      .json({ message: "User data updated successfully", data: user.aceData });
-  } catch (error) {
-    console.error("Error updating user:", error);
-    return res
-      .status(500)
-      .json({ message: "Error updating user: " + error.message });
   }
 };
 
@@ -430,7 +468,7 @@ const acceptServiceRequest = async (req, res) => {
 };
 
 const completeServiceRequest = async (req, res) => {
-  const { id, otpEntered } = req.body;
+  const { id, otpEntered, paymentMethod } = req.body;
   try {
     const request = await serviceRequestModel.findById(id);
 
@@ -444,7 +482,11 @@ const completeServiceRequest = async (req, res) => {
     } else {
       const updatedRequest = await serviceRequestModel.findByIdAndUpdate(
         (_id = id),
-        { status: "completed", completionDate: new Date() },
+        {
+          status: "completed",
+          completionDate: new Date(),
+          paymentMethod: paymentMethod,
+        },
         { new: true } // This option returns the updated document
       );
       await usersModel.findByIdAndUpdate(
@@ -473,16 +515,16 @@ const completeServiceRequest = async (req, res) => {
       });
       const reputation = (totalProjectsDone / totalRequests) * 5;
       const overall = (reputation + avgRating + responsiveness) / 3;
-      console.log(
-        "reputation:",
-        reputation,
-        "avgRating:",
-        avgRating,
-        "responsiveness:",
-        responsiveness,
-        "overall:",
-        overall
-      );
+      // console.log(
+      //   "reputation:",
+      //   reputation,
+      //   "avgRating:",
+      //   avgRating,
+      //   "responsiveness:",
+      //   responsiveness,
+      //   "overall:",
+      //   overall
+      // );
       // Update the user's reputation
       const clientData = await usersModel.findByIdAndUpdate(
         updatedRequest.clientID,
@@ -499,7 +541,7 @@ const completeServiceRequest = async (req, res) => {
         <p>Dear customer,</p>
         <p>We are pleased to inform you that your service request for ${request.selectedService} has been completed successfully. We hope that our team has met your expectations, providing you with a satisfactory experience.</p>
         <p>Your feedback is invaluable to us. If you would like to share your thoughts on the service provided by ${clientData.aceData.companyName}, we invite you to click the link below. Your input helps us continually improve and ensures we maintain the highest standards of quality and customer satisfaction.</p>
-        <p><b><a href="http://localhost:3000/review/${clientData._id}/new">Add Review</a></b></p>
+        <p><b><a href="https://homeserviceshub.in/review/${clientData._id}/new">Add Review</a></b></p>
         <p>Thank you for choosing us for your service needs</p>
         <p>Best regards,<br>Home Services Hub</p>
       `;
@@ -521,7 +563,7 @@ const rejectServiceRequest = async (req, res) => {
     // Update the service request status to "rejected"
     const request = await serviceRequestModel.findByIdAndUpdate(
       (_id = id),
-      { status: "rejected" },
+      { status: "cancelled" },
       { new: true } // This option returns the updated document
     );
 
@@ -534,7 +576,44 @@ const rejectServiceRequest = async (req, res) => {
     <p>Dear customer,</p>
     <p>We want to inform that your service request for ${request.selectedService} has been rejected.</p>
     <p>If you want to add a review you can do it </p>
-    <p><b><a href="http://localhost:3000/review/${clientData._id}/new">Add Review</a></b></p>
+    <p><b><a href="https://homeserviceshub.in/review/${clientData._id}/new">Add Review</a></b></p>
+    <p></p>
+    <p>Best regards,<br>Home Services Hub</p>
+  `;
+    sendEmail(
+      request.customerDetails.email,
+      "Your Service Request has been Rejected",
+      rejectedEmail
+    );
+    // Return the updated request as a response
+    res.status(200).json({ message: "Service request rejected", request });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+const customerRejectServiceRequest = async (req, res) => {
+  const { id, reason } = req.body;
+
+  try {
+    // Update the service request status to "rejected"
+    const request = await serviceRequestModel.findByIdAndUpdate(
+      (_id = id),
+      { status: "cancelled" },
+      { customerRejectedReason: reason },
+      { new: true } // This option returns the updated document
+    );
+
+    // Check if the update was successful
+    if (!request) {
+      return res.status(404).json({ message: "Service request not found" });
+    }
+    const clientData = await usersModel.findById(request.clientID);
+    const rejectedEmail = `
+    <p>Dear customer,</p>
+    <p>We want to inform that your service request for ${request.selectedService} has been rejected.</p>
+    <p>If you want to add a review you can do it </p>
+    <p><b><a href="https://homeserviceshub.in/review/${clientData._id}/new">Add Review</a></b></p>
     <p></p>
     <p>Best regards,<br>Home Services Hub</p>
   `;
@@ -577,18 +656,27 @@ const serviceRequest = async (req, res) => {
     const clientData = await usersModel.findOne({
       _id: req.body.fromDetails.clientID,
     });
-    const newRequestMsg = `
+    const customerData = await usersModel.findOne({
+      _id: req.body.fromDetails.customerID,
+    });
+    const newRequestMsgClient = `
     <p>Dear ${clientData.aceData.companyEmail},</p>
     <p>You got a new Service request of <b>${newRequest.selectedService}</b></p>
-    <p>For further details goto your profile or <b><a href="http://localhost:3000/ace/request">Click Here</a></b>.</p>
+    <p>For further details goto your profile or <b><a href="https://homeserviceshub.in/ace/request">Click Here</a></b>.</p>
+    <p></p>
+    <p>Best regards,<br>Home Services Hub</p>
+  `;
+    const newRequestMsgCustomer = `
+    <p>Your Request for <b>${newRequest.selectedService}</b> has been submitted successfully. </p>
     <p></p>
     <p>Best regards,<br>Home Services Hub</p>
   `;
     sendEmail(
       clientData.aceData.companyEmail,
       "New Service Request",
-      newRequestMsg
+      newRequestMsgClient
     );
+    sendEmail(customerData.email, "Request Successfull", newRequestMsgCustomer);
     res.status(200).send({
       success: true,
       message: "New Service Request Created",
@@ -701,6 +789,16 @@ const acesignin = async (req, res) => {
       // Check if password is correct
       if (user.password === req.body.password) {
         // If password is correct, return user exist
+        if (!user.aceData.subscriptionPlan) {
+          user.aceData.subscriptionPlan = {
+            planName: "Basic",
+            startingDate: new Date(),
+            endingDate: new Date(Date.now() + 100 * 365 * 24 * 60 * 60 * 1000),
+          };
+          user.aceData.taskAcceptanceLimit = 3;
+          user.aceData.maxConcurrentTasks = 1;
+          //if not the create three new fields  in aceData i.e. subscriptionPlan: [], taskAcceptanceLimit: 3, maxConcurrentTasks: 1,
+        }
         return res.json({ user: user, message: "User exists" });
       } else {
         // If password is incorrect, return an error message
@@ -709,6 +807,20 @@ const acesignin = async (req, res) => {
     } else {
       // If email is not found, return an error message
       return res.json({ message: "Email not found" });
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+const checkacemobile = async (req, res) => {
+  const { mobileNumber } = req.body;
+  try {
+    const user = await usersModel.findOne({ number: mobileNumber });
+
+    if (user && user.isAce) {
+      return res.json({ user: user, message: "User exists" });
+    } else {
+      return res.json({ message: "Invalid Number" });
     }
   } catch (error) {
     console.error("Error:", error);
@@ -725,7 +837,7 @@ const acesignup = async (req, res) => {
       postalCode,
     } = req.body;
 
-    if (_id) {
+    if (_id !== "new") {
       const updatedUser = await usersModel.findByIdAndUpdate(
         _id,
         {
@@ -735,11 +847,10 @@ const acesignup = async (req, res) => {
             "aceData.location": "",
             "aceData.totalReviews": 0,
             "aceData.brief": "",
-            "aceData.acceptedReviews": 0, // total requests that are accepted or completed
-            "aceData.overallRating": 0, // combination of average rating, reputation, responsiveness
-            "aceData.avgRating": 0, // based on  number of reviews
-            "aceData.reputation": 0, // number of accepted or completed  requests / (number of all requests) * 5
-            "aceData.responsiveness": 0, //time taken to reply
+            "aceData.overallRating": 0,
+            "aceData.avgRating": 0,
+            "aceData.reputation": 0,
+            "aceData.responsiveness": 0,
             "aceData.availability": "Mon-Sat",
             "aceData.projectsDone": 0,
             "aceData.projectsOngoing": 0,
@@ -754,8 +865,12 @@ const acesignup = async (req, res) => {
             "aceData.companyNumber": companyNumber,
             "aceData.companyPassword": companyPassword,
             "aceData.companyEmail": companyEmail,
-            "aceData.postalCode": postalCode,
-            "aceData.limit": 1,
+            "aceData.companyPostalCode": postalCode,
+            "aceData.awards": [],
+            "aceData.profilePhoto": [],
+            "aceData.subscriptionPlan": {},
+            "aceData.taskAcceptanceLimit": 3,
+            "aceData.maxConcurrentTasks": 1,
           },
         },
         { new: true }
@@ -770,16 +885,16 @@ const acesignup = async (req, res) => {
           companyName,
           location: "",
           totalReviews: 0,
-          acceptedReviews: 0, // total requests that are accepted or completed
           brief: "",
-          overallRating: 0, // combination of average rating, reputation, responsiveness
-          avgRating: 0, // based on  number of reviews
-          reputation: 0, // number of accepted or completed  requests / (number of all requests) * 5
-          responsiveness: 0, //time taken to reply
+          awards: [],
+          overallRating: 0,
+          avgRating: 0,
+          reputation: 0,
+          responsiveness: 0,
           availability: "Mon-Sat",
           projectsDone: 0,
           projectsOngoing: 0,
-          yearOfEstablishment,
+          yearOfEstablishment: "XXXX",
           paymentMethod: "Card, Cash and Cheque",
           categories: [],
           services: [],
@@ -790,8 +905,12 @@ const acesignup = async (req, res) => {
           companyPassword,
           companyNumber,
           companyEmail,
-          postalCode: postalCode,
-          limit: 1,
+          companyPostalCode: postalCode,
+          profilePhoto: [],
+          //subscription model data
+          subscriptionPlan: {},
+          taskAcceptanceLimit: 3,
+          maxConcurrentTasks: 1,
         },
       });
 
@@ -831,18 +950,19 @@ const checkace = async (req, res) => {
 };
 const acedata = async (req, res) => {
   const { id } = req.body; // Assuming userId is passed in the request params
-
-  try {
-    const user = await usersModel.findById(id);
-    if (!user) {
-      return res.status(404).json({
-        message: "User not found.",
-      });
+  if (id) {
+    try {
+      const user = await usersModel.findById(id);
+      if (!user) {
+        return res.status(404).json({
+          message: "User not found.",
+        });
+      }
+      return res.json(user);
+    } catch (error) {
+      console.error("Error:", error);
+      return res.status(500).json({ message: "Internal Server Error" });
     }
-    return res.json(user);
-  } catch (error) {
-    console.error("Error:", error);
-    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 const filterCategoryData = async (req, res) => {
@@ -1066,6 +1186,146 @@ const loadMoreCompanyData = async (req, res) => {
     res.status(400).send({ err: error.message });
   }
 };
+const updateaceuser = async (req, res) => {
+  const { id, data } = req.body;
+
+  try {
+    const user = await usersModel.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    //uploading photo is not working
+
+    user.aceData = data;
+
+    // Save the updated user
+    await user.save();
+    return res
+      .status(200)
+      .json({ message: "User data updated successfully", data: user.aceData });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    return res
+      .status(500)
+      .json({ message: "Error updating user: " + error.message });
+  }
+};
+const updateAceTitle = async (req, res) => {
+  const { id, data } = req.body;
+
+  try {
+    // Find the user by ID
+    const user = await usersModel.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update the media field
+    user.aceData = data;
+
+    // Save the updated user data
+    await user.save();
+
+    res.status(200).json({ message: "Title updated successfully" });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+const updateAceVerification = async (req, res) => {
+  const { number, data } = req.body;
+  try {
+    const user = await usersModel.findOne({ number: number });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    user.aceData = data;
+    await user.save();
+    res.status(200).json({ message: "User updated successfully" });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+const updateSubscription = async (req, res) => {
+  const userId = req.body.id;
+  const planName = req.body.planName;
+  const billingCycle = req.body.billingCycle;
+
+  try {
+    let user = await usersModel.findOneAndUpdate(
+      { _id: userId },
+      {
+        $set: {
+          "aceData.taskAcceptanceLimit": getTaskAcceptanceLimit(planName),
+          "aceData.maxConcurrentTasks": getMaxConcurrentTasks(planName),
+          "aceData.subscriptionPlan.planName": planName,
+          "aceData.subscriptionPlan.startingDate": new Date(),
+          "aceData.subscriptionPlan.endingDate":
+            getExpirationDate(billingCycle),
+          "aceData.subscriptionPlan.timePeriod": billingCycle,
+        },
+      },
+      { new: true, upsert: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.json({ user, message: "Subscription updated successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+// Helper functions
+const getTaskAcceptanceLimit = (planName) => {
+  switch (planName) {
+    case "Free":
+      return 3;
+    case "Basic":
+      return 10;
+    case "Standard":
+      return 20;
+    case "Premium":
+      return 50;
+    case "Exclusive":
+      return 100;
+    default:
+      throw new Error("Invalid plan name");
+  }
+};
+
+const getMaxConcurrentTasks = (planName) => {
+  switch (planName) {
+    case "Free":
+      return 1;
+    case "Basic":
+      return 2;
+    case "Standard":
+      return 5;
+    case "Premium":
+      return 7;
+    case "Exclusive":
+      return 10;
+    default:
+      throw new Error("Invalid plan name");
+  }
+};
+
+const getExpirationDate = (billingCycle) => {
+  let expirationDate = new Date();
+  if (billingCycle === "Monthly") {
+    expirationDate.setMonth(expirationDate.getMonth() + 1);
+  } else if (billingCycle === "Yearly") {
+    expirationDate.setFullYear(expirationDate.getFullYear() + 1);
+  } else {
+    throw new Error("Invalid billing cycle");
+  }
+  return expirationDate;
+};
 
 module.exports = {
   signUp,
@@ -1098,4 +1358,9 @@ module.exports = {
   completeServiceRequest,
   evaluateServiceRequest,
   reviewDataRequest,
+  updateAceTitle,
+  customerRejectServiceRequest,
+  checkacemobile,
+  updateAceVerification,
+  updateSubscription,
 };

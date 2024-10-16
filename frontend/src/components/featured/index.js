@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Col, Row } from "react-bootstrap";
+import { Button, Col, Modal, Row } from "react-bootstrap";
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import CustomButton from "../customBtn";
 import styles from "./index.module.css";
@@ -15,6 +15,8 @@ export const Featured = ({ heading }) => {
   const [country, setCountry] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [topAce, setTopAce] = useState([]);
+  const [loginModal, setLoginModal] = useState();
+
   // Update perPage value based on the window width
   useEffect(() => {
     function getViewType() {
@@ -54,11 +56,9 @@ export const Featured = ({ heading }) => {
       setCountry(country_name);
 
       // Fetch top Ace data based on the retrieved country
-      const topAceResponse = await axios.post(
-        `http://localhost:8000/filtertopcountryacedata`,
-        { country: country_name }
-      );
-
+      const topAceResponse = await axios.post("/api/filtertopcountryacedata", {
+        country: country_name,
+      });
       // Check the response status
       if (topAceResponse.status === 200) {
         setTopAce(topAceResponse.data.users);
@@ -69,8 +69,15 @@ export const Featured = ({ heading }) => {
       setIsLoading(false); // Reset loading state
     }
   };
-
-  const products = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  const handleLogin = () => {
+    navigate(`/signin`);
+  };
+  const handleFeatures = (item) => {
+    const authToken = localStorage.getItem("auth");
+    if (authToken) {
+      navigate(`/${item._id}/servicerequest`);
+    } else setLoginModal(true);
+  };
   return (
     <div className={styles.containerX}>
       <h2 className={styles.title}>{heading}</h2>
@@ -85,7 +92,6 @@ export const Featured = ({ heading }) => {
         modules={[Navigation, Pagination, Mousewheel, Keyboard]}
         className={` mySwiper ${styles.outer}`}
       >
-        {/* {console.log()} */}
         {topAce ? (
           topAce.map((item, index) => (
             <SwiperSlide key={index}>
@@ -95,7 +101,7 @@ export const Featured = ({ heading }) => {
                     <img
                       src={
                         item.aceData.profilePhoto
-                          ? `http://localhost:8000/images/${item.aceData.profilePhoto.path}`
+                          ? `/images/${item.aceData.profilePhoto.path}`
                           : process.env.PUBLIC_URL +
                             "/icons/default-profile-picture-male-icon.svg"
                       }
@@ -173,7 +179,7 @@ export const Featured = ({ heading }) => {
                     <CustomButton
                       text={"Request a service"}
                       height={"auto"}
-                      onClick={() => navigate(`/${item._id}/servicerequest`)}
+                      onClick={() => handleFeatures("Write a Review")}
                     />
                   </Col>
                   <Col className={styles.btnDiv}>
@@ -191,6 +197,34 @@ export const Featured = ({ heading }) => {
           <>Loading...</>
         )}
       </Swiper>
+      <LoginModal
+        show={loginModal}
+        onHide={() => setLoginModal(false)}
+        handleLogin={handleLogin}
+      />
     </div>
   );
 };
+function LoginModal(props) {
+  return (
+    <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+          Login First
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <h4>Oops this feature cannot be used without being registered</h4>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={props.onHide}>Close</Button>
+        <Button onClick={props.handleLogin}>Sign Up/Login</Button>
+      </Modal.Footer>
+    </Modal>
+  );
+}

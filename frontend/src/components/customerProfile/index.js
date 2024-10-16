@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { Col, Container, Form, Modal, Row } from "react-bootstrap";
-import CustomButton from "../customBtn";
+import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
+import CustomButton, { CustomRedButton } from "../customBtn";
 import styles from "./index.module.css";
 import { useState } from "react";
 import { AiFillEdit, AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
@@ -45,56 +45,54 @@ const CustomerProfile = () => {
   useEffect(() => {
     dispatch(GetUserData(userId));
   }, [userId, dispatch]);
+  const fetchData = async () => {
+    try {
+      const response = await axios.post("/api/getreviewdata", {
+        id: localStorage.getItem("auth"),
+      });
+      if (response.status === 200) {
+        setUserReviews(response.data);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+    try {
+      const response = await axios.post("/api/getprojectsdata", {
+        customerID: localStorage.getItem("auth"),
+      });
+      if (response.status === 200) {
+        setUserRequestData(response.data);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+    try {
+      const response = await axios.post("/api/getbookmarksdata", {
+        customerID: localStorage.getItem("auth"),
+      });
+      if (response.status === 200) {
+        if (response.data?.message !== "No Bookmarks Yet") {
+          setBookmarks(response.data);
+        }
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  const fetchProjects = async () => {
+    try {
+      // setIsLoading(true);
+      const response = await axios.post("/api/getprojectsdata", {
+        customerID: localStorage.getItem("auth"),
+      });
+      if (response.status === 200) {
+        setUserRequestData(response.data);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // setIsLoading(true);
-        const response = await axios.post(
-          "http://localhost:8000/getreviewdata",
-          {
-            id: localStorage.getItem("auth"),
-          }
-        );
-        if (response.status === 200) {
-          // setIsLoading(false);
-          setUserReviews(response.data);
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-      try {
-        // setIsLoading(true);
-        const response = await axios.post(
-          "http://localhost:8000/getrequestdata",
-          {
-            customerID: localStorage.getItem("auth"),
-          }
-        );
-        if (response.status === 200) {
-          setUserRequestData(response.data);
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-      try {
-        // setIsLoading(true);
-        const response = await axios.post(
-          "http://localhost:8000/getbookmarksdata",
-          {
-            customerID: localStorage.getItem("auth"),
-          }
-        );
-        if (response.status === 200) {
-          if (response.data?.message !== "No Bookmarks Yet") {
-            setBookmarks(response.data);
-          }
-          // setIsLoading(false);
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
-
     fetchData();
   }, []);
   useEffect(() => {
@@ -130,10 +128,7 @@ const CustomerProfile = () => {
         const formData = new FormData();
         formData.append("media", dummyData.profile_photo);
 
-        const response = await axios.post(
-          "http://localhost:8000/upload",
-          formData
-        );
+        const response = await axios.post("/api/upload", formData);
 
         if (response.status === 200) {
           const mediaObject = {
@@ -161,9 +156,7 @@ const CustomerProfile = () => {
     try {
       // setIsLoading(true);
       await axios
-        .post("http://localhost:8000/updateuser", {
-          email: dummyData.email,
-          number: dummyData.number,
+        .post("/api/updateuser", {
           password: dummyData.password,
           profile_photo: profileData,
           username: dummyData.username,
@@ -207,7 +200,7 @@ const CustomerProfile = () => {
     // setbookmark(!bookmark);
     try {
       axios
-        .post("http://localhost:8000/updatebookmark", {
+        .post("/api/updatebookmark", {
           clientID: id,
           customerID: localStorage.getItem("auth"),
         })
@@ -238,6 +231,33 @@ const CustomerProfile = () => {
     dispatch(CHECKLOGIN(false));
     navigate("/");
   };
+  const [cancelModal, setCancelModal] = useState(false);
+  const [cancelConfirmId, setCancelConfirmId] = useState();
+  const handleConfirm = (id, index) => {
+    setCancelConfirmId(id);
+    setCancelModal(true);
+  };
+  const handleCancel = (reason) => {
+    try {
+      axios
+        .post("/api/customerrejectservicerequest", {
+          id: cancelConfirmId,
+          reason: reason,
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            alert("Request Cancelled Successfully");
+            fetchProjects();
+          }
+        })
+        .catch((error) => {
+          console.error("AxiosError:", error);
+        });
+    } catch (error) {
+      console.error("Error:", error);
+    }
+    setCancelModal(false);
+  };
   return (
     <div className={styles.backgroundColor}>
       <div className={styles.backGround}>
@@ -261,7 +281,23 @@ const CustomerProfile = () => {
                   Details
                 </div>
               </ScrollLink>
-
+              <ScrollLink
+                to="projects"
+                smooth={true}
+                duration={500}
+                offset={-150}
+              >
+                <div
+                  title="projects"
+                  onClick={activeTab}
+                  lg={1}
+                  className={`${styles.tab} ${
+                    selectedFilter == "projects" ? styles.activeTab : ""
+                  }`}
+                >
+                  My Projects
+                </div>
+              </ScrollLink>
               <ScrollLink
                 to="reviews"
                 smooth={true}
@@ -302,7 +338,7 @@ const CustomerProfile = () => {
                 text={"logout"}
                 width={"auto"}
                 height={"auto"}
-                className={styles.btn}
+                customClass={styles.btn}
                 onClick={logout}
               />
             </div>
@@ -322,7 +358,7 @@ const CustomerProfile = () => {
               />
             ) : (
               <img
-                src={`http://localhost:8000/images/${data.profile_photo.path}`}
+                src={`/images/${data.profile_photo.path}`}
                 className={styles.img}
               />
             )}
@@ -408,17 +444,119 @@ const CustomerProfile = () => {
           </Row>
         </div>
       </Container>
-      <Container className="mb-0">
-        <Row id="projects" className="mx-0">
+      <Container id="projects" className="mb-0">
+        <Row className="mx-0">
           <Col lg={12} className={styles.reviewHeading}>
             <div>My Projects</div>
           </Col>
-          {userRequestData?.length > 0 ? (
-            userRequestData.map((item, index) => {
-              return <div key={index}>{item.status}</div>;
-            })
+          {userRequestData &&
+          userRequestData?.message !== "No Projects Done Yet" ? (
+            userRequestData
+              .sort((a, b) => new Date(b.requestDate) - new Date(a.requestDate))
+              .map((item, index) => {
+                return (
+                  !item.taskCompleted && (
+                    <Row className={styles.dynamicRow} key={index}>
+                      <Col lg={12}>
+                        <Col lg={12} className={styles.title}>
+                          {item.selectedService}
+                        </Col>
+                        <Col lg={12} className={styles.data}>
+                          <b>Location</b> - {item.customerDetails.address}
+                        </Col>
+                        <Col lg={12} className={styles.data}>
+                          <b>Type</b> - {item.accommodation}
+                        </Col>
+                        <Col lg={12} className={styles.data}>
+                          <b>Timimg</b> - {item.serviceNeed}
+                        </Col>
+                        <Col lg={12} className={styles.discription}>
+                          <b>Discription</b> - {item.discription}
+                        </Col>
+                        <Col lg={12} className={styles.discription}>
+                          <b>Service Request Date</b> -{" "}
+                          {moment(item.requestDate).format("DD/MM/YYYY")}
+                        </Col>
+
+                        {item.status !== "requested" ? (
+                          <>
+                            <Col lg={12} className={styles.data}>
+                              <b>Name</b> - {item.customerDetails.name}
+                            </Col>
+
+                            <Col lg={12} className={styles.data}>
+                              <b>Number</b> - {item.customerDetails.number}
+                            </Col>
+                          </>
+                        ) : null}
+                      </Col>
+
+                      <Col lg={12} className={styles.btns}>
+                        {item.status === "requested" && (
+                          <>
+                            {/* Initial step: Evaluate or Reject */}
+                            <CustomButton
+                              text={"Requested"}
+                              width={"130px"}
+                              customClass={styles.customBtn}
+                              disabled
+                            />
+                            <CustomRedButton
+                              text={"Cancel"}
+                              width={"130px"}
+                              onClick={() => handleConfirm(item._id, index)}
+                            />
+                          </>
+                        )}
+                        {item.status === "evaluating" && (
+                          <>
+                            {/* Secondary step: Accept or Reject after evaluation */}
+                            <CustomButton
+                              text={"Evaluating"}
+                              width={"130px"}
+                              customClass={styles.customBtn}
+                              disabled
+                            />
+                            <CustomRedButton
+                              text={"Cancel"}
+                              width={"130px"}
+                              onClick={() => handleConfirm(item._id, index)} // Handle reject action
+                            />
+                          </>
+                        )}
+                        {item.status === "accepted" && (
+                          <>
+                            {/* Secondary step: Accept or Reject after evaluation */}
+                            <CustomButton
+                              text={"Accepted"}
+                              width={"130px"}
+                              customClass={styles.customBtn}
+                              disabled
+                            />
+                          </>
+                        )}
+                        {item.status === "completed" && (
+                          <CustomButton
+                            text={"Task Completed"}
+                            width={"130px"}
+                            customClass={styles.customBtn}
+                            disabled
+                          />
+                        )}
+                        {item.status === "cancelled" && (
+                          <CustomRedButton
+                            text={"Cancelled"}
+                            width={"130px"}
+                            customClass={styles.redBtn}
+                          />
+                        )}
+                      </Col>
+                    </Row>
+                  )
+                );
+              })
           ) : (
-            <div className={styles.noReviews}>No Reviews Yet!!!</div>
+            <div className={styles.noReviews}>No Tasks Available!!! </div>
           )}
         </Row>
         <Row id="reviews" className="mx-0">
@@ -437,112 +575,116 @@ const CustomerProfile = () => {
             <div>Bookmarks({bookmarks?.length})</div>
           </Col>
           {bookmarks.length > 0 ? (
-            bookmarks.map((item, index) => {
-              return (
-                <Row
-                  className={styles.dynamicRow}
-                  key={index}
-                  data-aos="fade-up"
-                >
-                  <Col lg={8} className={styles.bookmarkData}>
-                    <div className={styles.bookmarkPhoto}>
-                      <img
-                        src={
-                          item.aceData.profilePhoto
-                            ? `http://localhost:8000/images/${item.aceData.profilePhoto.path}`
-                            : process.env.PUBLIC_URL +
-                              "/icons/default-profile-picture-male-icon.svg"
-                        }
-                        alt="Selected"
-                        width={150}
-                        height={150}
-                        className={styles.profilePhoto}
-                      />
-                    </div>
-                    <div style={{ width: "75%" }}>
-                      <div className={styles.companyName}>
-                        {item.aceData.companyName}
+            bookmarks
+              .sort(
+                (a, b) => new Date(b.bookmarkDate) - new Date(a.bookmarkDate)
+              )
+              .map((item, index) => {
+                return (
+                  <Row
+                    className={styles.dynamicRow}
+                    key={index}
+                    data-aos="fade-up"
+                  >
+                    <Col lg={8} className={styles.bookmarkData}>
+                      <div className={styles.bookmarkPhoto}>
+                        <img
+                          src={
+                            item.aceData.profilePhoto
+                              ? `/images/${item.aceData.profilePhoto.path}`
+                              : process.env.PUBLIC_URL +
+                                "/icons/default-profile-picture-male-icon.svg"
+                          }
+                          alt="Selected"
+                          width={150}
+                          height={150}
+                          className={styles.profilePhoto}
+                        />
                       </div>
-                      <div className={styles.companyDetails}>
-                        {[...Array(5)].map((_, idx) => {
-                          const rating = Number(item.aceData?.overallRating);
-                          const fullStars = Math.floor(rating);
-                          const hasHalfStar = rating - fullStars >= 0.5;
-                          return (
-                            <span key={idx}>
-                              {idx < fullStars ? (
-                                <BsStarFill fill="gold" />
-                              ) : idx === fullStars && hasHalfStar ? (
-                                <BsStarHalf fill="gold" />
-                              ) : (
-                                <BsStar fill="gold" />
-                              )}
-                            </span>
-                          );
-                        })}
-                      </div>
-                      <div className={styles.companySmallDetails}>
-                        <div className={styles.companyDetails}>
-                          ({item.aceData.totalReviews}) Reviews
+                      <div style={{ width: "75%" }}>
+                        <div className={styles.companyName}>
+                          {item.aceData.companyName}
                         </div>
                         <div className={styles.companyDetails}>
-                          {new Date().getFullYear() -
-                            item.aceData.yearOfEstablishment}
-                          + Year Experience
+                          {[...Array(5)].map((_, idx) => {
+                            const rating = Number(item.aceData?.overallRating);
+                            const fullStars = Math.floor(rating);
+                            const hasHalfStar = rating - fullStars >= 0.5;
+                            return (
+                              <span key={idx}>
+                                {idx < fullStars ? (
+                                  <BsStarFill fill="gold" />
+                                ) : idx === fullStars && hasHalfStar ? (
+                                  <BsStarHalf fill="gold" />
+                                ) : (
+                                  <BsStar fill="gold" />
+                                )}
+                              </span>
+                            );
+                          })}
+                        </div>
+                        <div className={styles.companySmallDetails}>
+                          <div className={styles.companyDetails}>
+                            ({item.aceData.totalReviews}) Reviews
+                          </div>
+                          <div className={styles.companyDetails}>
+                            {new Date().getFullYear() -
+                              item.aceData.yearOfEstablishment}
+                            + Year Experience
+                          </div>
+                        </div>
+                        <div className={styles.companyDetails}>
+                          {item.aceData.brief.length <= 160
+                            ? item.aceData.brief
+                            : `${item.aceData.brief.slice(0, 160)}...`}
+                          <Link
+                            style={{ color: "green" }}
+                            to={`/companyprofile/${item._id}`}
+                          >
+                            read more
+                          </Link>
                         </div>
                       </div>
-                      <div className={styles.companyDetails}>
-                        {item.aceData.brief.length <= 160
-                          ? item.aceData.brief
-                          : `${item.aceData.brief.slice(0, 160)}...`}
-                        <Link
-                          style={{ color: "green" }}
-                          to={`/companyprofile/${item._id}`}
-                        >
-                          read more
-                        </Link>
-                      </div>
-                    </div>
-                  </Col>
+                    </Col>
 
-                  <Col lg={2} className={styles.verifiedPhotoDiv}></Col>
+                    <Col lg={2} className={styles.verifiedPhotoDiv}></Col>
 
-                  <Col lg={2}>
-                    <div
-                      onClick={() => navigate(`/${item._id}/servicerequest`)}
-                      className={styles.firstBtn}
-                    >
-                      <CustomButton text={"Request a service"} />
-                    </div>
-                    <div
-                      onClick={() => navigate(`/companyprofile/${item._id}`)}
-                      className={styles.firstBtn}
-                    >
-                      <CustomButton text={"Profile"} />
-                    </div>
-                    <div onClick={() => handleRemove(index)}>
-                      <CustomButton
-                        onClick={() => bookmarkRemove(item._id)}
-                        text={"Remove"}
-                      />
-                    </div>
-                  </Col>
-
-                  <Col lg={8} className={styles.categoryList}>
-                    Category:{" "}
-                    {item.aceData.categories.map((cat, catIndex) => (
-                      <span
-                        key={catIndex}
-                        // onClick={() => handleCategoryClicked(cat)}
-                        className={styles.categories}
+                    <Col lg={2}>
+                      <div
+                        onClick={() => navigate(`/${item._id}/servicerequest`)}
+                        className={styles.firstBtn}
                       >
-                        {cat}
-                      </span>
-                    ))}
-                  </Col>
-                </Row>
-              );
-            })
+                        <CustomButton text={"Request a service"} />
+                      </div>
+                      <div
+                        onClick={() => navigate(`/companyprofile/${item._id}`)}
+                        className={styles.firstBtn}
+                      >
+                        <CustomButton text={"Profile"} />
+                      </div>
+                      <div onClick={() => handleRemove(index)}>
+                        <CustomButton
+                          onClick={() => bookmarkRemove(item._id)}
+                          text={"Remove"}
+                        />
+                      </div>
+                    </Col>
+
+                    <Col lg={8} className={styles.categoryList}>
+                      Category:{" "}
+                      {item.aceData.categories.map((cat, catIndex) => (
+                        <span
+                          key={catIndex}
+                          // onClick={() => handleCategoryClicked(cat)}
+                          className={styles.categories}
+                        >
+                          {cat}
+                        </span>
+                      ))}
+                    </Col>
+                  </Row>
+                );
+              })
           ) : (
             <div className={styles.noReviews}>No Bookmarks Yet!!!</div>
           )}
@@ -557,6 +699,11 @@ const CustomerProfile = () => {
         handleFormChange={handleFormChange}
         handleImageChange={handleImageChange}
         data={dummyData}
+      />
+      <CancleRequestModal
+        show={cancelModal}
+        onHide={() => setCancelModal(false)}
+        handleCancel={handleCancel}
       />
     </div>
   );
@@ -614,6 +761,7 @@ function ProfileModal(props) {
                 name="email"
                 value={props.data.email}
                 onChange={props.handleFormChange}
+                disabled
               />
             </Form.Group>
           </Row>
@@ -639,6 +787,7 @@ function ProfileModal(props) {
                 name="number"
                 value={props.data.number}
                 onChange={props.handleFormChange}
+                disabled
               />
               <Form.Control.Feedback type="invalid">
                 Please provide a valid address.
@@ -674,6 +823,81 @@ function ProfileModal(props) {
           text={"Save Changes"}
           onClick={() => props.handlechanges(formData)}
           width={"auto"}
+        />
+      </Modal.Footer>
+    </Modal>
+  );
+}
+function CancleRequestModal(props) {
+  const [reason, setReason] = useState("");
+  const [validated, setValidated] = useState(false);
+
+  const handleReasonChange = (event) => {
+    setReason(event.target.value);
+    console.log(event.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    if (form.checkValidity() === false) {
+      e.stopPropagation();
+    } else {
+      setValidated(true);
+      if (reason) {
+        props.handleCancel(reason);
+      }
+    }
+  };
+
+  return (
+    <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+          Cancel Confirmation
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Row className="mb-3">
+            <Form.Group as={Col} md="12" controlId="validationCustom02">
+              <Form.Label>Specify Reason</Form.Label>
+              <Form.Control
+                as="select"
+                required
+                value={reason}
+                onChange={handleReasonChange}
+                className="form-control"
+              >
+                <option value="" disabled>
+                  Select
+                </option>
+                <option value="Took a lot of time">Took a lot of time</option>
+                <option value="Not Interested Anymore">
+                  Not Interested Anymore
+                </option>
+                <option value="Amount was too much">Amount was too much</option>
+                <option value="Others">Others</option>
+              </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                Please select a reason.
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Row>
+        </Form>
+      </Modal.Body>
+      <Modal.Footer>
+        <CustomButton text={"No"} onClick={props.onHide} width={"auto"} />
+        <CustomRedButton
+          text={"Yes"}
+          onClick={handleSubmit}
+          width={"auto"}
+          type="submit"
         />
       </Modal.Footer>
     </Modal>

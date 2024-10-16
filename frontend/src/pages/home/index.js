@@ -16,7 +16,6 @@ function Home() {
   useEffect(() => {
     window.scrollTo(0, 0);
     const id = localStorage.getItem("auth");
-    id !== "null" && console.log(id, "id hegi");
     if (id && id !== null && id !== "null") {
       dispatch(CHECKLOGIN(true));
     } else {

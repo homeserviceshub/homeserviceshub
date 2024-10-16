@@ -17,11 +17,19 @@ function AceSignIn() {
     password: "",
   });
   const navigate = useNavigate();
+  // useEffect(() => {
+  //   if (id && cid && cid === id) {
+  //     navigate("/ace/profile", {
+  //       replace: true,
+  //     });
+  //   }
+  // }, []);
   useEffect(() => {
-    if (id && cid && cid === id) {
-      navigate("/ace/profile", {
-        replace: true,
-      });
+    const id = localStorage.getItem("aauth");
+    console.log("11111");
+    if (id && id !== null && id !== "null") {
+      console.log("22222");
+      navigate("/ace/profile", { replace: true });
     }
   }, []);
   function Forgetpassword() {
@@ -49,7 +57,7 @@ function AceSignIn() {
     if (userData.emailOrPhone && userData.password) {
       try {
         await axios
-          .post("http://localhost:8000/checkace", {
+          .post("/api/checkace", {
             emailOrPhone: userData.emailOrPhone,
             password: userData.password,
           })

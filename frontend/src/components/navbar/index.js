@@ -32,8 +32,8 @@ const Navbar = () => {
 
     // Add the conditional menu item
     const aceMenuItem = {
-      title: user.aceData ? "Switch to Ace" : "Join Us",
-      url: user.isAce ? "/ace/signin" : "/ace",
+      title: user?.aceData ? "Switch to Ace" : "Join Us",
+      url: user?.isAce ? "/ace/signin" : "/ace",
       cName: "nav-links",
     };
 
@@ -47,20 +47,14 @@ const Navbar = () => {
   const [loggedIn, setLoggedIn] = useState(checklogin);
   const navigate = useNavigate();
   const location = useLocation();
-
+  const authToken = localStorage.getItem("auth");
   useEffect(() => {
-    setLoggedIn(checklogin);
-    const getData = async () => {
-      const userResponse = await axios.post("http://localhost:8000/userdata", {
-        _id: localStorage.getItem("auth"),
-      });
-      if (userResponse.status === 200) {
-        console.log(userResponse.data[0]);
-        setUserData(userResponse.data[0]);
-      }
-    };
-    getData();
-  }, [checklogin]);
+    if (authToken !== null && authToken !== "null") {
+      setLoggedIn(true);
+    } else {
+      setLoggedIn(false);
+    }
+  }, [authToken]);
 
   const handleClick = () => {
     setDropdown(!dropdown);
@@ -79,6 +73,7 @@ const Navbar = () => {
     if (window.innerWidth <= 768) {
       setDropdown(false); // Collapse the navbar on mobile devices
     }
+    navigate(item.url);
   };
 
   // Update active route when domain path changes
@@ -108,9 +103,25 @@ const Navbar = () => {
             navigate("/");
           }}
         >
-          H S H
+          <img
+            src={
+              process.env.PUBLIC_URL +
+              "/photos/homeserviceshublogowithoutbg.png"
+            }
+            className="mobileImg"
+            alt="mobileLogo"
+            width={"55px"}
+            height={60}
+          />
+
+          <img
+            src={process.env.PUBLIC_URL + "/photos/hshlogo.png"}
+            className="desptopImg"
+            alt="desktopLogo"
+            width={"100%"}
+            height={60}
+          />
         </div>
-        <div className="logoSlag"> You Think We Build</div>
       </div>
       <div className="menu-icon" onClick={handleClick}>
         <span>

@@ -13,7 +13,7 @@ const RequestReviewCardComponent = (props) => {
   useEffect(() => {
     try {
       axios
-        .post("http://localhost:8000/userdata", {
+        .post("/userdata", {
           _id: data.requestBy,
         })
         .then((response) => {
@@ -38,7 +38,7 @@ const RequestReviewCardComponent = (props) => {
           src={
             requesterData
               ? requesterData[0]?.profile_photo
-                ? `http://localhost:8000/images/${requesterData[0].profile_photo.path}`
+                ? `/images/${requesterData[0].profile_photo.path}`
                 : process.env.PUBLIC_URL + photo
               : process.env.PUBLIC_URL + photo
           }

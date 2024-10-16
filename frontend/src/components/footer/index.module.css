@@ -44,19 +44,34 @@
   text-decoration: none;
   line-height: 30px;
 }
-.icon {
-  width: 40px;
-  transition: all 120ms ease-out;
-  background-color: white;
-  border-radius: 50%;
+.outerIconDiv {
+  background-color: grey;
+  border-radius: 50px;
+  padding: 3px;
+  transition: color 0.15s ease-in-out, background-color 0.45s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-.icon:hover {
-  z-index: 2;
-  transform: scale(1.2);
+.outerIconDiv:hover {
+  background-color: white;
+}
+.icon {
+  font-size: 40px;
+  fill: black;
+  padding: 3px;
 }
 .iconDiv {
   display: flex;
-  gap: 5px;
+  gap: 10px;
   padding-top: 15px;
   justify-content: flex-end;
+}
+
+@media (max-width: 767px) {
+  .iconDiv {
+    justify-content: flex-start;
+  }
+  .footerArea {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
 }

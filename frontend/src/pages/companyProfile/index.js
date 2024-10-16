@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Card, Col, Container, Row, Spinner } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  Modal,
+  Row,
+  Spinner,
+} from "react-bootstrap";
 import styles from "./index.module.css";
 import CustomButton from "../../components/customBtn";
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
@@ -24,6 +32,7 @@ const CompanyProfile = () => {
   const [showFullScreen, setShowFullScreen] = useState(false);
   const [bookmark, setbookmark] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [loginModal, setLoginModal] = useState();
 
   useEffect(() => {
     setIsLoading(true);
@@ -36,12 +45,9 @@ const CompanyProfile = () => {
   const fetchData = async () => {
     try {
       // Fetch reviews data
-      const reviewsResponse = await axios.post(
-        "http://localhost:8000/getreviews",
-        {
-          id: id,
-        }
-      );
+      const reviewsResponse = await axios.post("/api/getreviews", {
+        id: id,
+      });
       if (reviewsResponse.status === 200) {
         if (reviewsResponse.data.message) {
           console.log(reviewsResponse.data.message);
@@ -51,7 +57,7 @@ const CompanyProfile = () => {
         }
       }
       // Fetch user data
-      const userResponse = await axios.post("http://localhost:8000/userdata", {
+      const userResponse = await axios.post("/api/userdata", {
         _id: id,
       });
       if (userResponse.status === 200) {
@@ -60,13 +66,10 @@ const CompanyProfile = () => {
       }
 
       // Check bookmark status
-      const bookmarkResponse = await axios.post(
-        "http://localhost:8000/checkbookmark",
-        {
-          clientID: id,
-          customerID: localStorage.getItem("auth"),
-        }
-      );
+      const bookmarkResponse = await axios.post("/api/checkbookmark", {
+        clientID: id,
+        customerID: localStorage.getItem("auth"),
+      });
       if (bookmarkResponse.status === 200) {
         setbookmark(bookmarkResponse.data.message ? false : true);
       }
@@ -92,7 +95,7 @@ const CompanyProfile = () => {
     // setbookmark(!bookmark);
     try {
       axios
-        .post("http://localhost:8000/updatebookmark", {
+        .post("/api/updatebookmark", {
           clientID: id,
           customerID: localStorage.getItem("auth"),
         })
@@ -116,6 +119,19 @@ const CompanyProfile = () => {
   const activeTab = (e) => {
     setSelectedFilter(e.target.title);
   };
+  const handleLogin = () => {
+    navigate(`/signin`);
+  };
+  const handleFeatures = (feature) => {
+    const authToken = localStorage.getItem("auth");
+    if (authToken) {
+      if (feature === "Write a Review") {
+        navigate(`/review/${id}/new`);
+      } else if (feature === "Request a Service") {
+        navigate(`/${id}/servicerequest`);
+      } else bookmarkClicked();
+    } else setLoginModal(true);
+  };
 
   return (
     <>
@@ -128,7 +144,7 @@ const CompanyProfile = () => {
                 <Col lg={2} className={styles.companyProfilePhoto}>
                   {usersAceData?.profilePhoto ? (
                     <img
-                      src={`http://localhost:8000/images/${usersAceData.profilePhoto.path}`}
+                      src={`/images/${usersAceData.profilePhoto.path}`}
                       alt="Selected"
                       width={"350px"}
                       height={"350px"}
@@ -173,14 +189,14 @@ const CompanyProfile = () => {
                   >
                     <CustomButton
                       text={"Write a Review"}
-                      onClick={() => navigate(`/review/${id}/new`)}
+                      onClick={() => handleFeatures("Write a Review")}
                     />
                   </ScrollLink>
 
                   <div className={styles.profilebtn}>
                     <CustomButton
                       text={"Request a service"}
-                      onClick={() => navigate(`/${id}/servicerequest`)}
+                      onClick={() => handleFeatures("Request a Service")}
                     />
                   </div>
                   <div className={styles.profilebtn}>
@@ -188,7 +204,7 @@ const CompanyProfile = () => {
                       text={
                         bookmark ? "Remove from bookmark" : "Add to bookmark"
                       }
-                      onClick={bookmarkClicked}
+                      onClick={() => handleFeatures("Bookmark")}
                     />
                   </div>
                 </Col>
@@ -431,7 +447,7 @@ const CompanyProfile = () => {
                     width={"auto"}
                     height="auto"
                     text={"Write a Review"}
-                    onClick={() => navigate(`/review/${id}/new`)}
+                    onClick={() => handleFeatures("Write a Review")}
                   />
                 </div>
               </Col>
@@ -544,7 +560,7 @@ const CompanyProfile = () => {
                     <Card className={styles.card}>
                       <Card.Img
                         variant="top"
-                        src={`http://localhost:8000/images/${image.src.path}`}
+                        src={`/images/${image.src.path}`}
                         alt={image.title}
                         onClick={() => handleImageClick(index)}
                       />
@@ -555,7 +571,7 @@ const CompanyProfile = () => {
                             placeholder="Title"
                             value={image.title}
                             disabled={!image.editable}
-                            onChange={(e) => handleTitleChange(e, index)}
+                            // onChange={(e) => handleTitleChange(e, index)}
                             className={styles.title}
                             style={{ opacity: image.editable ? 1 : 0.5 }}
                           />
@@ -573,7 +589,7 @@ const CompanyProfile = () => {
               open={showFullScreen}
               close={() => setShowFullScreen(false)}
               slides={usersAceData.media.map((image) => ({
-                src: `http://localhost:8000/images/${image.src.path}`,
+                src: `/images/${image.src.path}`,
                 title: image.title,
               }))}
               plugins={[Fullscreen, Video, Zoom]}
@@ -585,8 +601,35 @@ const CompanyProfile = () => {
           <Spinner animation="border" className={styles.signInLoader} />
         </div>
       )}
+      <LoginModal
+        show={loginModal}
+        onHide={() => setLoginModal(false)}
+        handleLogin={handleLogin}
+      />
     </>
   );
 };
-
+function LoginModal(props) {
+  return (
+    <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+          Login First
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <h4>Oops this feature cannot be used without being registered</h4>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={props.onHide}>Close</Button>
+        <Button onClick={props.handleLogin}>Sign Up/Login</Button>
+      </Modal.Footer>
+    </Modal>
+  );
+}
 export default CompanyProfile;

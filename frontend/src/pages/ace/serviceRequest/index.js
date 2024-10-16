@@ -6,6 +6,9 @@ import { Link as ScrollLink } from "react-scroll";
 import { useDispatch } from "react-redux";
 import { REMAININGTASKS } from "../../../redux/actions/actionRemainingTasks";
 import axios from "axios";
+import DatePicker from "react-datepicker";
+import moment from "moment";
+import { BsCalendarDate, BsFacebook } from "react-icons/bs";
 
 const ServiceRequest = () => {
   // const [data, setData] = useState([
@@ -19,7 +22,7 @@ const ServiceRequest = () => {
   //     location: "666,Diamond Avenue,Amritsar",
   //     number: "98456-34546",
   //     accepted: false,
-  //     rejected: false,
+  //     cancelled: false,
   //     otpEntered: false,
   //     taskCompleted: false,
   //   },
@@ -33,7 +36,7 @@ const ServiceRequest = () => {
   //     location: "666,Diamond Avenue,Amritsar",
   //     number: "98456-34546",
   //     accepted: false,
-  //     rejected: false,
+  //     cancelled: false,
   //     otpEntered: false,
   //     taskCompleted: false,
   //   },
@@ -47,7 +50,7 @@ const ServiceRequest = () => {
   //     location: "666,Diamond Avenue,Amritsar",
   //     number: "98456-34546",
   //     accepted: false,
-  //     rejected: false,
+  //     cancelled: false,
   //     otpEntered: false,
   //     taskCompleted: false,
   //   },
@@ -61,7 +64,7 @@ const ServiceRequest = () => {
   //     location: "666,Diamond Avenue,Amritsar",
   //     number: "98456-34546",
   //     accepted: false,
-  //     rejected: false,
+  //     cancelled: false,
   //     otpEntered: false,
   //     taskCompleted: false,
   //   },
@@ -75,7 +78,7 @@ const ServiceRequest = () => {
   //     location: "666,Diamond Avenue,Amritsar",
   //     number: "98456-34546",
   //     accepted: false,
-  //     rejected: false,
+  //     cancelled: false,
   //     otpEntered: false,
   //     taskCompleted: false,
   //   },
@@ -87,40 +90,38 @@ const ServiceRequest = () => {
   const [completedTasks, setCompletedTasks] = useState(0);
   const [taskInProgress, setTaskInProgress] = useState(false);
   const [otpId, setOtpId] = useState();
+  const [dateRange, setDateRange] = useState([
+    new Date(new Date().setDate(new Date().getDate() - 30)),
+    new Date(),
+  ]);
+  const [startDate, endDate] = dateRange;
   const dispatch = useDispatch();
   const fetchData = async () => {
+    console.log("inside fetch data", dateRange);
+
     try {
       // setIsLoading(true);
-      const response = await axios.post(
-        "http://localhost:8000/getprojectsdata",
-        {
-          clientID: localStorage.getItem("aauth"),
-        }
-      );
+      const response = await axios.post("/api/getprojectsdata", {
+        clientID: localStorage.getItem("aauth"),
+        from: dateRange[0],
+        to: dateRange[1],
+      });
       if (response.status === 200) {
         setData(response.data);
         localStorage.setItem(
           "totalProjects",
           data.filter((item) => item.status !== "completed").length
         );
+        console.log(response.data);
       }
     } catch (error) {
       console.error("Error:", error);
     }
   };
-  useEffect(() => {
-    // let count = data.filter((item) => item.status === "requested").length;
-    // dispatch(
-    //   REMAININGTASKS(data.filter((item) => item.status !== "completed").length)
-    // );
-    // localStorage.setItem(
-    //   "totalProjects",
-    //   data.filter((item) => item.status !== "completed").length
-    // );
-  }, [completedTasks, data, dispatch, fetchData]);
+
   useEffect(() => {
     const userID = localStorage.getItem("aauth");
-    if (userID) {
+    if (userID && startDate !== null && endDate !== null) {
       fetchData();
     }
   }, []);
@@ -133,12 +134,9 @@ const ServiceRequest = () => {
   const handleEvaluate = async (id, index) => {
     try {
       // setIsLoading(true);
-      const response = await axios.post(
-        "http://localhost:8000/evaluateservicerequest",
-        {
-          id: id,
-        }
-      );
+      const response = await axios.post("/api/evaluateservicerequest", {
+        id: id,
+      });
       if (response.status === 200) {
         fetchData();
       }
@@ -147,16 +145,12 @@ const ServiceRequest = () => {
       console.log(error);
     }
   };
-
   const handleReject = async (id, index) => {
     try {
       // setIsLoading(true);
-      const response = await axios.post(
-        "http://localhost:8000/rejectservicerequest",
-        {
-          id: id,
-        }
-      );
+      const response = await axios.post("/api/rejectservicerequest", {
+        id: id,
+      });
       if (response.status === 200) {
         console.log(response);
         fetchData();
@@ -171,13 +165,10 @@ const ServiceRequest = () => {
     setAcceptModalShow(false);
     try {
       // setIsLoading(true);
-      const response = await axios.post(
-        "http://localhost:8000/acceptservicerequest",
-        {
-          id: id,
-          price: enteredPrice,
-        }
-      );
+      const response = await axios.post("/api/acceptservicerequest", {
+        id: id,
+        price: enteredPrice,
+      });
       if (response.status === 200) {
         console.log(response);
         fetchData();
@@ -187,18 +178,17 @@ const ServiceRequest = () => {
       console.error("Error:", error);
     }
   };
-  const handleOpt = async (id, otpEntered) => {
+  const handleOpt = async (id, otpEntered, paymentMethod) => {
     console.log(id);
     console.log(otpEntered);
+    console.log(paymentMethod);
     try {
       // setIsLoading(true);
-      const response = await axios.post(
-        "http://localhost:8000/completeservicerequest",
-        {
-          id: id,
-          otpEntered: otpEntered,
-        }
-      );
+      const response = await axios.post("/api/completeservicerequest", {
+        id: id,
+        otpEntered: otpEntered,
+        paymentMethod: paymentMethod,
+      });
       if (response.status === 200) {
         console.log("task complpeted");
         fetchData();
@@ -209,69 +199,347 @@ const ServiceRequest = () => {
     }
     setOtpModalShow(false);
   };
+  const [selectedTab, setSelectedTab] = useState("allTasks");
+
+  const handleTabClick = (tab) => {
+    setSelectedTab(tab);
+  };
+  const handleDateChange = async (update) => {
+    if (update[1]) {
+      const endOfDay = new Date(update[1].setHours(23, 59, 59, 999));
+      setDateRange([update[0], endOfDay]);
+    } else {
+      setDateRange(update);
+    }
+  };
+  useEffect(() => {
+    if (dateRange[0] !== null && dateRange[1] !== null) {
+      fetchData();
+    }
+  }, [dateRange]);
   return (
     <div className={styles.backgroundColor}>
       <div className={styles.backGround}>
         <Container className={`${styles.containerY}`}>
-          <div className={`${styles.tabs} ${styles.borderX} `}>
-            <ScrollLink
-              to="allTasks"
-              smooth={true}
-              duration={500}
-              offset={-170}
-            >
-              <div
-                title="allTasks"
-                onClick={activeTab}
-                lg={1}
-                className={`${styles.tab} ${
-                  selectedFilter === "allTasks" ? styles.activeTab : ""
-                }`}
-              >
-                All Tasks({data.length === undefined ? 0 : data.length})
+          <div className={styles.tabsContainer}>
+            <div className={`flex-wrap ${styles.tabs} ${styles.borderX}`}>
+              <div className="d-flex  flex-wrap">
+                <div
+                  title="allTasks"
+                  onClick={() => handleTabClick("allTasks")}
+                  className={`${styles.tab} ${
+                    selectedTab === "allTasks" ? styles.activeTab : ""
+                  }`}
+                >
+                  All({data.length === undefined ? 0 : data.length})
+                </div>
+                <div
+                  title="completedTasks"
+                  onClick={() => handleTabClick("completedTasks")}
+                  className={`${styles.tab} ${
+                    selectedTab === "completedTasks" ? styles.activeTab : ""
+                  }`}
+                >
+                  Completed(
+                  {data?.message !== "No Projects Done Yet"
+                    ? data.filter((item) => item.status === "completed").length
+                    : 0}
+                  )
+                </div>
+                <div
+                  title="pendingTasks"
+                  onClick={() => handleTabClick("pendingTasks")}
+                  className={`${styles.tab} ${
+                    selectedTab === "pendingTasks" ? styles.activeTab : ""
+                  }`}
+                >
+                  Pending(
+                  {data?.message !== "No Projects Done Yet"
+                    ? data.filter(
+                        (item) =>
+                          item.status === "requested" ||
+                          item.status === "evaluating" ||
+                          item.status === "accepted"
+                      ).length
+                    : 0}
+                  {/* {console.log(item.status)} */})
+                </div>
+                <div
+                  title="cancelledTasks"
+                  onClick={() => handleTabClick("cancelledTasks")}
+                  className={`${styles.tab} ${
+                    selectedTab === "cancelledTasks" ? styles.activeTab : ""
+                  }`}
+                >
+                  Cancelled(
+                  {data?.message !== "No Projects Done Yet"
+                    ? data.filter((item) => item.status === "cancelled").length
+                    : 0}
+                  )
+                </div>
               </div>
-            </ScrollLink>
-            {data && data?.message !== "No Projects Done Yet"
-              ? data.filter((item) => item.status === "completed").length !==
-                  0 && (
-                  <ScrollLink
-                    to="completedTasks"
-                    smooth={true}
-                    duration={500}
-                    offset={-170}
-                  >
-                    <div
-                      title="completedTasks"
-                      onClick={activeTab}
-                      lg={1}
-                      className={`${styles.tab} ${
-                        selectedFilter === "completedTasks"
-                          ? styles.activeTab
-                          : ""
-                      }`}
-                    >
-                      CompletedTasks(
-                      {
-                        data.filter((item) => item.status === "completed")
-                          .length
-                      }
-                      )
-                    </div>
-                  </ScrollLink>
-                )
-              : ""}
+              <div>
+                <div className={`${styles.dateDiv}`}>
+                  <DatePicker
+                    showIcon
+                    selectsRange={true}
+                    startDate={startDate}
+                    endDate={endDate}
+                    onChange={handleDateChange}
+                    isClearable={true}
+                    dateFormat="d/M/yyyy"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </Container>
       </div>
       <Container>
         <Row className="m-0">
-          <Col lg={12} id="allTasks" className={styles.allRequests}>
-            {data && data?.message !== "No Projects Done Yet" ? (
-              data
-                .filter((item) => item.status !== "completed")
-                ?.map((item, index) => {
-                  return (
-                    !item.taskCompleted && (
+          {selectedTab === "allTasks" && (
+            <Col lg={12} id="allTasks" className={styles.allRequests}>
+              {data && data?.message !== "No Projects Done Yet" ? (
+                data
+                  .sort(
+                    (a, b) => new Date(b.requestDate) - new Date(a.requestDate)
+                  )
+                  .map((item, index) => {
+                    return (
+                      !item.taskCompleted && (
+                        <Row className={styles.dynamicRow} key={index}>
+                          <Col lg={12}>
+                            <Col lg={12} className={styles.title}>
+                              {item.selectedService}
+                            </Col>
+                            <Col lg={12} className={styles.data}>
+                              <b>Location</b> - {item.customerDetails.address}
+                            </Col>
+                            <Col lg={12} className={styles.data}>
+                              <b>Type</b> - {item.accommodation}
+                            </Col>
+                            <Col lg={12} className={styles.data}>
+                              <b>Timimg</b> - {item.serviceNeed}
+                            </Col>
+                            <Col lg={12} className={styles.discription}>
+                              <b>Discription</b> - {item.discription}
+                            </Col>
+                            <Col lg={12} className={styles.discription}>
+                              <b>Service Request Date</b> -{" "}
+                              {moment(item.requestDate).format("DD/MM/YYYY")}
+                            </Col>
+
+                            {item.status !== "requested" ? (
+                              <>
+                                <Col lg={12} className={styles.data}>
+                                  <b>Name</b> - {item.customerDetails.name}
+                                </Col>
+
+                                <Col lg={12} className={styles.data}>
+                                  <b>Number</b> - {item.customerDetails.number}
+                                </Col>
+                              </>
+                            ) : null}
+                          </Col>
+
+                          <Col lg={12} className={styles.btns}>
+                            {item.status === "requested" && (
+                              <>
+                                {/* Initial step: Evaluate or Reject */}
+                                <CustomButton
+                                  text={"Evaluate"}
+                                  width={"130px"}
+                                  onClick={() =>
+                                    handleEvaluate(item._id, index)
+                                  } // Handle evaluate action
+                                />
+                                <CustomRedButton
+                                  text={"Reject"}
+                                  width={"130px"}
+                                  onClick={() => handleReject(item._id, index)} // Handle reject action
+                                />
+                              </>
+                            )}
+                            {item.status === "evaluating" && (
+                              <>
+                                {/* Secondary step: Accept or Reject after evaluation */}
+                                <CustomButton
+                                  text={"Accept"}
+                                  width={"130px"}
+                                  onClick={() => {
+                                    setAcceptModalShow(true);
+                                    setAcceptedItemIndex(item._id);
+                                  }} // Handle accept action
+                                />
+                                <CustomRedButton
+                                  text={"Reject"}
+                                  width={"130px"}
+                                  onClick={() => handleReject(item._id, index)} // Handle reject action
+                                />
+                              </>
+                            )}
+                            {item.status === "accepted" && (
+                              <CustomButton
+                                text={"Enter Otp"}
+                                width={"130px"}
+                                onClick={() => {
+                                  setOtpModalShow(true);
+                                  setAcceptedItemIndex(item._id);
+                                }}
+                              />
+                            )}
+                            {item.status === "completed" && (
+                              <button className={styles.requestedBtn}>
+                                Task Completed
+                              </button>
+                            )}
+                            {item.status === "cancelled" && (
+                              <CustomRedButton
+                                text={"Cancelled"}
+                                width={"130px"}
+                                customClass={styles.redBtn}
+                              />
+                            )}
+                          </Col>
+                        </Row>
+                      )
+                    );
+                  })
+              ) : (
+                <div className={styles.noReviews}>No Tasks Available!!! </div>
+              )}
+            </Col>
+          )}
+          {selectedTab === "completedTasks" && (
+            <Col lg={12} id="completedTasks" className={styles.allRequests}>
+              {data &&
+              data?.message !== "No Projects Done Yet" &&
+              selectedTab === "completedTasks" &&
+              data.filter((item) => item.status === "completed").length > 0 ? (
+                data
+                  .filter((item) => item.status === "completed")
+                  .sort(
+                    (a, b) => new Date(b.requestDate) - new Date(a.requestDate)
+                  )
+                  ?.map((item, index) => {
+                    return (
+                      item.status === "completed" && (
+                        <Row className={styles.dynamicRow} key={index}>
+                          <Col lg={12}>
+                            <Col lg={12} className={styles.title}>
+                              {item.selectedService}
+                            </Col>
+                            <Col lg={12} className={styles.data}>
+                              <b>Location</b> - {item.customerDetails.address}
+                            </Col>
+                            <Col lg={12} className={styles.data}>
+                              <b>Type</b> - {item.accommodation}
+                            </Col>
+                            <Col lg={12} className={styles.data}>
+                              <b>Timimg</b> - {item.serviceNeed}
+                            </Col>
+                            <Col lg={12} className={styles.discription}>
+                              <b>Discription</b> - {item.discription}
+                            </Col>
+                            <Col lg={12} className={styles.discription}>
+                              <b>Service Request Date</b> -{" "}
+                              {moment(item.requestDate).format("DD/MM/YYYY")}
+                            </Col>
+                            <>
+                              <Col lg={12} className={styles.data}>
+                                <b>Name</b> - {item.customerDetails.name}
+                              </Col>
+                              <Col lg={12} className={styles.data}>
+                                <b>Number</b> - {item.customerDetails.number}
+                              </Col>
+                            </>
+                          </Col>
+                          <Col lg={12} className={styles.btns}>
+                            <button className={styles.requestedBtn}>
+                              Task Completed
+                            </button>
+                          </Col>
+                        </Row>
+                      )
+                    );
+                  })
+              ) : (
+                <div className={styles.noReviews}>No Tasks Available!!! </div>
+              )}
+            </Col>
+          )}
+          {selectedTab === "cancelledTasks" && (
+            <Col lg={12} id="cancelledTasks" className={styles.allRequests}>
+              {data &&
+              data?.message !== "No Projects Done Yet" &&
+              data.filter((item) => item.status === "cancelled").length ? (
+                data
+                  .sort(
+                    (a, b) => new Date(b.requestDate) - new Date(a.requestDate)
+                  )
+                  .map((item, index) => {
+                    return (
+                      item.status === "cancelled" && (
+                        <Row className={styles.dynamicRow} key={index}>
+                          <Col lg={12}>
+                            <Col lg={12} className={styles.title}>
+                              {item.selectedService}
+                            </Col>
+                            <Col lg={12} className={styles.data}>
+                              <b>Location</b> - {item.customerDetails.address}
+                            </Col>
+                            <Col lg={12} className={styles.data}>
+                              <b>Type</b> - {item.accommodation}
+                            </Col>
+                            <Col lg={12} className={styles.data}>
+                              <b>Timimg</b> - {item.serviceNeed}
+                            </Col>
+                            <Col lg={12} className={styles.discription}>
+                              <b>Discription</b> - {item.discription}
+                            </Col>
+                            <Col lg={12} className={styles.discription}>
+                              <b>Service Request Date</b> -{" "}
+                              {moment(item.requestDate).format("DD/MM/YYYY")}
+                            </Col>
+                          </Col>
+                          <Col lg={12} className={styles.btns}>
+                            <CustomRedButton
+                              text={"Cancelled"}
+                              width={"130px"}
+                              customClass={styles.redBtn}
+                            />
+                          </Col>
+                        </Row>
+                      )
+                    );
+                  })
+              ) : (
+                <div className={styles.noReviews}>No Tasks Available!!! </div>
+              )}
+            </Col>
+          )}
+          {selectedTab === "pendingTasks" && (
+            <Col lg={12} id="pendingTasks" className={styles.allRequests}>
+              {data &&
+              data?.message !== "No Projects Done Yet" &&
+              data.filter(
+                (item) =>
+                  item.status === "requested" ||
+                  item.status === "evaluating" ||
+                  item.status === "accepted"
+              ).length > 0 ? (
+                data
+                  .filter(
+                    (item) =>
+                      item.status === "requested" ||
+                      item.status === "evaluating" ||
+                      item.status === "accepted"
+                  )
+                  .sort(
+                    (a, b) => new Date(b.requestDate) - new Date(a.requestDate)
+                  )
+                  .map((item, index) => {
+                    return (
                       <Row className={styles.dynamicRow} key={index}>
                         <Col lg={12}>
                           <Col lg={12} className={styles.title}>
@@ -289,21 +557,19 @@ const ServiceRequest = () => {
                           <Col lg={12} className={styles.discription}>
                             <b>Discription</b> - {item.discription}
                           </Col>
-
-                          {item.status === "evaluating" ||
-                          item.status === "accepted" ? (
-                            <>
-                              <Col lg={12} className={styles.data}>
-                                <b>Name</b> - {item.customerDetails.name}
-                              </Col>
-
-                              <Col lg={12} className={styles.data}>
-                                <b>Number</b> - {item.customerDetails.number}
-                              </Col>
-                            </>
-                          ) : null}
+                          <Col lg={12} className={styles.discription}>
+                            <b>Service Request Date</b> -{" "}
+                            {moment(item.requestDate).format("DD/MM/YYYY")}
+                          </Col>
+                          <>
+                            <Col lg={12} className={styles.data}>
+                              <b>Name</b> - {item.customerDetails.name}
+                            </Col>
+                            <Col lg={12} className={styles.data}>
+                              <b>Number</b> - {item.customerDetails.number}
+                            </Col>
+                          </>
                         </Col>
-
                         <Col lg={12} className={styles.btns}>
                           {item.status === "requested" && (
                             <>
@@ -348,69 +614,23 @@ const ServiceRequest = () => {
                               }}
                             />
                           )}
-                          {item.status === "completed" && (
-                            <CustomButton
-                              text={"Task Completed"}
-                              width={"150px"}
-                            />
-                          )}
                         </Col>
                       </Row>
-                    )
-                  );
-                })
-            ) : (
-              <div className={styles.noReviews}>No Tasks Available!!! </div>
-            )}
-          </Col>
-          <Col lg={12} id="completedTasks" className={styles.allRequests}>
-            {data &&
-              data?.message !== "No Projects Done Yet" &&
-              data.map((item, index) => {
-                return (
-                  item.status === "completed" && (
-                    <Row className={styles.dynamicRow} key={index}>
-                      <Col lg={12}>
-                        <Col lg={12} className={styles.title}>
-                          {item.selectedService}
-                        </Col>
-                        <Col lg={12} className={styles.data}>
-                          <b>Location</b> - {item.customerDetails.address}
-                        </Col>
-                        <Col lg={12} className={styles.data}>
-                          <b>Type</b> - {item.accommodation}
-                        </Col>
-                        <Col lg={12} className={styles.data}>
-                          <b>Timimg</b> - {item.serviceNeed}
-                        </Col>
-                        <Col lg={12} className={styles.discription}>
-                          <b>Discription</b> - {item.discription}
-                        </Col>
-                        <>
-                          <Col lg={12} className={styles.data}>
-                            <b>Name</b> - {item.customerDetails.name}
-                          </Col>
-                          <Col lg={12} className={styles.data}>
-                            <b>Number</b> - {item.customerDetails.number}
-                          </Col>
-                        </>
-                      </Col>
-                      <Col lg={12} className={styles.btns}>
-                        <button className={styles.requestedBtn}>
-                          Task Completed
-                        </button>
-                      </Col>
-                    </Row>
-                  )
-                );
-              })}
-          </Col>
+                    );
+                  })
+              ) : (
+                <div className={styles.noReviews}>No Tasks Available!!! </div>
+              )}
+            </Col>
+          )}
         </Row>
       </Container>
       <OtpModal
         show={otpModalShow}
         onHide={() => setOtpModalShow(false)}
-        handleOpt={(enteredOtp) => handleOpt(acceptedItemIndex, enteredOtp)}
+        handleOpt={(enteredOtp, paymentMethod) =>
+          handleOpt(acceptedItemIndex, enteredOtp, paymentMethod)
+        }
       />
       <AcceptModal
         show={acceptModalShow}
@@ -447,9 +667,10 @@ function AcceptModal(props) {
         <Form>
           <Row className="mb-3">
             <Form.Group as={Col} md="12" controlId="validationCustom01">
-              <Form.Label>Enter Decided Price</Form.Label>
+              <Form.Label>
+                Enter estimated price if decided(Optional)
+              </Form.Label>
               <Form.Control
-                required
                 type="text"
                 placeholder="price..."
                 value={enteredPrice}
@@ -470,10 +691,15 @@ function AcceptModal(props) {
 
 function OtpModal(props) {
   const [enteredOtp, setEnteredOtp] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
+
+  const handlePaymentMethodChange = (event) => {
+    setPaymentMethod(event.target.value);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.handleOpt(enteredOtp);
+    props.handleOpt(enteredOtp, paymentMethod);
   };
   return (
     <Modal
@@ -499,6 +725,24 @@ function OtpModal(props) {
                 value={enteredOtp}
                 onChange={(e) => setEnteredOtp(e.target.value)}
               />
+              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group as={Col} md="12" controlId="validationCustom02">
+              <Form.Label>Payment Method</Form.Label>
+              <Form.Control
+                as="select"
+                required
+                value={paymentMethod}
+                onChange={handlePaymentMethodChange}
+              >
+                <option value="" disabled>
+                  Select
+                </option>
+                <option value="Cash">Cash</option>
+                <option value="Card">Card</option>
+                <option value="UPI">UPI</option>
+                <option value="Others">Others</option>
+              </Form.Control>
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
           </Row>

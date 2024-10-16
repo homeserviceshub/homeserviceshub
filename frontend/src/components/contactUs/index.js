@@ -50,9 +50,9 @@ const ContactUsComponent = () => {
             Seamless Support for You
           </div>
           <div className={styles.oppositeDivDescription}>
-            Contact us effortlessly via email at homeserviceshub@gmail.com, and
+            Contact us effortlessly via email at homeserviceshub1@gmail.com, and
             experience our swift response and dedicated assistance. For
-            immediate help, dial 98789-87898 to connect with our friendly team.
+            immediate help, dial 80548-75055 to connect with our friendly team.
             At HomeservicesHub, we value your time and prioritize your
             satisfaction. Let us be your reliable point of contact
           </div>
@@ -64,10 +64,10 @@ const ContactUsComponent = () => {
           <div className={styles.oppositeDivDescription}>
             If you are an Ace of our company, you can count on personalized
             assistance by reaching out to us at
-            service.homeserviceshub@gmail.com. Your needs are our top priority,
+            service.homeserviceshub1@gmail.com. Your needs are our top priority,
             and we're delighted to offer you our expertise and support. For
             urgent matters, don't hesitate to give us a call directly at
-            12345-45321. We're here to ensure that you receive swift and
+            80548-75055. We're here to ensure that you receive swift and
             efficient solutions whenever you require them.
           </div>
         </Col>

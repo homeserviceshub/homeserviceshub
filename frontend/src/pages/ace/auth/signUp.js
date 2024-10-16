@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { Form, Container, Row, Col, Button, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,9 @@ import styles from "./index.module.css";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { CHECKLOGIN } from "../../../redux/actions/actionCheckLogin";
+import RequestServiceDropdown from "../../../components/customDropdown/requestServiceDropdown";
+import { allServices } from "../../../Data/DataList";
+import CheckboxDropdown from "../../../components/customDropdown/checkboxDropdown";
 
 function AceSignUp() {
   const [credField, setCredField] = useState(false);
@@ -17,10 +20,15 @@ function AceSignUp() {
   const [confirmPassword, setConfirmPassword] = useState(null);
   const [number, setNumber] = useState(null);
   const [postalCode, setPostalCode] = useState(null);
+  const titlesArray = allServices.map((service) => service.title);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  useEffect(() => {
+    if (id && id !== null && id !== "null") {
+      navigate("/ace/profile", { replace: true });
+    }
+  }, []);
   function gotoSignin() {
     navigate("signin");
   }
@@ -28,13 +36,13 @@ function AceSignUp() {
     e.preventDefault();
     if (username && email && password && confirmPassword && number) {
       axios
-        .post("http://localhost:8000/ace/signup", {
+        .post("/api/ace/signup", {
           companyName: username,
           companyEmail: email,
           companyPassword: password,
           companyNumber: number,
           postalCode: postalCode,
-          _id: id,
+          _id: id === "null" ? "new" : id,
         })
         .then((response) => {
           if (response.status === 200) {
@@ -78,30 +86,31 @@ function AceSignUp() {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Company Name"
+                    placeholder="Bussiness Name"
                     value={username}
                     onChange={({ target: { value } }) => setUsername(value)}
-                    autoComplete="off"
+                    // autoComplete="off"
                   />
                 </Col>
                 <Col md={12}>
                   <input
+                    name="email"
                     type="text"
                     className="form-control"
-                    placeholder="Company Email Address"
+                    placeholder="Bussiness Email Address"
                     value={email}
                     onChange={({ target: { value } }) => setEmail(value)}
-                    autoComplete="off"
+                    // autoComplete="off"
                   />
                 </Col>
                 <Col md={12}>
                   <input
                     type="number"
                     className="form-control"
-                    placeholder="Company Number"
+                    placeholder="Bussiness Number"
                     value={number}
                     onChange={({ target: { value } }) => setNumber(value)}
-                    autoComplete="off"
+                    // autoComplete="off"
                   />
                 </Col>
                 <Col md={12}>
@@ -111,16 +120,28 @@ function AceSignUp() {
                     placeholder="Postal Code"
                     value={postalCode}
                     onChange={({ target: { value } }) => setPostalCode(value)}
-                    autoComplete="off"
+                    // autoComplete="off"
                   />
                 </Col>
+                <Col md={12} className="mb-3">
+                  <CheckboxDropdown
+                    options={titlesArray}
+                    // onChange={(selectedService) => {
+                    //   setSearchData({
+                    //     ...searchData,
+                    //     sortedBy: selectedService,
+                    //   });
+                    // }}
+                  />
+                </Col>
+
                 <Col md={12} className="position-relative">
                   <input
                     type={credField ? "text" : "password"}
                     className="form-control"
                     placeholder="Password"
                     value={password}
-                    autoComplete="off"
+                    // autoComplete="off"
                     onChange={({ target: { value } }) => setPassword(value)}
                   />
                   <span
@@ -136,7 +157,7 @@ function AceSignUp() {
                     className="form-control"
                     placeholder="Confirm Password"
                     value={confirmPassword}
-                    autoComplete="off"
+                    // autoComplete="off"
                     onChange={({ target: { value } }) =>
                       setConfirmPassword(value)
                     }
@@ -165,7 +186,7 @@ function AceSignUp() {
                     )}
                   </Button>
                   <div>
-                    Already have an account
+                    Already have an account{" "}
                     <a
                       href="hhtp:google.com"
                       alt="Forggetin"

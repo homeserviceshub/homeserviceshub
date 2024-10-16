@@ -5,7 +5,7 @@
 }
 
 .picture {
-  background-image: url("/public/photos/testimage.jpg");
+  background-image: url("/public/photos/backgroundImg.jpg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;

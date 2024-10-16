@@ -2,19 +2,36 @@ import React from "react";
 import styles from "./index.module.css";
 import { Button, Col, Container, Form, InputGroup, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import IconFacebook from "../icons/IconFacebook";
-import IconInstagram from "../icons/IconInstagram";
-import IconLinkedIn from "../icons/IconLinkedIn";
-import IconYoutube from "../icons/IconYoutube";
-import IconTwitter from "../icons/IconTwitter";
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaLinkedin,
+  FaTwitter,
+  FaYoutube,
+} from "react-icons/fa";
 
 const Footer = () => {
   const socialMedia = [
-    { link: "https://www.facebook.com/", icon: <IconFacebook /> },
-    { link: "https://www.instagram.com/", icon: <IconInstagram /> },
-    { link: "https://www.linkedin.com/", icon: <IconLinkedIn /> },
-    { link: "https://www.youtube.com/", icon: <IconYoutube /> },
-    { link: "https://www.twitter.com/", icon: <IconTwitter /> },
+    {
+      link: "https://www.facebook.com/",
+      icon: <FaFacebookF className={styles.icon} />,
+    },
+    {
+      link: "https://www.instagram.com/",
+      icon: <FaInstagram className={styles.icon} />,
+    },
+    {
+      link: "https://www.linkedin.com/",
+      icon: <FaLinkedin className={styles.icon} />,
+    },
+    {
+      link: "https://www.youtube.com/",
+      icon: <FaYoutube className={styles.icon} />,
+    },
+    {
+      link: "https://www.twitter.com/",
+      icon: <FaTwitter className={styles.icon} />,
+    },
   ];
   return (
     <div className={styles.footerArea}>
@@ -87,15 +104,15 @@ const Footer = () => {
           <Col lg={4} md={4} className={styles.iconDiv}>
             {socialMedia.map((item, index) => {
               return (
-                <div key={index} className={styles.icon}>
-                  <Link
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    to={item.link}
-                  >
-                    {item.icon}
-                  </Link>
-                </div>
+                <Link
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  key={index}
+                  to={item.link}
+                  className={styles.outerIconDiv}
+                >
+                  {item.icon}
+                </Link>
               );
             })}
           </Col>

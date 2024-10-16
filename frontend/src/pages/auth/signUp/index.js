@@ -85,7 +85,7 @@ function Signup() {
     // Make API request to submit the form data
 
     axios
-      .post("http://localhost:8000/signup", {
+      .post("/api/signup", {
         username: formData.username,
         email: formData.email,
         password: formData.password,
