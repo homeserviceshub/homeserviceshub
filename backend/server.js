@@ -61,7 +61,7 @@ async function main() {
 
 app.use(
   cors({
-    origin: "https://www.homeserviceshub.in",
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"],
     allowedHeaders: ["Content-Type", "Authorization"], // Add other necessary headers
   })
@@ -81,52 +81,19 @@ app.get("/", (req, res) => {
 });
 
 // Redirect HTTP to HTTPS
-app.use((req, res, next) => {
-  if (req.secure) {
-    return next();
-  }
-  res.redirect("https://" + req.headers.host + req.url);
-});
-const httpsServer = https.createServer(credentials, app);
-
-httpsServer.listen(8000, () => {
-  console.log(`HTTPS Server running on port ${port}`);
-});
-
-//Http
-// app.listen(port, "0.0.0.0", () => {
-//   console.log("Backend is Running");
+// app.use((req, res, next) => {
+//   if (req.secure) {
+//     return next();
+//   }
+//   res.redirect("https://" + req.headers.host + req.url);
 // });
-
-// const options = {
-//   key: fs.readFileSync("private-key.pem"),
-//   cert: fs.readFileSync("certificate.pem"),
-// };
-
-// app.use((err, req, res, next) => {
-//   console.error(err.stack);
-//   res.status(500).send("Something broke!");
-// });
-
-// https
-//   .createServer(credentials, (req, res) => {
-//     res.writeHead(200);
-//     res.end("hello world\n");
-//   })
-//   .listen(8000);
-
-// const httpsServer = https.createServer(
-//   {
-//     key: fs.readFileSync(
-//       "ssl/keys/bfdb9_a093f_fd5192dbb946bd08d2d6342540fa5fdd.key"
-//     ),
-//     cert: fs.readFileSync(
-//       "ssl/certs/homeserviceshub_in_bfdb9_a093f_1758175768_0f0b53b11973782ea9d431635124b40e.crt"
-//     ),
-//   },
-//   app
-// );
+// const httpsServer = https.createServer(credentials, app);
 
 // httpsServer.listen(8000, () => {
-//   console.log("HTTPS Server running on port 8000");
+//   console.log(`HTTPS Server running on port ${port}`);
 // });
+
+//Http
+app.listen(port, "0.0.0.0", () => {
+  console.log("Backend is Running on", port);
+});
