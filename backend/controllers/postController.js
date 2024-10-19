@@ -835,6 +835,7 @@ const acesignup = async (req, res) => {
       companyPassword,
       companyEmail,
       postalCode,
+      selectedServices,
     } = req.body;
 
     if (_id !== "new") {
@@ -856,8 +857,8 @@ const acesignup = async (req, res) => {
             "aceData.projectsOngoing": 0,
             "aceData.yearOfEstablishment": 2024,
             "aceData.paymentMethod": "Card, Cash and Cheque",
-            "aceData.categories": [],
-            "aceData.services": [],
+            "aceData.categories": selectedServices,
+            "aceData.services": selectedServices,
             "aceData.serviceAreas": [],
             "aceData.totalWorkers": 1,
             "aceData.writtenContract": false,
@@ -896,8 +897,8 @@ const acesignup = async (req, res) => {
           projectsOngoing: 0,
           yearOfEstablishment: "XXXX",
           paymentMethod: "Card, Cash and Cheque",
-          categories: [],
-          services: [],
+          categories: selectedServices,
+          services: selectedServices,
           serviceAreas: [],
           totalWorkers: 1,
           writtenContract: false,
@@ -926,7 +927,10 @@ const checkace = async (req, res) => {
 
   try {
     const user = await usersModel.findOne({
-      $or: [{ email: emailOrPhone }, { number: emailOrPhone }],
+      $or: [
+        { "aceData.companyNumber": emailOrPhone },
+        { "aceData.companyEmail": emailOrPhone },
+      ],
     });
 
     if (!user) {
@@ -940,7 +944,7 @@ const checkace = async (req, res) => {
       });
     }
 
-    if (user.password === password) {
+    if (user.aceData.companyPassword === password) {
       return res.json(user);
     } else return res.json({ message: "Password is incorrect." });
   } catch (error) {

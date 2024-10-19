@@ -1,9 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./index.module.css";
+import { useDispatch } from "react-redux";
+import { ACESERVICESSELECT } from "../../redux/actions/aceServicesSelect";
 
 const CheckboxDropdown = ({ onChange, options }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const dispatch = useDispatch();
+
   const dropdownRef = useRef(null);
 
   const handleOptionChange = (event) => {
@@ -11,11 +15,15 @@ const CheckboxDropdown = ({ onChange, options }) => {
 
     if (checked) {
       // Add the selected option to the array
-      setSelectedOptions((prevSelected) => [...prevSelected, value]);
+      var prevSelected = [...selectedOptions];
+      setSelectedOptions([...prevSelected, value]);
+      dispatch(ACESERVICESSELECT([...prevSelected, value]));
     } else {
       // Remove the deselected option from the array
-      setSelectedOptions((prevSelected) =>
-        prevSelected.filter((option) => option !== value)
+      var prevSelected = [...selectedOptions];
+      setSelectedOptions(prevSelected.filter((option) => option !== value));
+      dispatch(
+        ACESERVICESSELECT(prevSelected.filter((option) => option !== value))
       );
     }
 
@@ -47,7 +55,7 @@ const CheckboxDropdown = ({ onChange, options }) => {
         type="button"
         onClick={() => setIsOpen(!isOpen)}
       >
-        {selectedOptions.length > 0
+        {selectedOptions?.length > 0
           ? selectedOptions.join(", ")
           : "Select the Service"}
       </button>
@@ -58,7 +66,7 @@ const CheckboxDropdown = ({ onChange, options }) => {
               type="checkbox"
               name="option"
               value={option}
-              checked={selectedOptions.includes(option)}
+              checked={selectedOptions?.includes(option)}
               className={styles.input}
               onChange={handleOptionChange}
             />

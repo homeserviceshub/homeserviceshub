@@ -16,6 +16,7 @@ import CustomButton from "../../../components/customBtn";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import SwitchToUser from "../../../components/switchToUser";
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
 const AceProfile = () => {
   const [profileModalShow, setProfileModalShow] = useState(false);
@@ -122,7 +123,8 @@ const AceProfile = () => {
   };
   const handlechanges = async () => {
     var data;
-
+    console.log("data:", data);
+    console.log("dummyData", dummyData);
     // If there is a new profile photo, upload it
     if (dummyData.profilePhoto) {
       try {
@@ -565,6 +567,7 @@ const AceProfile = () => {
 function ProfileModal(props) {
   const [validated, setValidated] = useState(false);
   const [formData, setFormData] = useState(props.data);
+  const [credField, setCredField] = useState(false);
 
   return (
     <Modal
@@ -619,6 +622,68 @@ function ProfileModal(props) {
               />
               <Form.Control.Feedback type="invalid">
                 Please provide a valid Location.
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Row>
+          <Row className="mb-3">
+            <Form.Group as={Col} md="12" controlId="validationCustom03">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type="text"
+                name="companyEmail"
+                value={props.data?.companyEmail}
+                onChange={props.handleFormChange}
+                required
+                // disabled={props.data?.companyEmail ? true : false}
+                placeholder="Email/Gmail..."
+              />
+              <Form.Control.Feedback type="invalid">
+                Please provide a valid email.
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Row>
+          <Row className="mb-3">
+            <Form.Group as={Col} md="12" controlId="validationCustom03">
+              <Form.Label>Number</Form.Label>
+              <Form.Control
+                type="number"
+                name="number"
+                value={props.data?.companyNumber}
+                onChange={props.handleFormChange}
+                required
+                disabled
+                placeholder="Number..."
+              />
+              <Form.Control.Feedback type="invalid">
+                Please provide a valid number.
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Row>
+          <Row className="mb-3">
+            <Form.Group
+              as={Col}
+              md="12"
+              className="position-relative"
+              controlId="validationCustom03"
+            >
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type={credField ? "text" : "password"}
+                name="password"
+                value={props.data?.companyPassword}
+                onChange={props.handleFormChange}
+                required
+                placeholder="Password..."
+                disabled
+              />
+              <span
+                className={styles.floatingEye}
+                onClick={() => setCredField(!credField)}
+              >
+                {!credField ? <AiFillEyeInvisible /> : <AiFillEye />}
+              </span>
+              <Form.Control.Feedback type="invalid">
+                Please provide a valid password.
               </Form.Control.Feedback>
             </Form.Group>
           </Row>

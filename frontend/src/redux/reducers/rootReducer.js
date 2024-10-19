@@ -5,6 +5,7 @@ import RemainingTasksReducer from "./remainingTasksReducer";
 import authReducer from "./authReducer";
 import userDataReducer from "./getUserDataReducer";
 import AceCheckLoginReducer from "./aceCheckLoginReducer";
+import AceServicesSelectReducer from "./aceServicesReducer";
 const rootReducer = combineReducers({
   reducer1,
   checkLoginReducer,
@@ -12,5 +13,6 @@ const rootReducer = combineReducers({
   RemainingTasksReducer,
   authReducer,
   userDataReducer,
+  AceServicesSelectReducer,
 });
 export default rootReducer;

@@ -3,7 +3,7 @@ import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { Form, Container, Row, Col, Button, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import styles from "./index.module.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { CHECKLOGIN } from "../../../redux/actions/actionCheckLogin";
 import RequestServiceDropdown from "../../../components/customDropdown/requestServiceDropdown";
@@ -24,6 +24,9 @@ function AceSignUp() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const selectedServices = useSelector((state) => {
+    return state.AceServicesSelectReducer;
+  });
   useEffect(() => {
     if (id && id !== null && id !== "null") {
       navigate("/ace/profile", { replace: true });
@@ -34,7 +37,7 @@ function AceSignUp() {
   }
   async function handleSubmit(e) {
     e.preventDefault();
-    if (username && email && password && confirmPassword && number) {
+    if (username && password && confirmPassword && number && selectedServices) {
       axios
         .post("/api/ace/signup", {
           companyName: username,
@@ -42,11 +45,11 @@ function AceSignUp() {
           companyPassword: password,
           companyNumber: number,
           postalCode: postalCode,
+          selectedServices: selectedServices,
           _id: id === "null" ? "new" : id,
         })
         .then((response) => {
           if (response.status === 200) {
-            console.log(response);
             navigate("/ace/profile", {
               replace: true,
             });
@@ -58,7 +61,6 @@ function AceSignUp() {
           console.log(error);
         });
     }
-
     setIsSubmitting(true);
   }
   function handleClose() {
@@ -97,7 +99,7 @@ function AceSignUp() {
                     name="email"
                     type="text"
                     className="form-control"
-                    placeholder="Bussiness Email Address"
+                    placeholder="Bussiness Email Address (optional)"
                     value={email}
                     onChange={({ target: { value } }) => setEmail(value)}
                     // autoComplete="off"
@@ -124,15 +126,7 @@ function AceSignUp() {
                   />
                 </Col>
                 <Col md={12} className="mb-3">
-                  <CheckboxDropdown
-                    options={titlesArray}
-                    // onChange={(selectedService) => {
-                    //   setSearchData({
-                    //     ...searchData,
-                    //     sortedBy: selectedService,
-                    //   });
-                    // }}
-                  />
+                  <CheckboxDropdown options={titlesArray} />
                 </Col>
 
                 <Col md={12} className="position-relative">
