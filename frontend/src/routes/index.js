@@ -1,5 +1,5 @@
 import React from "react";
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "../pages/home";
 import Layout, { Layout2 } from "../components/layout";
 import Signin from "../pages/auth/signIn";
@@ -31,7 +31,7 @@ import AceCheckRoute from "./aceCheckRoute";
 
 export default function AppRoutes() {
   return (
-    <HashRouter basename="/">
+    <Router basename="/">
       <Routes>
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
@@ -74,6 +74,6 @@ export default function AppRoutes() {
         </Route>
         <Route path="/ace/verification" element={<Verification />} />
       </Routes>
-    </HashRouter>
+    </Router>
   );
 }
