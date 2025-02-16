@@ -10,6 +10,8 @@ import HomePageReviews from "../../components/homePageReviews";
 import axios from "axios";
 import { CHECKLOGIN } from "../../redux/actions/actionCheckLogin";
 import { useDispatch } from "react-redux";
+import HowItWorks from "../../components/howItWorks";
+import WhyChooseUs from "../../components/whyChooseUs";
 
 function Home() {
   const dispatch = useDispatch();
@@ -24,14 +26,16 @@ function Home() {
   }, []);
 
   const ourOfferedServicesHeading = "Our Offered Services";
-  const trendingheading = "Trending Services";
+  const trendingheading = "Popular Services";
   return (
     <>
       <MainPhoto />
       <BuildingOptions options={trendingServices} heading={trendingheading} />
-      <FindLocalAce />
+      <HowItWorks />
+      {/* <FindLocalAce /> */}
       <Featured heading={"Our Top Ace"} />
       <OurUpdateForm />
+      <WhyChooseUs />
       <HomePageReviews />
       <AreYouServiceProvider />
     </>

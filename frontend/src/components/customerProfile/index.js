@@ -1,5 +1,13 @@
 import React, { useEffect } from "react";
-import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  Container,
+  Form,
+  InputGroup,
+  Modal,
+  Row,
+} from "react-bootstrap";
 import CustomButton, { CustomRedButton } from "../customBtn";
 import styles from "./index.module.css";
 import { useState } from "react";
@@ -236,6 +244,19 @@ const CustomerProfile = () => {
   const handleConfirm = (id, index) => {
     setCancelConfirmId(id);
     setCancelModal(true);
+  };
+  const handleResetPassword = () => {
+    const id = localStorage.getItem("auth");
+    const email = dummyData.email;
+
+    try {
+      axios.post("/api/resetpassword", {
+        id,
+        email,
+      });
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
   const handleCancel = (reason) => {
     try {
@@ -699,6 +720,7 @@ const CustomerProfile = () => {
         handleFormChange={handleFormChange}
         handleImageChange={handleImageChange}
         data={dummyData}
+        handleResetPassword={handleResetPassword}
       />
       <CancleRequestModal
         show={cancelModal}
@@ -766,7 +788,21 @@ function ProfileModal(props) {
             </Form.Group>
           </Row>
           <Row className="mb-3">
-            <Form.Group as={Col} md="12">
+            <InputGroup className="mb-3">
+              <Form.Control
+                type="password"
+                placeholder="**********"
+                name="password"
+                disabled
+                value={props.data.password}
+              />
+              <CustomButton
+                text={"Change Password"}
+                onClick={() => props.handleResetPassword()}
+                width={"auto"}
+              />
+            </InputGroup>
+            {/* <Form.Group as={Col} md="10">
               <Form.Label>Password</Form.Label>
               <Form.Control
                 type="text"
@@ -774,8 +810,14 @@ function ProfileModal(props) {
                 name="password"
                 value={props.data.password}
                 onChange={props.handleFormChange}
+                disabled
               />
-            </Form.Group>
+            </Form.Group> */}
+            {/* <Col md="2" className="d-flex align-items-end">
+              <Button variant="primary" onClick={props.handleResetPassword}>
+                Reset
+              </Button>
+            </Col> */}
           </Row>
 
           <Row className="mb-3">

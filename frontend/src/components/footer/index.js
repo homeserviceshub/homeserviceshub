@@ -62,16 +62,16 @@ const Footer = () => {
           </Col>
           <Col lg={3} md={6} sm={6}>
             <div>
-              <h6 className={styles.footerTitle}>Be an Ace</h6>
+              <h6 className={styles.footerTitle}>Service Provider</h6>
               <Link to={"/ace"} className={styles.link}>
-                Join Us
+                Become a Provider
               </Link>
               <Link to={"/ace/signin"} className={styles.link}>
                 Ace Login
               </Link>
-              <Link to={"/ace/terms"} className={styles.link}>
+              {/* <Link to={"/ace/terms"} className={styles.link}>
                 Terms & Conditions
-              </Link>
+              </Link> */}
             </div>
           </Col>
           <Col lg={6} md={6} sm={6}>

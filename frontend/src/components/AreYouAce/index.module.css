@@ -1,10 +1,5 @@
 .main {
-  background: linear-gradient(
-      45deg,
-      var(--color-primary-with-opacity-30),
-      rgba(0, 0, 0, 0.75)
-    ),
-    url("/public/photos/areYouAce.jpg");
+  background-color: var(--color-primary-with-opacity);
   z-index: -1;
   background-repeat: no-repeat;
   background-position: center;
@@ -13,7 +8,17 @@
 .innerDiv {
   padding: 30px;
   text-align: center;
-  color: white;
+}
+.heading {
+  font-size: 1.75rem;
+  font-weight: 700 !important;
+  font-family: "Playfair Display", serif !important;
+}
+.subheading {
+  font-size: 1.25rem;
+  color: grey;
+  font-weight: 300;
+  margin-bottom: 2rem;
 }
 .btnDiv {
   width: 15%;

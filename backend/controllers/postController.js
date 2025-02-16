@@ -4,6 +4,7 @@ const serviceRequestModel = require("../models/serviceRequestModel");
 const bookmarksModel = require("../models/bookmarkModel");
 const nodemailer = require("nodemailer");
 const cron = require("node-cron");
+const jwt = require("jsonwebtoken");
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -317,6 +318,47 @@ const updateuser = async (req, res) => {
     res.status(200).json({ message: "User updated successfully" });
   } catch (error) {
     res.status(400).send({ success: false, message: error.message });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  try {
+    const { id, email } = req.body;
+
+    if (!email || !id) {
+      return res
+        .status(400)
+        .json({ message: "User ID and email are required." });
+    }
+
+    // Generate a token that expires in 15 minutes
+    const token = jwt.sign({ id, email }, process.env.EDITOR, {
+      expiresIn: "15m",
+    });
+
+    // Reset link with token
+    const resetLink = `http://localhost:3000/reset-password?token=${token}`;
+    // const resetLink = `https://homeserviceshub.in/reset-password?token=${token}`;
+
+    // Email content
+    const emailContent = `
+    <p>Dear User,</p>
+    <p>We received a request to reset your password. Click the link below to reset your password. This link is valid for <b>15 minutes</b>.</p>
+    <p><a href="${resetLink}" target="_blank" style="color: blue; font-weight: bold;">Reset Your Password</a></p>
+    <p>If you did not request this, please ignore this email. Your password will remain unchanged.</p>
+    <br/>
+    <p>Best Regards,</p>
+    <p>Your Company Name</p>
+  `;
+    //send email
+    sendEmail(email, "Password Reset Request", emailContent);
+
+    res
+      .status(200)
+      .json({ message: "Password reset email sent successfully." });
+  } catch (error) {
+    console.error("Error in resetPassword:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -857,7 +899,6 @@ const acesignup = async (req, res) => {
             "aceData.projectsOngoing": 0,
             "aceData.yearOfEstablishment": 2024,
             "aceData.paymentMethod": "Card, Cash and Cheque",
-            "aceData.categories": selectedServices,
             "aceData.services": selectedServices,
             "aceData.serviceAreas": [],
             "aceData.totalWorkers": 1,
@@ -897,7 +938,6 @@ const acesignup = async (req, res) => {
           projectsOngoing: 0,
           yearOfEstablishment: "XXXX",
           paymentMethod: "Card, Cash and Cheque",
-          categories: selectedServices,
           services: selectedServices,
           serviceAreas: [],
           totalWorkers: 1,
@@ -981,7 +1021,7 @@ const filterCategoryData = async (req, res) => {
 
     // Add category filtering
     if (category) {
-      query["aceData.categories"] = {
+      query["aceData.services"] = {
         $regex: new RegExp(category.toLowerCase()),
         $options: "i",
       };
@@ -1113,7 +1153,7 @@ const loadMoreCategoryData = async (req, res) => {
     let query = { isAce: true };
     // Add category filtering
     if (category) {
-      query["aceData.categories"] = {
+      query["aceData.services"] = {
         $regex: new RegExp(category.toLowerCase()),
         $options: "i",
       };
@@ -1367,4 +1407,5 @@ module.exports = {
   checkacemobile,
   updateAceVerification,
   updateSubscription,
+  resetPassword,
 };

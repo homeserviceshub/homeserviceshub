@@ -100,6 +100,7 @@ postRoute.post("/api/loadmorecompanydata", postController.loadMoreCompanyData);
 postRoute.post("/api/reviewdatarequest", postController.reviewDataRequest);
 postRoute.post("/api/updateacetitle", postController.updateAceTitle);
 postRoute.post("/api/checkacemobile", postController.checkacemobile);
+postRoute.post("/api/resetpassword", postController.resetPassword);
 postRoute.post(
   "/api/ace/updatesubscription",
   postController.updateSubscription

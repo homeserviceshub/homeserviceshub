@@ -1,5 +1,7 @@
 .containerX {
-  margin: 50px 0px;
+  margin: 80px 0px 0 0;
+  padding-bottom: 4rem;
+  background-color: var(--color-primary-with-opacity);
 }
 .main {
   padding: 0px 50px;
@@ -18,21 +20,25 @@
   left: 15px;
 }
 .title {
-  padding: 10px 0px !important;
+  padding: 4rem 0 0 0px !important;
   display: flex;
-  font-size: 3rem;
-  margin-bottom: 24px;
-  font-weight: 500;
+  font-size: 1.75rem;
+  font-weight: 700 !important;
   justify-content: center;
+  margin-bottom: 40px;
+  font-family: "Playfair Display", serif !important;
 }
 .outer {
   padding: 0px 30px;
   height: auto !important;
 }
+.slideOne {
+  background-color: unset !important;
+}
 .oneCard {
   padding: 10px;
   margin: 10px;
-  background-color: var(--color-primary-with-opacity) !important;
+  background-color: white;
   border-radius: 10px;
   text-align: left;
 }
@@ -46,13 +52,14 @@
   width: 30%;
 }
 .img {
-  border-radius: 10px;
+  border-radius: 50%;
 }
 .btnDiv {
   padding-top: 10px;
 }
 .innerDiv {
   margin-top: 1rem;
+  margin-left: -9px;
 }
 
 .btnDiv {
@@ -64,10 +71,20 @@
   line-height: 26px;
 }
 .largerFont {
-  font-size: larger;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.75;
+  cursor: pointer;
 }
 .mediumFont {
   font-size: medium;
+  font-weight: 500;
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+}
+.reviewSpan {
+  font-size: medium;
+  padding-left: 10px;
 }
 .stars {
   font-size: larger;

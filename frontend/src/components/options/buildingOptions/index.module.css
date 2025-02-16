@@ -36,9 +36,11 @@
 
 .howcanwehelp {
   display: flex;
-  font-size: 3rem;
+  font-size: 1.75rem;
+  font-weight: 700 !important;
   margin-bottom: 24px;
-  font-weight: 500;
+  margin-top: 14px;
+  font-family: "Playfair Display", serif !important;
 }
 .dropdown {
   padding: 10px;

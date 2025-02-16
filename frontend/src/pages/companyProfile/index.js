@@ -22,11 +22,11 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import Lightbox from "yet-another-react-lightbox";
 import { Fullscreen, Video, Zoom } from "yet-another-react-lightbox/plugins";
+import { LuCircleCheckBig } from "react-icons/lu";
 
 const CompanyProfile = () => {
   const [reviews, setReviews] = useState([]);
   const { id } = useParams();
-  console.log(id);
   const [usersAceData, setUsersAceData] = useState([]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [showFullScreen, setShowFullScreen] = useState(false);
@@ -50,9 +50,7 @@ const CompanyProfile = () => {
       });
       if (reviewsResponse.status === 200) {
         if (reviewsResponse.data.message) {
-          console.log(reviewsResponse.data.message);
         } else {
-          console.log("Reviews data: ", reviewsResponse.data);
           setReviews(reviewsResponse.data);
         }
       }
@@ -61,7 +59,6 @@ const CompanyProfile = () => {
         _id: id,
       });
       if (userResponse.status === 200) {
-        console.log(userResponse.data[0]);
         setUsersAceData(userResponse.data[0].aceData);
       }
 
@@ -81,7 +78,6 @@ const CompanyProfile = () => {
     }
   };
 
-  console.log(reviews);
   const navigate = useNavigate();
   const stars = ["1", "2", "3", "4", "5"];
   const [selectedFilter, setSelectedFilter] = useState("overview");
@@ -124,7 +120,7 @@ const CompanyProfile = () => {
   };
   const handleFeatures = (feature) => {
     const authToken = localStorage.getItem("auth");
-    if (authToken) {
+    if (authToken && authToken !== null && authToken !== "null") {
       if (feature === "Write a Review") {
         navigate(`/review/${id}/new`);
       } else if (feature === "Request a Service") {
@@ -135,7 +131,6 @@ const CompanyProfile = () => {
 
   return (
     <>
-      {console.log(usersAceData)}
       {usersAceData?.companyName && !isLoading ? (
         <div className={styles.customContainer}>
           <div className={styles.companyProfileBackgroundPhoto}>
@@ -181,18 +176,12 @@ const CompanyProfile = () => {
                   </Row>
                 </Col>
                 <Col lg={3} className={styles.profilebtns}>
-                  <ScrollLink
-                    to="reviews"
-                    smooth={true}
-                    duration={500}
-                    offset={-150}
-                  >
+                  <div className={styles.profilebtn}>
                     <CustomButton
                       text={"Write a Review"}
                       onClick={() => handleFeatures("Write a Review")}
                     />
-                  </ScrollLink>
-
+                  </div>
                   <div className={styles.profilebtn}>
                     <CustomButton
                       text={"Request a service"}
@@ -439,105 +428,73 @@ const CompanyProfile = () => {
                 Ace awards
               </Col>
             </Row>
+            <Row className="m-0">
+              <Col lg={12} className={styles.reviewHeading} data-aos="zoom-in">
+                <div>Services We Offer</div>
+              </Col>
+
+              <Col className={styles.gridCol} data-aos="zoom-in">
+                <div className={styles.gridContainer}>
+                  {usersAceData?.services?.map((item, index) => {
+                    return (
+                      <div key={index} data-aos="zoom-in">
+                        <LuCircleCheckBig className={styles.gridSvg} /> {item}
+                      </div>
+                    );
+                  })}
+                </div>
+              </Col>
+            </Row>
             <Row id="reviews" className="m-0">
               <Col lg={12} className={styles.reviewHeading} data-aos="zoom-in">
                 <div>Reviews</div>
-                <div className={styles.writeReview}>
-                  <CustomButton
-                    width={"auto"}
-                    height="auto"
-                    text={"Write a Review"}
-                    onClick={() => handleFeatures("Write a Review")}
-                  />
-                </div>
               </Col>
-
-              {!reviews && isLoading ? (
-                <div className={styles.noReviews}>No Reviews Yet!!!</div>
+              {!reviews || isLoading || reviews == 0 ? (
+                <div className={styles.noReviews} data-aos="zoom-in">
+                  No Reviews Yet!!!
+                </div>
               ) : (
                 <ReviewCardComponent data={reviews} photosOf={"reviewer"} />
               )}
             </Row>
-
-            <Row className={styles.allDetails} id="details">
-              <Col lg={12} className={`${styles.nameInDetailsInner} p-0`}>
-                {usersAceData?.companyName}
+            <Row className="m-0" id="details">
+              <Col lg={12} className={styles.reviewHeading} data-aos="zoom-in">
+                <div>Other Details</div>
               </Col>
-              <Col lg={8} className={styles.overview}>
-                <div className={styles.detailDiv}>
-                  <div className={styles.detailHeading}>Categories</div>
-                  <div className={styles.detailData}>
-                    {usersAceData?.categories?.map((item, index) => {
-                      if (usersAceData.categories.length === index + 1) {
-                        return item + ".";
-                      } else return item + ", ";
-                    })}
-                    {/* Basement Renovation, Bathroom Renovation, General Contractors,
-                Design/Build, Home Additions, Architects, Kitchen & Bathroom -
-                Cabinets & Design, and Structural Engineering */}
-                  </div>
-                </div>
-                <div className={styles.detailDiv}>
-                  <div className={styles.detailHeading}>Services</div>
-                  <div className={styles.detailData}>
-                    {usersAceData?.services?.map((item, index) => {
-                      if (usersAceData.services.length === index + 1) {
-                        return item + ".";
-                      } else return item + ", ";
-                    })}
 
-                    {/* Basement Renovation, Bathroom Renovation, Basement Finishing,
-                Bathroom Remodeling, Kitchen Makeovers, Kitchen Renovation,
-                Engineering, structural engineering, mechanical engineering,
-                drafting services, home additions, rear additions, home
-                extensions, rear extensions, marble installers, tile
-                installation, ceramic tile setting, marble tile setting and most
-                Interior Renovation Projects. */}
+              <Col className={styles.gridCol} data-aos="zoom-in">
+                <div className={styles.gridContainer}>
+                  <div>
+                    <h5>Areas Served</h5>
+                    <p className="m-0">
+                      {usersAceData?.serviceAreas?.map((item, index) => {
+                        if (usersAceData.serviceAreas.length === index + 1) {
+                          return item + ".";
+                        } else return item + ", ";
+                      })}
+                    </p>
                   </div>
-                </div>
-                <div className={styles.detailDiv}>
-                  <div className={styles.detailHeading}>Area's Served</div>
-                  <div className={styles.detailData}>
-                    {usersAceData?.serviceAreas?.map((item, index) => {
-                      if (usersAceData.serviceAreas.length === index + 1) {
-                        return item + ".";
-                      } else return item + ", ";
-                    })}
-
-                    {/* Amritsar,Jalandhar,Ludhiana,Patiala,Beas,Riya */}
+                  <div data-aos="zoom-in">
+                    <h5>Website</h5>
+                    <p className="m-0">N/A</p>
                   </div>
-                </div>
-                <div className={styles.detailDiv}>
-                  <div className={styles.detailHeading}>Website</div>
-                  <div className={styles.detailData}>
-                    N/A
-                    {/* Amritsar,Jalandhar,Ludhiana,Patiala,Beas,Riya */}
+                  <div data-aos="zoom-in">
+                    <h5>Year of Establised</h5>
+                    <p className="m-0">{usersAceData?.yearOfEstablishment}</p>
                   </div>
-                </div>
-              </Col>
-              <Col className="p-0">
-                <div className={styles.detailDiv}>
-                  <div className={styles.detailHeading}>Year of Establised</div>
-                  <div className={styles.detailData}>
-                    {usersAceData?.yearOfEstablishment}
+                  <div data-aos="zoom-in">
+                    <h5>Payment method</h5>
+                    <p className="m-0">{usersAceData?.paymentMethod}</p>
                   </div>
-                </div>
-                <div className={styles.detailDiv}>
-                  <div className={styles.detailHeading}>Payment method</div>
-                  <div className={styles.detailData}>
-                    {usersAceData?.paymentMethod}
+                  <div data-aos="zoom-in">
+                    <h5>Number of workers</h5>
+                    <p className="m-0">{usersAceData?.totalWorkers}</p>
                   </div>
-                </div>
-                <div className={styles.detailDiv}>
-                  <div className={styles.detailHeading}>Number of workers</div>
-                  <div className={styles.detailData}>
-                    {usersAceData?.totalWorkers}
-                  </div>
-                </div>
-                <div className={styles.detailDiv}>
-                  <div className={styles.detailHeading}>Written Contract</div>
-                  <div className={styles.detailData}>
-                    {usersAceData?.writtenContract === true ? "Yes" : "No"}
+                  <div data-aos="zoom-in">
+                    <h5>Written Contract</h5>
+                    <p className="m-0">
+                      {usersAceData?.writtenContract === true ? "Yes" : "No"}
+                    </p>
                   </div>
                 </div>
               </Col>
@@ -547,7 +504,6 @@ const CompanyProfile = () => {
               <Col className={styles.nameInDetailsInner} lg={12}>
                 Gallery
               </Col>
-              {console.log(usersAceData?.media)}
               {usersAceData?.media.length === 0 ? (
                 <Col>
                   <div className={styles.noImagesMessage}>
@@ -623,7 +579,7 @@ function LoginModal(props) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <h4>Oops this feature cannot be used without being registered</h4>
+        <h4>Sorry for intrusion but you have to register first</h4>
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={props.onHide}>Close</Button>

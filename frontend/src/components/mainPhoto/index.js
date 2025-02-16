@@ -5,6 +5,7 @@ import { Form, InputGroup } from "react-bootstrap";
 import CustomButton from "../customBtn";
 import { useDispatch } from "react-redux";
 import { SELECTEDSERVICE } from "../../redux/actions/action1";
+import { BsSearch } from "react-icons/bs";
 
 const MainPhoto = () => {
   const navigate = useNavigate();
@@ -21,12 +22,18 @@ const MainPhoto = () => {
       <div className={styles.picture}></div>
 
       <div className={styles.header}>
-        You Think We
-        <span className={styles.headerSpan}>Build</span>
-        <h3 className={styles.subHeader}>We help to build your dreams</h3>
+        <div className={styles.mainHeader}>
+          Find Trusted
+          <span className={styles.headerSpan}>Ace</span>
+          Near You
+        </div>
+        <h3 className={styles.subHeader}>
+          Connect with qualified professionals for all your home service needs
+        </h3>
         <div>
           <Form onSubmit={handleSubmit}>
             <InputGroup className={styles.inputGroup}>
+              <BsSearch className={styles.searchIcon} />
               <Form.Control
                 type="text"
                 placeholder="Search here..."
@@ -35,6 +42,7 @@ const MainPhoto = () => {
                 className={styles.inputField}
                 value={data}
                 onChange={(e) => setData(e.target.value)}
+                autoFocus
               />
               <CustomButton
                 text={"Search"}

@@ -7,6 +7,7 @@
   top: 80px;
   z-index: 1;
   border-top: 1px solid var(--color-primary);
+  border-bottom: 1px solid var(--color-primary);
 }
 .containerX {
   margin: 0px auto;
@@ -17,16 +18,7 @@
 }
 
 .companyProfileBackgroundPhoto {
-  background: radial-gradient(
-    circle,
-    rgba(0, 0, 0, 0.6) 0%,
-    rgba(0, 0, 0, 0.8) 100%
-  );
-
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  color: white;
+  background-color: white;
 }
 .companyProfilePhoto {
   display: flex;
@@ -51,12 +43,12 @@
 }
 
 .companyName {
-  font-size: 3rem;
-  font-weight: 800;
+  font-size: 1.875rem;
+  font-weight: 700;
 }
 
 .profileCol {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
 }
 .profilebtns {
   display: flex;
@@ -66,7 +58,7 @@
   padding: 50px;
 }
 .reviewHeading {
-  font-size: 3rem;
+  font-size: 1.875rem;
   font-weight: 500;
   background-color: white;
   border-radius: 6px;
@@ -74,6 +66,7 @@
   margin-top: 10px;
   display: flex;
   justify-content: space-between;
+  padding-left: 17px;
 }
 .defaultIcons {
   color: red;
@@ -147,6 +140,32 @@
 .detail {
   padding-bottom: 10px;
 }
+.gridContainer {
+  display: grid;
+  grid-template-columns: 1fr; /* Default: 1 column (mobile view) */
+  gap: 16px; /* Adjust spacing between grid items */
+}
+.gridCol {
+  background-color: white;
+  padding: 30px 18px;
+  border-radius: 6px;
+  margin-top: -10px;
+}
+.gridContainer div {
+  background-color: #f6f6f6;
+  padding: 20px;
+  text-align: left;
+  border-radius: 6px;
+  position: relative;
+}
+.gridContainer div h5 {
+  color: var(--color-primary);
+}
+.gridSvg {
+  font-size: 22px;
+  color: var(--color-primary);
+  margin-right: 5px;
+}
 .ratingDiv11 {
   font-size: 20px;
   font-weight: 700;
@@ -193,9 +212,10 @@
 }
 
 .nameInDetailsInner {
-  font-size: 3rem;
+  font-size: 1.875rem;
   font-weight: 500;
-  color: gray;
+  color: black;
+  padding-top: 20px;
 }
 .allDetails {
   color: gray;
@@ -311,5 +331,10 @@
 @media screen and (max-width: 992px) {
   .profilebtns {
     padding: 40px 15px;
+  }
+}
+@media (min-width: 768px) {
+  .gridContainer {
+    grid-template-columns: repeat(3, 1fr); /* 2 columns */
   }
 }

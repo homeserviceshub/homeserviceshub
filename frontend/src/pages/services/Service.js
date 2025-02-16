@@ -77,7 +77,6 @@ function Service() {
   }, []);
   useEffect(() => {
     if (clickedCategory) {
-      console.log("runnign 3");
       fetchData();
     }
   }, [clickedCategory]);
@@ -239,7 +238,6 @@ function Service() {
     }
   };
   const handleClick = (e) => {
-    console.log(e.target.title);
     setSelectedFilter(e.target.title);
   };
   const handleSearch = (event) => {
@@ -275,13 +273,10 @@ function Service() {
         queryParams.append(key, searchData[key]);
       }
     }
-    console.log(item);
-    console.log("before:", searchData.category);
     setSearchData((prevData) => ({
       ...prevData,
       category: item,
     }));
-    console.log("after:", searchData.category);
     const url = `/services/service?category=${item}&location=${searchData.location}&sortedBy=${searchData.sortedBy}`;
     navigate(url);
   };
@@ -290,7 +285,7 @@ function Service() {
   };
   const handleRequestService = (item) => {
     const authToken = localStorage.getItem("auth");
-    if (authToken) {
+    if (authToken && authToken !== null && authToken !== "null") {
       navigate(`/${item._id}/servicerequest`);
     } else setLoginModal(true);
   };

@@ -13,7 +13,7 @@ const OurUpdateForm = () => {
 
         <Form className={styles.main}>
           <Row>
-            <Col className={styles.heading}>Get in touch with us</Col>
+            <Col className={`${styles.heading}`}>Get in touch with us</Col>
           </Row>
           <Form.Group className="mb-3" controlId="formBasicName">
             <Form.Label>Full Name</Form.Label>

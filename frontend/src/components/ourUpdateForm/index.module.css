@@ -1,19 +1,25 @@
 .main {
-  background-color: rgb(229 255 244);
+  background-color: rgb(231 243 239);
   border-radius: 20px;
   margin: 20px auto;
+  margin-bottom: 5rem;
   padding: 20px;
 }
 .heading {
-  padding-bottom: 20px;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
+  margin-bottom: 30px;
 }
+
 .button {
   padding-bottom: 10px;
   text-align: end;
 }
 .mainHeading {
-  font-family: "Oswald", sans-serif;
-  font-size: 3rem;
-  font-weight: 500;
+  padding: 2rem 0 0 0px !important;
+  display: flex;
+  font-size: 1.75rem;
+  font-weight: 700 !important;
+  justify-content: center;
+  margin-bottom: 30px;
+  font-family: "Playfair Display", serif !important;
 }

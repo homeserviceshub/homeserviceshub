@@ -24,8 +24,10 @@
 }
 .heading {
   text-align: center;
-  font-size: 3rem;
   padding-top: 20px;
+  font-size: 1.75rem;
+  font-weight: 700 !important;
+  font-family: "Playfair Display", serif !important;
 }
 .review {
   padding: 70px 0px 0px 30px;

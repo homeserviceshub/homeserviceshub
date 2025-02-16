@@ -8,8 +8,8 @@ const AreYouServiceProvider = () => {
   return (
     <div className={styles.main}>
       <div className={styles.innerDiv}>
-        <h2>Are You Ace Service Provider?</h2>
-        <h3>Connect with new customers, now.</h3>
+        <h2 className={styles.heading}>Are You Ace Service Provider?</h2>
+        <h3 className={styles.subheading}>Connect with new customers, now.</h3>
 
         <CustomButton
           width={"250px"}

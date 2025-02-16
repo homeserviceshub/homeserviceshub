@@ -1,17 +1,23 @@
-@font-face {
-  font-family: "Bebas Neue";
-  src: url("./fonts/BebasNeue-Regular.ttf") format("truetype") !important; /* Adjust the path if necessary */
-  font-weight: normal;
-  font-style: normal;
-}
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap");
+
+/* * {
+  font-family: "Playfair Display", serif !important;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+} */
 
 body,
 div,
 p {
-  margin: 0;
-  font-family: "Bebas Neue", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: inherit;
+}
+button,
+input,
+textarea {
+  font-family: inherit;
 }
 
 code {
@@ -20,11 +26,11 @@ code {
 :root {
   --swiper-navigation-color: rgb(67 204 147);
   --swiper-theme-color: rgb(67 204 147);
-  --color-primary: rgb(67 204 147);
+  --color-primary: rgb(45 90 69);
   --color-black: rgb(0, 0, 0);
   --color-white: rgb(255, 255, 255);
   --color-primary-with-opacity: rgb(67 204 147/10%);
-  --color-primary-with-opacity-30: rgb(67 204 147/30%);
+  --color-primary-with-opacity-30: rgb(45 90 69/30%);
   --color-primary-with-opacity-50: rgba(67 204 147/ 50%);
   --color-primary-with-opacity-75: rgba(67 204 147/ 0.75);
 }
@@ -70,6 +76,9 @@ a:hover {
 }
 
 /*  */
+.swiper-slide {
+  background-color: none;
+}
 .splide .splide__pagination {
   display: none;
 }

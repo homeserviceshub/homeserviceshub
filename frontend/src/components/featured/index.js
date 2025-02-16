@@ -26,9 +26,9 @@ export const Featured = ({ heading }) => {
       } else if (screenWidth <= 1240) {
         return "2";
       } else if (screenWidth <= 1640) {
-        return "3";
+        return "2";
       } else {
-        return "4";
+        return "3";
       }
     }
     function handleScreenSizeChange() {
@@ -94,7 +94,7 @@ export const Featured = ({ heading }) => {
       >
         {topAce ? (
           topAce.map((item, index) => (
-            <SwiperSlide key={index}>
+            <SwiperSlide key={index} className={styles.slideOne}>
               <div className={styles.oneCard}>
                 <Row>
                   <div className={styles.imgDiv}>
@@ -112,15 +112,16 @@ export const Featured = ({ heading }) => {
                     />
                   </div>
                   <Col className={styles.aceData}>
-                    <div className={styles.largerFont}>
+                    <div
+                      className={styles.largerFont}
+                      onClick={() => {
+                        navigate(`/companyprofile/${item._id}`);
+                      }}
+                    >
                       {item.aceData.companyName}
                     </div>
-                    <div className={styles.mediumFont}>
-                      {item.aceData.location}
-                    </div>
-                    <div className={styles.mediumFont}>
-                      {item.aceData.availability}
-                    </div>
+                    <p className={styles.mediumFont}>{item.aceData.location}</p>
+
                     <div className={styles.stars}>
                       {[...Array(5)].map((_, index) => {
                         const rating = Number(item.aceData.overallRating);
@@ -145,10 +146,10 @@ export const Featured = ({ heading }) => {
                 <Row className={styles.innerDiv}>
                   <h4>About</h4>
                   <p>
-                    {`${item.aceData.brief.slice(0, 127)}${
-                      item.aceData.brief.length > 127 ? "..." : ""
+                    {`${item.aceData.brief.slice(0, 100)}${
+                      item.aceData.brief.length > 100 ? "..." : ""
                     }`}
-                    {item.aceData.brief.length > 127 && (
+                    {item.aceData.brief.length > 100 && (
                       <Link
                         style={{ color: "green" }}
                         to={"/companyprofile/" + item._id}
@@ -158,7 +159,7 @@ export const Featured = ({ heading }) => {
                     )}
                   </p>
                 </Row>
-                <Row>
+                {/* <Row>
                   <h4>Experience</h4>
                   <p>
                     Hello there I have an experience of{" "}
@@ -173,8 +174,8 @@ export const Featured = ({ heading }) => {
                       see all
                     </Link>
                   </p>
-                </Row>
-                <Row>
+                </Row> */}
+                {/* <Row>
                   <Col className={styles.btnDiv}>
                     <CustomButton
                       text={"Request a service"}
@@ -189,7 +190,7 @@ export const Featured = ({ heading }) => {
                       onClick={() => navigate(`/companyprofile/${item._id}`)}
                     />
                   </Col>
-                </Row>
+                </Row> */}
               </div>
             </SwiperSlide>
           ))
