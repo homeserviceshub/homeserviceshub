@@ -10,7 +10,7 @@ import axios from "axios";
 function SignIn() {
   const [credField, setCredField] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(null);
 
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
@@ -41,16 +41,14 @@ function SignIn() {
         password: password,
       })
       .then((response) => {
-        console.log(response);
-        if (response.data.message) {
+        if (response.data.message !== "Login successful") {
           setTimeout(function () {
             setIsSubmitting(false);
-            setError(true);
+            setError(response.data.message);
           }, 1000);
-          console.log(response.data.message, "yaaaa");
         } else {
-          setError(false);
-          localStorage.setItem("auth", response.data[0]._id);
+          setError(null);
+          localStorage.setItem("auth", response.data.user._id);
           dispatch(CHECKLOGIN(true));
           navigate("/");
         }
@@ -109,7 +107,7 @@ function SignIn() {
                   </span>
                   {error && (
                     <div className="mb-3" style={{ color: "red" }}>
-                      **User not found**
+                      {error}
                     </div>
                   )}
                 </Col>

@@ -5,6 +5,14 @@ const bookmarksModel = require("../models/bookmarkModel");
 const nodemailer = require("nodemailer");
 const cron = require("node-cron");
 const jwt = require("jsonwebtoken");
+const argon2 = require("argon2");
+
+const hashPassword = async (password) => {
+  return await argon2.hash(password);
+};
+const verifyPassword = async (password, hash) => {
+  return await argon2.verify(hash, password);
+};
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -85,10 +93,11 @@ const signUp = async (req, res) => {
     }
 
     // Create a new user if no existing user with the given username or number is found
+    const encrytedPassword = await hashPassword(req.body.password);
     const newUser = new usersModel({
       username: req.body.username,
       email: req.body.email,
-      password: req.body.password,
+      password: encrytedPassword,
       number: req.body.number,
       joiningDate: new Date(),
     });
@@ -107,33 +116,41 @@ const signUp = async (req, res) => {
 const login = async (req, res) => {
   try {
     const emailOrNumber = req.body.email;
-    if (emailOrNumber !== null) {
-      let query = {
-        $or: [{ email: emailOrNumber }, { number: emailOrNumber }],
-      };
+    if (!emailOrNumber) {
+      return res.json({ message: "No User Found" });
+    }
 
-      const user = await usersModel.find(query);
-      if (user) {
-        // Check if password is correct
-        if (user[0].password === req.body.password) {
-          // If password is correct, return user exist
-          return res.json(user);
-        } else {
-          // If password is incorrect, return an error message
+    let query = {
+      $or: [{ email: emailOrNumber }, { number: emailOrNumber }],
+    };
+
+    // Find a single user instead of an array
+    const user = await usersModel.findOne(query);
+    if (!user) {
+      return res.json({ message: "User not found" });
+    } else {
+      if (user.password.startsWith("$")) {
+        const passcheck = await verifyPassword(
+          req.body.password,
+          user.password
+        );
+        if (!passcheck) {
           return res.json({ message: "Incorrect password" });
         }
       } else {
-        // If email is not found, return an error message
-        return res.json({ message: "Email not found" });
+        if (req.body.password !== user.password) {
+          return res.json({ message: "Incorrect password" });
+        }
       }
-    } else {
-      return res.json({ message: "No User Found" });
+
+      return res.json({ message: "Login successful", user });
     }
   } catch (error) {
     console.error("Error:", error);
     return res.status(500).json({ message: "An error occurred" });
   }
 };
+
 const checkBookmark = async (req, res) => {
   try {
     const users = await bookmarksModel.find({
@@ -879,7 +896,7 @@ const acesignup = async (req, res) => {
       postalCode,
       selectedServices,
     } = req.body;
-
+    const encrytedCompanyPassword = await hashPassword(companyPassword);
     if (_id !== "new") {
       const updatedUser = await usersModel.findByIdAndUpdate(
         _id,
@@ -905,7 +922,7 @@ const acesignup = async (req, res) => {
             "aceData.writtenContract": false,
             "aceData.media": [],
             "aceData.companyNumber": companyNumber,
-            "aceData.companyPassword": companyPassword,
+            "aceData.companyPassword": encrytedCompanyPassword,
             "aceData.companyEmail": companyEmail,
             "aceData.companyPostalCode": postalCode,
             "aceData.awards": [],
@@ -943,7 +960,7 @@ const acesignup = async (req, res) => {
           totalWorkers: 1,
           writtenContract: false,
           media: [],
-          companyPassword,
+          companyPassword: encrytedCompanyPassword,
           companyNumber,
           companyEmail,
           companyPostalCode: postalCode,

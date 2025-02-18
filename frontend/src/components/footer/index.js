@@ -99,7 +99,7 @@ const Footer = () => {
         </Row>
         <Row className={styles.bottomDiv}>
           <Col lg={8} md={8} m={0} className={styles.footerPara}>
-            Copyright © 2023 All rights reserved
+            Copyright © 2025 | Homeserviceshub | All rights reserved
           </Col>
           <Col lg={4} md={4} className={styles.iconDiv}>
             {socialMedia.map((item, index) => {
