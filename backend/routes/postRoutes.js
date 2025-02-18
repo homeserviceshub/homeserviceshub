@@ -10,8 +10,8 @@ require("dotenv").config(); // Load environment variables
 
 postRoute.use(cors());
 postRoute.use(bodyParser.json());
-// postRoute.use(express.json());
-// postRoute.use(express.static("public"));
+postRoute.use(express.json());
+postRoute.use(express.static("public"));
 // postRoute.use(bodyParser.urlencoded({ extended: true }));
 
 // // Configure AWS SDK (IAM role on EC2 will handle authentication)
