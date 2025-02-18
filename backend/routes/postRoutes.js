@@ -2,10 +2,10 @@ const express = require("express");
 const postRoute = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const AWS = require("aws-sdk");
-const multer = require("multer");
-const multerS3 = require("multer-s3");
-const path = require("path");
+// const AWS = require("aws-sdk");
+// const multer = require("multer");
+// const multerS3 = require("multer-s3");
+// const path = require("path");
 require("dotenv").config(); // Load environment variables
 
 postRoute.use(cors());
@@ -15,31 +15,31 @@ postRoute.use(express.static("public"));
 // postRoute.use(bodyParser.urlencoded({ extended: true }));
 
 // Configure AWS SDK (IAM role on EC2 will handle authentication)
-const s3 = new AWS.S3({ region: "eu-north-1" });
-//multer is used for image storage
-// Configure Multer-S3
-const upload = multer({
-  storage: multerS3({
-    s3: s3,
-    bucket: "homeserviceshubbucket",
-    acl: "public-read", // Set file visibility (or use "private")
-    metadata: function (req, file, cb) {
-      cb(null, { fieldName: file.fieldname });
-    },
-    key: function (req, file, cb) {
-      cb(null, `uploads/${Date.now()}${path.extname(file.originalname)}`);
-    },
-  }),
-  // limits: { fileSize: 50 * 1024 * 1024 }, // 50MB limit
-});
-// Upload route
-postRoute.post("/api/upload", upload.single("media"), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ error: "No file uploaded" });
-  }
+// const s3 = new AWS.S3({ region: "eu-north-1" });
+// //multer is used for image storage
+// // Configure Multer-S3
+// const upload = multer({
+//   storage: multerS3({
+//     s3: s3,
+//     bucket: "homeserviceshubbucket",
+//     acl: "public-read", // Set file visibility (or use "private")
+//     metadata: function (req, file, cb) {
+//       cb(null, { fieldName: file.fieldname });
+//     },
+//     key: function (req, file, cb) {
+//       cb(null, `uploads/${Date.now()}${path.extname(file.originalname)}`);
+//     },
+//   }),
+//   // limits: { fileSize: 50 * 1024 * 1024 }, // 50MB limit
+// });
+// // Upload route
+// postRoute.post("/api/upload", upload.single("media"), (req, res) => {
+//   if (!req.file) {
+//     return res.status(400).json({ error: "No file uploaded" });
+//   }
 
-  res.json({ fileUrl: req.file.location }); // S3 URL of the uploaded file
-});
+//   res.json({ fileUrl: req.file.location }); // S3 URL of the uploaded file
+// });
 
 postRoute.post(
   "/api/uploadVerification",
