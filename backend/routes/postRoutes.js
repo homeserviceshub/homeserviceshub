@@ -12,7 +12,7 @@ postRoute.use(cors());
 postRoute.use(bodyParser.json());
 postRoute.use(express.json());
 postRoute.use(express.static("public"));
-postRoute.use(bodyParser.urlencoded({ extended: true }));
+// postRoute.use(bodyParser.urlencoded({ extended: true }));
 
 // Configure AWS SDK (IAM role on EC2 will handle authentication)
 const s3 = new AWS.S3({ region: "eu-north-1" });
