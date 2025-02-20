@@ -7,9 +7,9 @@ const port = process.env.PORT || 8000;
 const path = require("path");
 const _dirname = path.dirname("");
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/build", "index.html"));
+  res.sendFile(path.join(__dirname, "frontend/build", "index.html"));
 });
-const buildPath = path.join(__dirname, "../frontend/build");
+const buildPath = path.join(__dirname, "frontend/build");
 app.use(express.static(buildPath));
 main().catch((err) => console.log(err));
 
