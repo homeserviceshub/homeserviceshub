@@ -1,51 +1,46 @@
 const express = require("express");
-const app = express();
 const cors = require("cors");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-const port = process.env.PORT || 8000;
 const path = require("path");
 
-const buildPath = path.join(__dirname, "../frontend/build");
-app.get("*", (req, res) => {
-  res.sendFile(path.join(buildPath));
-});
-app.use(express.static(buildPath));
-main().catch((err) => console.log(err));
+const app = express();
+const port = process.env.PORT || 8000;
 
+// Connect to MongoDB
 async function main() {
-  await mongoose
-    .connect(
+  try {
+    await mongoose.connect(
       "mongodb+srv://homeserviceshub1:5ecpQMPZyWi9g0mE@homeservicescluster.0zszq0t.mongodb.net/homeserviceshub?retryWrites=true&w=majority"
-    )
-    .then(() => console.log("Database connected"))
-    .catch((err) => console.log("Database connection error:", err));
-  console.log("Connection Made");
-  // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
+    );
+    console.log("Database connected");
+  } catch (err) {
+    console.error("Database connection error:", err);
+  }
 }
+main();
 
-app.use(
-  cors({
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"],
-    allowedHeaders: ["Content-Type", "Authorization"], // Add other necessary headers
-  })
-);
-
+// Middleware
+app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
 app.use("/", express.static("upload"));
 
-//getting routes
+// Serve API Routes
 const postRoute = require("./routes/postRoutes");
 const getRoute = require("./routes/getRoutes");
-app.use(postRoute);
-app.use(getRoute);
-app.get("/", (req, res) => {
-  res.send("Welcome to Home Services Hub!");
+app.use("/api", postRoute);
+app.use("/api", getRoute);
+
+// Serve React Frontend
+const buildPath = path.join(__dirname, "../frontend/build");
+app.use(express.static(buildPath)); // Serve static files first
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(buildPath, "index.html"));
 });
 
-//Http
+// Start Server
 app.listen(port, "0.0.0.0", () => {
-  console.log("Backend is Running on", port);
+  console.log("Backend is running on port", port);
 });
