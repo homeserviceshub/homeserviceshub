@@ -63,10 +63,10 @@ const Verification = () => {
           ...userData.aceData,
           idProof: {
             AdharCard: {
-              adharFront: response.data.frontFilePath.filename,
-              adharBack: response.data.backFilePath.filename,
+              adharFront: response.data.frontFilePath,
+              adharBack: response.data.backFilePath,
             },
-            PhoneVerification: "pending",
+            PhoneVerification: "done",
           },
         };
         if (members === "team") {

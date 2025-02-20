@@ -1296,18 +1296,23 @@ const updateAceTitle = async (req, res) => {
 const updateAceVerification = async (req, res) => {
   const { number, data } = req.body;
   try {
-    const user = await usersModel.findOne({ number: number });
-    if (!user) {
+    const updatedUser = await usersModel.findOneAndUpdate(
+      { number: number }, // Find user by number
+      { $set: { aceData: data } }, // Update aceData field
+      { new: true } // Return updated user
+    );
+
+    if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });
     }
-    user.aceData = data;
-    await user.save();
-    res.status(200).json({ message: "User updated successfully" });
+
+    res.status(200).json({ message: "User updated successfully", updatedUser });
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 const updateSubscription = async (req, res) => {
   const userId = req.body.id;
   const planName = req.body.planName;

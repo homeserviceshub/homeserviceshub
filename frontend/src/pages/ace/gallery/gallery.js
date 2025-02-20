@@ -69,19 +69,19 @@ const AceGallery = () => {
 
       const formData = new FormData();
       formData.append("media", file);
-
+      formData.append("id", localStorage.getItem("aauth"));
+      console.log("FormData : ", file);
       const response = await axios.post("/api/upload", formData, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": file.type,
         },
       });
-
+      console.log(response);
       if (response.status === 200) {
         const mediaObject = {
-          path: response.data.filePath.filename,
+          path: response.data.fileUrl,
           type: "image",
         };
-
         setImages((prevImages) => [
           ...prevImages,
           { src: mediaObject, title: "Image Title", editable: false },
@@ -128,12 +128,11 @@ const AceGallery = () => {
         data: updatedAceData,
         id: localStorage.getItem("aauth"),
       });
-
-      alert("Image deleted successfully");
+      setDeleteModal(false);
     } catch (error) {
       console.error("Error:", error);
     }
-    setDeleteModal(false);
+    // alert("Image deleted successfully");
   };
   const handleEditTitle = async (index) => {
     const updatedImages = [...images];
@@ -183,7 +182,7 @@ const AceGallery = () => {
               <Card className={styles.card}>
                 <Card.Img
                   variant="top"
-                  src={`/images/${image.src.path}`}
+                  src={image.src.path}
                   alt={image.title}
                   onClick={() => handleImageClick(index)}
                 />
