@@ -62,7 +62,7 @@ const uploadVerify = multer({
 });
 
 // Upload route
-postRoute.post("/api/upload", upload.single("media"), async (req, res) => {
+postRoute.post("/upload", upload.single("media"), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: "No file uploaded" });
   }
@@ -70,7 +70,7 @@ postRoute.post("/api/upload", upload.single("media"), async (req, res) => {
 });
 
 postRoute.post(
-  "/api/uploadVerification",
+  "/uploadVerification",
   uploadVerify.fields([
     { name: "adharFront", maxCount: 1 },
     { name: "adharBack", maxCount: 1 },
@@ -83,70 +83,52 @@ postRoute.post(
 );
 
 const postController = require("../controllers/postController");
-postRoute.post("/api/signup", postController.signUp);
-postRoute.post("/api/login", postController.login);
-postRoute.post("/api/userdata", postController.getUserData);
-postRoute.post("/api/serviceRequest", postController.serviceRequest);
-postRoute.post("/api/updateuser", postController.updateuser);
-postRoute.post("/api/updateaceuser", postController.updateaceuser);
+postRoute.post("/signup", postController.signUp);
+postRoute.post("/login", postController.login);
+postRoute.post("/userdata", postController.getUserData);
+postRoute.post("/serviceRequest", postController.serviceRequest);
+postRoute.post("/updateuser", postController.updateuser);
+postRoute.post("/updateaceuser", postController.updateaceuser);
+postRoute.post("/updateaceverification", postController.updateAceVerification);
+postRoute.post("/checkace", postController.checkace);
+postRoute.post("/acedata", postController.acedata);
+postRoute.post("/getreviews", postController.getreviews);
+postRoute.post("/getrequestdata", postController.getServiceRequests);
+postRoute.post("/newreview", postController.newReview);
+postRoute.post("/ace/signup", postController.acesignup);
+postRoute.post("/ace/signin", postController.acesignin);
+postRoute.post("/updateServiceRequest", postController.updateServiceRequest);
 postRoute.post(
-  "/api/updateaceverification",
-  postController.updateAceVerification
-);
-postRoute.post("/api/checkace", postController.checkace);
-postRoute.post("/api/acedata", postController.acedata);
-postRoute.post("/api/getreviews", postController.getreviews);
-postRoute.post("/api/getrequestdata", postController.getServiceRequests);
-postRoute.post("/api/newreview", postController.newReview);
-postRoute.post("/api/ace/signup", postController.acesignup);
-postRoute.post("/api/ace/signin", postController.acesignin);
-postRoute.post(
-  "/api/updateServiceRequest",
-  postController.updateServiceRequest
-);
-postRoute.post(
-  "/api/evaluateservicerequest",
+  "/evaluateservicerequest",
   postController.evaluateServiceRequest
 );
-postRoute.post("/api/getprojectsdata", postController.getprojectsdata);
-postRoute.post("/api/getprojectsdone", postController.getProjectsDone);
+postRoute.post("/getprojectsdata", postController.getprojectsdata);
+postRoute.post("/getprojectsdone", postController.getProjectsDone);
+postRoute.post("/rejectservicerequest", postController.rejectServiceRequest);
+postRoute.post("/acceptservicerequest", postController.acceptServiceRequest);
 postRoute.post(
-  "/api/rejectservicerequest",
-  postController.rejectServiceRequest
-);
-postRoute.post(
-  "/api/acceptservicerequest",
-  postController.acceptServiceRequest
-);
-postRoute.post(
-  "/api/completeservicerequest",
+  "/completeservicerequest",
   postController.completeServiceRequest
 );
-postRoute.post("/api/getreviewdata", postController.getReviewData);
-postRoute.post("/api/checkbookmark", postController.checkBookmark);
-postRoute.post("/api/getbookmarksdata", postController.getBookmarkData);
-postRoute.post("/api/updatebookmark", postController.updateBookmark);
-postRoute.post("/api/filtercategorydata", postController.filterCategoryData);
-postRoute.post("/api/filterCompanydata", postController.filterCompanyData);
+postRoute.post("/getreviewdata", postController.getReviewData);
+postRoute.post("/checkbookmark", postController.checkBookmark);
+postRoute.post("/getbookmarksdata", postController.getBookmarkData);
+postRoute.post("/updatebookmark", postController.updateBookmark);
+postRoute.post("/filtercategorydata", postController.filterCategoryData);
+postRoute.post("/filterCompanydata", postController.filterCompanyData);
+postRoute.post("/loadmorecategorydata", postController.loadMoreCategoryData);
+postRoute.post("/loadmorecompanydata", postController.loadMoreCompanyData);
+postRoute.post("/reviewdatarequest", postController.reviewDataRequest);
+postRoute.post("/updateacetitle", postController.updateAceTitle);
+postRoute.post("/checkacemobile", postController.checkacemobile);
+postRoute.post("/resetpassword", postController.resetPassword);
+postRoute.post("/ace/updatesubscription", postController.updateSubscription);
 postRoute.post(
-  "/api/loadmorecategorydata",
-  postController.loadMoreCategoryData
-);
-postRoute.post("/api/loadmorecompanydata", postController.loadMoreCompanyData);
-postRoute.post("/api/reviewdatarequest", postController.reviewDataRequest);
-postRoute.post("/api/updateacetitle", postController.updateAceTitle);
-postRoute.post("/api/checkacemobile", postController.checkacemobile);
-postRoute.post("/api/resetpassword", postController.resetPassword);
-postRoute.post(
-  "/api/ace/updatesubscription",
-  postController.updateSubscription
-);
-postRoute.post(
-  "/api/customerrejectservicerequest",
+  "/customerrejectservicerequest",
   postController.customerRejectServiceRequest
 );
 postRoute.post(
-  "/api/filtertopcountryacedata",
+  "/filtertopcountryacedata",
   postController.filterTopCountryAceData
 );
 

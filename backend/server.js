@@ -26,15 +26,17 @@ app.use(bodyParser.json());
 app.use(express.json());
 app.use("/", express.static("upload"));
 
-// Serve API Routes
+// Load API Routes **BEFORE** serving frontend
 const postRoute = require("./routes/postRoutes");
 const getRoute = require("./routes/getRoutes");
+
+// ✅ Use `/api` prefix to match frontend requests
 app.use("/api", postRoute);
 app.use("/api", getRoute);
 
 // Serve React Frontend
 const buildPath = path.join(__dirname, "../frontend/build");
-app.use(express.static(buildPath)); // Serve static files first
+app.use(express.static(buildPath));
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(buildPath, "index.html"));
