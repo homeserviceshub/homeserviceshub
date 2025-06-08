@@ -21,12 +21,9 @@
   background-repeat: no-repeat !important;
   background-position: center !important;
   background-size: cover !important;
-  color: white;
-  background: radial-gradient(
-    circle,
-    rgba(0, 0, 0, 0.6) 0%,
-    rgba(0, 0, 0, 0.8) 100%
-  );
+  color: black;
+  background: white;
+  border-bottom: 1px solid black;
 }
 .companyProfileBackgroundPhoto {
   width: 100%;
@@ -52,7 +49,7 @@
   height: 200px;
   border-radius: 12px;
   object-fit: cover;
-  object-position: center;
+  object-position: top;
 }
 .profileMainCol {
   display: flex;

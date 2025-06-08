@@ -137,13 +137,10 @@ const CustomerProfile = () => {
         formData.append("media", dummyData.profile_photo);
 
         const response = await axios.post("/api/upload", formData);
-
         if (response.status === 200) {
           const mediaObject = {
-            path: response.data.filePath.filename,
-            type: dummyData.profile_photo.type.startsWith("image")
-              ? "image"
-              : "video",
+            url: response.data.fileUrl,
+            type: "image",
           };
           profileData = mediaObject;
           setData((prevData) => ({
@@ -162,24 +159,25 @@ const CustomerProfile = () => {
       profile_photo: profileData ? profileData : data.profile_photo,
     }));
     try {
-      // setIsLoading(true);
-      await axios
-        .post("/api/updateuser", {
-          password: dummyData.password,
-          profile_photo: profileData,
-          username: dummyData.username,
-          id: dummyData._id,
-        })
-        .then((response) => {
-          if (response.status === 200) {
-            alert("Users data updated Successfully");
-          }
-        })
-        .catch((error) => {
-          console.error("AxiosError:", error);
-        });
+      const payload = {
+        username: dummyData.username,
+        id: dummyData._id,
+        password: dummyData.password,
+      };
+
+      // Only include profile_photo if it exists
+      if (profileData) {
+        payload.profile_photo = profileData;
+      }
+
+      const response = await axios.post("/api/updateuser", payload);
+
+      if (response.status === 200) {
+        alert(response.data.message);
+      }
     } catch (error) {
       console.error("Error:", error);
+      alert("Error updating user data");
     }
     setProfileModalShow(false);
   };
@@ -369,17 +367,14 @@ const CustomerProfile = () => {
       <Container id="details" className={styles.containerX}>
         <Row>
           <div className={styles.imgDiv}>
-            {data.profile_photo === null ? (
+            {data.profile_photo?.url ? (
+              <img src={data.profile_photo.url} className={styles.img} />
+            ) : (
               <img
                 src={
                   process.env.PUBLIC_URL +
                   "/icons/default-profile-picture-male-icon.svg"
                 }
-                className={styles.img}
-              />
-            ) : (
-              <img
-                src={`/images/${data.profile_photo.path}`}
                 className={styles.img}
               />
             )}
@@ -421,12 +416,12 @@ const CustomerProfile = () => {
                 disabled
                 autoComplete="off"
               />
-              <span
+              {/* <span
                 className={styles.floatingEye}
                 onClick={() => setCredField(!credField)}
               >
                 {!credField ? <AiFillEyeInvisible /> : <AiFillEye />}
-              </span>
+              </span> */}
             </Col>
           </Row>
           <Row className={styles.infoDiv}>
@@ -796,11 +791,6 @@ function ProfileModal(props) {
                 disabled
                 value={props.data.password}
               />
-              <CustomButton
-                text={"Change Password"}
-                onClick={() => props.handleResetPassword()}
-                width={"auto"}
-              />
             </InputGroup>
             {/* <Form.Group as={Col} md="10">
               <Form.Label>Password</Form.Label>
@@ -876,7 +866,6 @@ function CancleRequestModal(props) {
 
   const handleReasonChange = (event) => {
     setReason(event.target.value);
-    console.log(event.target.value);
   };
 
   const handleSubmit = (e) => {

@@ -2,9 +2,6 @@ const express = require("express");
 const postRoute = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const fs = require("fs");
-const usersModel = require("../models/usersModel");
-
 const {
   S3Client,
   PutObjectCommand,
@@ -14,8 +11,14 @@ const multerS3 = require("multer-s3");
 const { Upload } = require("@aws-sdk/lib-storage");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const multer = require("multer");
-const path = require("path");
-require("dotenv").config(); // Load environment variables
+require("dotenv").config();
+
+// Import controllers
+const userController = require("../controllers/userController");
+const serviceController = require("../controllers/serviceController");
+const reviewController = require("../controllers/reviewController");
+const aceController = require("../controllers/aceController");
+const adminController = require("../controllers/adminController");
 
 postRoute.use(cors());
 postRoute.use(bodyParser.json());
@@ -25,7 +28,7 @@ postRoute.use(bodyParser.urlencoded({ extended: true }));
 
 // Configure AWS SDK (v3)
 const s3Client = new S3Client({
-  region: "eu-north-1", // e.g., "us-east-1"
+  region: "eu-north-1",
   // for running on localhost
   // credentials: {
   //   accessKeyId: process.env.AWS_ACCESS_KEY,
@@ -41,7 +44,7 @@ const upload = multer({
     },
     contentType: multerS3.AUTO_CONTENT_TYPE,
     key: (req, file, cb) => {
-      cb(null, `uploads/${Date.now()}_${file.originalname}`); // Store inside "uploads/" folder in S3
+      cb(null, `uploads/${Date.now()}_${file.originalname}`);
     },
   }),
   limits: { fileSize: 50 * 1024 * 1024 }, // 50MB limit
@@ -55,13 +58,13 @@ const uploadVerify = multer({
     },
     contentType: multerS3.AUTO_CONTENT_TYPE,
     key: (req, file, cb) => {
-      cb(null, `verifydocs/${Date.now()}_${file.originalname}`); // Store inside "uploads/" folder in S3
+      cb(null, `verifydocs/${Date.now()}_${file.originalname}`);
     },
   }),
   limits: { fileSize: 50 * 1024 * 1024 }, // 50MB limit
 });
 
-// Upload route
+// AWS S3 Upload Routes
 postRoute.post("/upload", upload.single("media"), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: "No file uploaded" });
@@ -74,62 +77,103 @@ postRoute.post(
   uploadVerify.fields([
     { name: "adharFront", maxCount: 1 },
     { name: "adharBack", maxCount: 1 },
+    { name: "panCard", maxCount: 1, optional: true },
   ]),
   (req, res) => {
-    const frontFilePath = req.files["adharFront"][0].location;
-    const backFilePath = req.files["adharBack"][0].location;
-    res.json({ frontFilePath, backFilePath });
+    try {
+      const frontFilePath = req.files["adharFront"][0].location;
+      const backFilePath = req.files["adharBack"][0].location;
+
+      const responseData = {
+        frontFilePath,
+        backFilePath,
+      };
+
+      if (req.files["panCard"] && req.files["panCard"][0]) {
+        responseData.panFilePath = req.files["panCard"][0].location;
+      }
+
+      res.json(responseData);
+    } catch (error) {
+      console.error("Upload error:", error);
+      res.status(500).json({ error: "File upload failed" });
+    }
   }
 );
 
-const postController = require("../controllers/postController");
-postRoute.post("/signup", postController.signUp);
-postRoute.post("/login", postController.login);
-postRoute.post("/userdata", postController.getUserData);
-postRoute.post("/serviceRequest", postController.serviceRequest);
-postRoute.post("/updateuser", postController.updateuser);
-postRoute.post("/updateaceuser", postController.updateaceuser);
-postRoute.post("/updateaceverification", postController.updateAceVerification);
-postRoute.post("/checkace", postController.checkace);
-postRoute.post("/acedata", postController.acedata);
-postRoute.post("/getreviews", postController.getreviews);
-postRoute.post("/getrequestdata", postController.getServiceRequests);
-postRoute.post("/newreview", postController.newReview);
-postRoute.post("/ace/signup", postController.acesignup);
-postRoute.post("/ace/signin", postController.acesignin);
-postRoute.post("/updateServiceRequest", postController.updateServiceRequest);
-postRoute.post(
-  "/evaluateservicerequest",
-  postController.evaluateServiceRequest
-);
-postRoute.post("/getprojectsdata", postController.getprojectsdata);
-postRoute.post("/getprojectsdone", postController.getProjectsDone);
-postRoute.post("/rejectservicerequest", postController.rejectServiceRequest);
-postRoute.post("/acceptservicerequest", postController.acceptServiceRequest);
+// User Routes
+postRoute.post("/signup", userController.signUp);
+postRoute.post("/login", userController.login);
+postRoute.post("/userdata", userController.getUserData);
+postRoute.post("/updateuser", userController.updateuser);
+postRoute.post("/checkbookmark", userController.checkBookmark);
+postRoute.post("/getbookmarksdata", userController.getBookmarkData);
+postRoute.post("/updatebookmark", userController.updateBookmark);
+postRoute.post("/resetpassword", userController.resetPassword);
+
+// Service Routes
+postRoute.post("/serviceRequest", serviceController.serviceRequest);
+postRoute.post("/updateServiceRequest", serviceController.updateServiceRequest);
+postRoute.post("/acceptservicerequest", serviceController.acceptServiceRequest);
 postRoute.post(
   "/completeservicerequest",
-  postController.completeServiceRequest
+  serviceController.completeServiceRequest
 );
-postRoute.post("/getreviewdata", postController.getReviewData);
-postRoute.post("/checkbookmark", postController.checkBookmark);
-postRoute.post("/getbookmarksdata", postController.getBookmarkData);
-postRoute.post("/updatebookmark", postController.updateBookmark);
-postRoute.post("/filtercategorydata", postController.filterCategoryData);
-postRoute.post("/filterCompanydata", postController.filterCompanyData);
-postRoute.post("/loadmorecategorydata", postController.loadMoreCategoryData);
-postRoute.post("/loadmorecompanydata", postController.loadMoreCompanyData);
-postRoute.post("/reviewdatarequest", postController.reviewDataRequest);
-postRoute.post("/updateacetitle", postController.updateAceTitle);
-postRoute.post("/checkacemobile", postController.checkacemobile);
-postRoute.post("/resetpassword", postController.resetPassword);
-postRoute.post("/ace/updatesubscription", postController.updateSubscription);
+postRoute.post("/rejectservicerequest", serviceController.rejectServiceRequest);
 postRoute.post(
   "/customerrejectservicerequest",
-  postController.customerRejectServiceRequest
+  serviceController.customerRejectServiceRequest
 );
+postRoute.post("/getrequestdata", serviceController.getServiceRequests);
+postRoute.post("/getprojectsdata", serviceController.getprojectsdata);
+postRoute.post("/getprojectsdone", serviceController.getProjectsDone);
+
+// Review Routes
+postRoute.post("/newreview", reviewController.newReview);
+postRoute.post("/getreviewdata", reviewController.getReviewData);
+postRoute.post("/getreviews", reviewController.getreviews);
+postRoute.post("/reviewdatarequest", reviewController.reviewDataRequest);
+
+// Ace Routes
+postRoute.post("/ace/signup", aceController.acesignup);
+postRoute.post("/ace/signin", aceController.acesignin);
+postRoute.post("/checkace", aceController.checkace);
+postRoute.post("/acedata", aceController.acedata);
+postRoute.post("/updateaceuser", aceController.updateaceuser);
+postRoute.post("/updateaceverification", aceController.updateAceVerification);
+postRoute.post("/filtercategorydata", aceController.filterCategoryData);
+postRoute.post("/filterCompanydata", aceController.filterCompanyData);
+postRoute.post("/loadmorecategorydata", aceController.loadMoreCategoryData);
+postRoute.post("/loadmorecompanydata", aceController.loadMoreCompanyData);
 postRoute.post(
   "/filtertopcountryacedata",
-  postController.filterTopCountryAceData
+  aceController.filterTopCountryAceData
+);
+postRoute.post("/updateacetitle", aceController.updateAceTitle);
+postRoute.post("/checkacemobile", aceController.checkacemobile);
+postRoute.post("/ace/updatesubscription", aceController.updateSubscription);
+
+//admin routes
+postRoute.post("/dashboard/getclients", adminController.getClients);
+postRoute.post("/dashboard/getcustomers", adminController.getCustomers);
+postRoute.post("/dashboard/getreviews", adminController.getReviews);
+postRoute.post(
+  "/dashboard/getservicerequests",
+  adminController.getServiceRequests
+);
+postRoute.post("/dashboard/getsubscriptions", adminController.getSubscriptions);
+postRoute.post("/dashboard/getuserdata", adminController.getUserData);
+postRoute.post(
+  "/dashboard/createservicerequest",
+  adminController.createServiceRequest
+);
+postRoute.post(
+  "/dashboard/updateservicerequest",
+  adminController.updateServiceRequest
+);
+postRoute.post(
+  "/dashboard/getserviceproviders",
+  adminController.getServiceProviders
 );
 
 module.exports = postRoute;

@@ -57,23 +57,17 @@ function AceSignIn() {
     if (userData.emailOrPhone && userData.password) {
       try {
         await axios
-          .post("/api/checkace", {
+          .post("/api/ace/signin", {
             emailOrPhone: userData.emailOrPhone,
             password: userData.password,
           })
           .then((response) => {
             if (response.status === 200) {
-              if (response.data.message) {
-                setShowMessage(response.data.message);
-                setIsSubmitting(false);
-                setNewUser(true);
-              } else {
-                console.log("User Data: ", response.data);
-                setNewUser(false);
-                setIsSubmitting(false);
-                navigate("/ace/profile");
-                localStorage.setItem("aauth", response.data._id);
-              }
+              console.log("User Data: ", response.data.user);
+              setNewUser(false);
+              setIsSubmitting(false);
+              navigate("/ace/profile");
+              localStorage.setItem("aauth", response.data.user._id);
             }
           })
           .catch((error) => {

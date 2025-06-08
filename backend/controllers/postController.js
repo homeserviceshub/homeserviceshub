@@ -1297,7 +1297,7 @@ const updateAceVerification = async (req, res) => {
   const { number, data } = req.body;
   try {
     const updatedUser = await usersModel.findOneAndUpdate(
-      { number: number }, // Find user by number
+      { "aceData.companyNumber": number }, // Find user by number
       { $set: { aceData: data } }, // Update aceData field
       { new: true } // Return updated user
     );
@@ -1393,41 +1393,41 @@ const getExpirationDate = (billingCycle) => {
   return expirationDate;
 };
 
-module.exports = {
-  signUp,
-  login,
-  getUserData,
-  serviceRequest,
-  updateuser,
-  checkace,
-  acedata,
-  getreviews,
-  acesignup,
-  acesignin,
-  updateServiceRequest,
-  newReview,
-  updateaceuser,
-  getprojectsdata,
-  getReviewData,
-  getBookmarkData,
-  checkBookmark,
-  updateBookmark,
-  filterCategoryData,
-  filterCompanyData,
-  loadMoreCategoryData,
-  loadMoreCompanyData,
-  filterTopCountryAceData,
-  getServiceRequests,
-  getProjectsDone,
-  rejectServiceRequest,
-  acceptServiceRequest,
-  completeServiceRequest,
-  evaluateServiceRequest,
-  reviewDataRequest,
-  updateAceTitle,
-  customerRejectServiceRequest,
-  checkacemobile,
-  updateAceVerification,
-  updateSubscription,
-  resetPassword,
-};
+// module.exports = {
+//   signUp,
+//   login,
+//   getUserData,
+//   serviceRequest,
+//   updateuser,
+//   checkace,
+//   acedata,
+//   getreviews,
+//   acesignup,
+//   acesignin,
+//   updateServiceRequest,
+//   newReview,
+//   updateaceuser,
+//   getprojectsdata,
+//   getReviewData,
+//   getBookmarkData,
+//   checkBookmark,
+//   updateBookmark,
+//   filterCategoryData,
+//   filterCompanyData,
+//   loadMoreCategoryData,
+//   loadMoreCompanyData,
+//   filterTopCountryAceData,
+//   getServiceRequests,
+//   getProjectsDone,
+//   rejectServiceRequest,
+//   acceptServiceRequest,
+//   completeServiceRequest,
+//   evaluateServiceRequest,
+//   reviewDataRequest,
+//   updateAceTitle,
+//   customerRejectServiceRequest,
+//   checkacemobile,
+//   updateAceVerification,
+//   updateSubscription,
+//   resetPassword,
+// };

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-// import { menuItems } from "../../Data/DataList";
 import { FaTimes, FaBars } from "react-icons/fa";
 import "./navBar.css";
 import CustomButton from "../customBtn";
@@ -15,8 +14,6 @@ const Navbar = () => {
     return state.checkLoginReducer;
   });
   const getMenuItems = (user) => {
-    console.log(user);
-    // Base menu items
     const menuItems = [
       {
         title: "Home",
@@ -29,8 +26,6 @@ const Navbar = () => {
         cName: "nav-links",
       },
     ];
-
-    // Add the conditional menu item
     const aceMenuItem = {
       title: user?.aceData ? "Switch to Ace" : "Join Us",
       url: user?.isAce ? "/ace/signin" : "/ace",
@@ -89,7 +84,6 @@ const Navbar = () => {
     ) {
       setChangeActive("Services");
     } else {
-      // Handle the case when the route doesn't match any menu item (optional)
       setChangeActive("");
     }
   }, [location.pathname]);

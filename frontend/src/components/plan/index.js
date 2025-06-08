@@ -6,15 +6,15 @@ import styles from "./index.module.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const Plan = ({ title, price, benefits, planTime, selectedPlan }) => {
+const Plan = ({ title, price, benefits, duration, selectedPlan }) => {
   const navigate = useNavigate();
   const handleselected = async () => {
     try {
       await axios
         .post("/api/ace/updatesubscription", {
           id: localStorage.getItem("aauth"),
-          planName: title.split(" ")[0],
-          billingCycle: planTime,
+          planName: title,
+          billingCycle: duration,
         })
         .then((response) => {
           if (response.status === 200) {
@@ -46,10 +46,10 @@ const Plan = ({ title, price, benefits, planTime, selectedPlan }) => {
       </ul>
       <CustomButton
         customClass={`mt-4 ${
-          selectedPlan === title.split(" ")[0] ? styles.selectedPlan : ""
+          selectedPlan === title ? styles.selectedPlan : ""
         } `}
         width={"100%"}
-        text={selectedPlan === title.split(" ")[0] ? "Selected" : "Purchase"}
+        text={selectedPlan === title ? "Selected" : "Purchase"}
         onClick={() => handleselected()}
       />
     </Card>

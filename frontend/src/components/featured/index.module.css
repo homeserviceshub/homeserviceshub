@@ -53,6 +53,7 @@
 }
 .img {
   border-radius: 50%;
+  object-position: top;
 }
 .btnDiv {
   padding-top: 10px;

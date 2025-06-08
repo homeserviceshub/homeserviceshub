@@ -40,6 +40,9 @@
   color: grey;
   text-decoration: none;
 }
+.nav-links:hover {
+  color: var(--color-primary) !important;
+}
 
 .fa-bars {
   color: var(--color-white);

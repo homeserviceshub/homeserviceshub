@@ -137,9 +137,9 @@ const CompanyProfile = () => {
             <Container className={styles.containerX}>
               <Row className={styles.complanyProfilePhotoRow}>
                 <Col lg={2} className={styles.companyProfilePhoto}>
-                  {usersAceData?.profilePhoto ? (
+                  {usersAceData?.profilePhoto?.url?.length > 0 ? (
                     <img
-                      src={`/images/${usersAceData.profilePhoto.path}`}
+                      src={usersAceData.profilePhoto.url}
                       alt="Selected"
                       width={"350px"}
                       height={"350px"}
@@ -516,7 +516,7 @@ const CompanyProfile = () => {
                     <Card className={styles.card}>
                       <Card.Img
                         variant="top"
-                        src={`/images/${image.src.path}`}
+                        src={image.src.path}
                         alt={image.title}
                         onClick={() => handleImageClick(index)}
                       />

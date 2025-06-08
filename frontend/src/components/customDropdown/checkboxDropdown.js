@@ -3,32 +3,46 @@ import styles from "./index.module.css";
 import { useDispatch } from "react-redux";
 import { ACESERVICESSELECT } from "../../redux/actions/aceServicesSelect";
 
-const CheckboxDropdown = ({ onChange, options }) => {
+const CheckboxDropdown = ({ onChange, options, selected }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState(
+    Array.isArray(selected) ? selected : []
+  );
   const dispatch = useDispatch();
-
   const dropdownRef = useRef(null);
+
+  // Sync selectedOptions with selected prop when it changes
+  useEffect(() => {
+    if (Array.isArray(selected)) {
+      // Only include valid options that exist in the options array
+      const validSelections = selected.filter((item) => options.includes(item));
+      setSelectedOptions(validSelections);
+      dispatch(ACESERVICESSELECT(validSelections));
+    } else {
+      setSelectedOptions([]);
+      dispatch(ACESERVICESSELECT([]));
+    }
+  }, [selected, options, dispatch]);
 
   const handleOptionChange = (event) => {
     const { value, checked } = event.target;
+    let updatedOptions;
 
     if (checked) {
       // Add the selected option to the array
-      var prevSelected = [...selectedOptions];
-      setSelectedOptions([...prevSelected, value]);
-      dispatch(ACESERVICESSELECT([...prevSelected, value]));
+      updatedOptions = [...selectedOptions, value];
     } else {
       // Remove the deselected option from the array
-      var prevSelected = [...selectedOptions];
-      setSelectedOptions(prevSelected.filter((option) => option !== value));
-      dispatch(
-        ACESERVICESSELECT(prevSelected.filter((option) => option !== value))
-      );
+      updatedOptions = selectedOptions.filter((option) => option !== value);
     }
 
+    // Update state and dispatch to Redux
+    setSelectedOptions(updatedOptions);
+    dispatch(ACESERVICESSELECT(updatedOptions));
+
+    // Call the parent component's onChange with the updated options
     if (onChange) {
-      onChange(selectedOptions);
+      onChange(updatedOptions);
     }
   };
 
@@ -55,7 +69,7 @@ const CheckboxDropdown = ({ onChange, options }) => {
         type="button"
         onClick={() => setIsOpen(!isOpen)}
       >
-        {selectedOptions?.length > 0
+        {selectedOptions.length > 0
           ? selectedOptions.join(", ")
           : "Select the Service"}
       </button>
@@ -66,7 +80,7 @@ const CheckboxDropdown = ({ onChange, options }) => {
               type="checkbox"
               name="option"
               value={option}
-              checked={selectedOptions?.includes(option)}
+              checked={selectedOptions.includes(option)}
               className={styles.input}
               onChange={handleOptionChange}
             />

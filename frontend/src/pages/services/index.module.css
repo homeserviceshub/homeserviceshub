@@ -92,6 +92,7 @@
 .profilePhoto {
   border-radius: 12px;
   object-fit: cover;
+  object-position: top;
 }
 .verifiedPhotoDiv {
   display: flex;
@@ -111,6 +112,7 @@
   font-size: 0.9rem;
   gap: 5px;
   flex-wrap: wrap;
+  width: 100%;
 }
 .companyName {
   font-size: 1.5rem;
@@ -178,13 +180,12 @@
   padding: 0px 35px;
 }
 .categories {
-  color: var(--color-primary);
-
-  cursor: pointer;
+  color: var(--color-primary) !important;
+  cursor: pointer !important;
 }
 .categories:hover {
-  color: green;
-  text-decoration: underline;
+  color: green !important ;
+  text-decoration: underline !important;
 }
 .bothBtns {
   margin: auto;

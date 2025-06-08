@@ -18,7 +18,7 @@ const HowItWorks = () => {
     {
       icon: <LuCircleCheckBig className={styles.gridSvg} />,
       title: "Book",
-      desc: "Schedule and pay securely",
+      desc: "Schedule and pay directly",
     },
   ];
   return (

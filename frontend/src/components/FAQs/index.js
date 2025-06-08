@@ -8,21 +8,18 @@ const FAQs = () => {
       <Row className={styles.heading}>FAQs</Row>
       <Accordion>
         <Accordion.Item eventKey="0">
-          <Accordion.Header>
-            What services does your home building startup provide?
-          </Accordion.Header>
+          <Accordion.Header>What services does you provide?</Accordion.Header>
           <Accordion.Body>
-            Our startup specializes in custom home construction, remodeling, and
-            renovation projects.
+            We provide all kind of Home Services such as Plumber, Electrician.
           </Accordion.Body>
         </Accordion.Item>
         <Accordion.Item eventKey="1">
           <Accordion.Header>
-            How experienced is your team in the home building industry?
+            How experienced is your team in the home services industry?
           </Accordion.Header>
           <Accordion.Body>
-            Our team consists of highly skilled professionals with over 10 years
-            of experience in the home building industry.
+            Our team consists of highly skilled professionals with over 10+
+            years of experience in the home services industry.
           </Accordion.Body>
         </Accordion.Item>
         <Accordion.Item eventKey="2">

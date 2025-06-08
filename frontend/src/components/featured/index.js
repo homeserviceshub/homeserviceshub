@@ -100,8 +100,9 @@ export const Featured = ({ heading }) => {
                   <div className={styles.imgDiv}>
                     <img
                       src={
-                        item.aceData.profilePhoto
-                          ? `/images/${item.aceData.profilePhoto.path}`
+                        item.aceData.profilePhoto &&
+                        item.aceData.profilePhoto?.url?.length > 0
+                          ? item.aceData.profilePhoto.url
                           : process.env.PUBLIC_URL +
                             "/icons/default-profile-picture-male-icon.svg"
                       }

@@ -25,7 +25,7 @@ function Service() {
   const dispatch = useDispatch();
   const [pageNumber, setPageNumber] = useState(1); // Initialize page number
   const [pageSize, setPageSize] = useState(5); // Set the number of items per page
-  const clickedData = useSelector((state) => state.reducer1);
+  const clickedData = useSelector((state) => state.selectedService);
   const [allAceCategoryData, setAllAceCategoryData] = useState([]);
   const [allAceCompanyData, setAllAceCompanyData] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState("CategoryName");
@@ -41,39 +41,47 @@ function Service() {
 
   const [searchData, setSearchData] = useState({
     category: clickedData || searchParams.get("category") || "",
-    location: searchParams.get("location") || "Punjab",
+    location: searchParams.get("location") || "Amritsar",
     sortedBy: searchParams.get("sortedBy") || "Top Customer Ratings",
   });
-  const handleNavigation = (city) => {
+  // const handleNavigation = (city) => {
+  //   const url = `/services/service?category=${searchData.category}&location=${
+  //     searchData.location ? searchData.location : city
+  //   }&sortedBy=${searchData.sortedBy}`;
+  //   navigate(url, { replace: true });
+  // };
+  const handleNavigation = () => {
     const url = `/services/service?category=${searchData.category}&location=${
-      searchData.location ? searchData.location : city
+      searchData.location ? searchData.location : "Amritsar"
     }&sortedBy=${searchData.sortedBy}`;
     navigate(url, { replace: true });
   };
   useEffect(() => {
     window.scrollTo(0, 0);
     AOS.init();
-    const funct = async () => {
-      await axios
-        .get("https://ipapi.co/json/")
-        .then((response) => {
-          const { city } = response.data;
-          !searchParams.get("location") &&
-            setSearchData({
-              ...searchData,
-              location: city,
-            });
-          if (city) {
-            fetchData(city);
-          }
+    handleNavigation();
+    fetchData();
+    // const funct = async () => {
+    //   await axios
+    //     .get("https://ipapi.co/json/")
+    //     .then((response) => {
+    //       const { city } = response.data;
+    //       !searchParams.get("location") &&
+    //         setSearchData({
+    //           ...searchData,
+    //           location: city,
+    //         });
+    //       if (city) {
+    //         fetchData(city);
+    //       }
 
-          handleNavigation(city);
-        })
-        .catch((error) => {
-          console.error("Error fetching geolocation data:", error);
-        });
-    };
-    funct();
+    //       handleNavigation(city);
+    //     })
+    //     .catch((error) => {
+    //       console.error("Error fetching geolocation data:", error);
+    //     });
+    // };
+    // funct();
   }, []);
   useEffect(() => {
     if (clickedCategory) {
@@ -93,7 +101,7 @@ function Service() {
       if (searchData.location) {
         queryParams.location = searchData.location;
       } else {
-        queryParams.location = city;
+        queryParams.location = "Amritsar";
       }
       if (searchData.sortedBy) {
         queryParams.sortedBy = searchData.sortedBy;
@@ -401,7 +409,7 @@ function Service() {
             // Check if not loading
             !isLoading ? (
               // All Ace Category Data Section
-              allAceCategoryData.length ? (
+              allAceCategoryData && allAceCategoryData.length > 0 ? (
                 <Row className={styles.mainDynamicSection}>
                   <Col lg={12}>
                     {allAceCategoryData?.map((item, index) => (
@@ -415,8 +423,8 @@ function Service() {
                             <div>
                               <img
                                 src={
-                                  item.aceData.profilePhoto
-                                    ? `/images/${item.aceData.profilePhoto.path}`
+                                  item.aceData.profilePhoto?.url?.length > 0
+                                    ? item.aceData.profilePhoto.url
                                     : process.env.PUBLIC_URL +
                                       "/icons/default-profile-picture-male-icon.svg"
                                 }
@@ -478,13 +486,14 @@ function Service() {
                             <Link
                               style={{ color: "green" }}
                               to={`/companyprofile/${item._id}`}
+                              className={styles.categories}
                             >
                               read more
                             </Link>
                           </div>
                           <Col lg={8} className={styles.categoryList}>
                             Categories: {"  "}
-                            {item.aceData.categories.map((category, index) => (
+                            {item.aceData.services?.map((category, index) => (
                               <span
                                 key={index}
                                 onClick={() => handleCategoryClicked(category)}
@@ -495,22 +504,28 @@ function Service() {
                                   .charAt(0)
                                   .toUpperCase() +
                                   category.toLowerCase().slice(1) +
-                                  (index + 1 === item.aceData.categories.length
-                                    ? "."
+                                  (index + 1 === item.aceData.services.length
+                                    ? ""
                                     : ", ")}
                               </span>
                             ))}
                           </Col>
                         </Col>
                         <Col lg={3} className={styles.verifiedPhotoDiv}>
-                          <img
-                            src={
-                              process.env.PUBLIC_URL + "/photos/VerifiedAce.png"
-                            }
-                            width={150}
-                            height={130}
-                            className={styles.verify}
-                          />
+                          {item.aceData.idProof &&
+                          item.aceData.idProof?.PhoneVerification === "done" ? (
+                            <img
+                              src={
+                                process.env.PUBLIC_URL +
+                                "/photos/VerifiedAce.png"
+                              }
+                              width={150}
+                              height={130}
+                              className={styles.verify}
+                            />
+                          ) : (
+                            ""
+                          )}
                         </Col>
                         <Col lg={2} className={styles.bothBtns}>
                           <CustomButton
@@ -588,8 +603,8 @@ function Service() {
                           <div>
                             <img
                               src={
-                                item.aceData.profilePhoto
-                                  ? `/images/${item.aceData.profilePhoto.path}`
+                                item.aceData.profilePhoto?.path
+                                  ? item.aceData.profilePhoto.path
                                   : process.env.PUBLIC_URL +
                                     "/icons/default-profile-picture-male-icon.svg"
                               }
@@ -651,13 +666,14 @@ function Service() {
                           <Link
                             style={{ color: "green" }}
                             to={`/companyprofile/${item._id}`}
+                            className={styles.categories}
                           >
                             read more
                           </Link>
                         </div>
                         <Col lg={8} className={styles.categoryList}>
                           Categories: {"  "}
-                          {item.aceData.categories.map((category, index) => (
+                          {item.aceData.services.map((category, index) => (
                             <span
                               key={index}
                               onClick={() => handleCategoryClicked(category)}
@@ -665,8 +681,8 @@ function Service() {
                             >
                               {category.toLowerCase().charAt(0).toUpperCase() +
                                 category.toLowerCase().slice(1) +
-                                (index + 1 === item.aceData.categories.length
-                                  ? "."
+                                (index + 1 === item.aceData.services.length
+                                  ? ""
                                   : ", ")}
                             </span>
                           ))}

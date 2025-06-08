@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Form, Container } from "react-bootstrap";
 import axios from "axios";
 import styles from "./index.module.css";
@@ -12,13 +12,11 @@ const Verification = () => {
   const [members, setMembers] = useState("");
   const [adharFront, setAdharFront] = useState(null);
   const [adharBack, setAdharBack] = useState(null);
+  const [panCard, setPanCard] = useState(null);
   const [gstNumber, setGstNumber] = useState("");
   const [userData, setUserData] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-
-  const frontFileInputRef = useRef(null);
-  const backFileInputRef = useRef(null);
 
   const handleMobileSubmit = async (e) => {
     e.preventDefault();
@@ -48,16 +46,18 @@ const Verification = () => {
     e.preventDefault();
     if (isLoading) return;
     setIsLoading(true);
+
     try {
       const formData = new FormData();
       formData.append("adharFront", adharFront);
       formData.append("adharBack", adharBack);
+      if (panCard) {
+        formData.append("panCard", panCard);
+      }
       if (members === "team") {
         formData.append("gstNumber", gstNumber);
       }
-
       const response = await axios.post("/api/uploadVerification", formData);
-
       if (response.status === 200) {
         const updatedAceData = {
           ...userData.aceData,
@@ -69,6 +69,12 @@ const Verification = () => {
             PhoneVerification: "done",
           },
         };
+
+        // Add panCard path if it was uploaded
+        if (response.data.panFilePath) {
+          updatedAceData.idProof.PanCard = response.data.panFilePath;
+        }
+
         if (members === "team") {
           updatedAceData.idProof.gstNumber = gstNumber;
         }
@@ -77,6 +83,7 @@ const Verification = () => {
           data: updatedAceData,
           number: mobileNumber,
         });
+
         setUserData({ ...userData, aceData: updatedAceData });
         setStep(4);
       }
@@ -236,6 +243,16 @@ const Verification = () => {
               type="file"
               onChange={(e) => setAdharBack(e.target.files[0])}
               required
+            />
+          </Form.Group>
+          <Form.Group controlId="panCard" className="mt-2">
+            <Form.Label className={`${styles.formHeading}`}>
+              Pan Card Photo
+            </Form.Label>
+            <Form.Control
+              className={styles.inputField}
+              type="file"
+              onChange={(e) => setPanCard(e.target.files[0])}
             />
           </Form.Group>
           <div className="d-flex justify-content-end gap-4 my-4">

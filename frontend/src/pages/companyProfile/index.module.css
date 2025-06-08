@@ -33,7 +33,7 @@
   height: 200px;
   border-radius: 12px;
   object-fit: cover;
-  object-position: center;
+  object-position: top;
 }
 .profileMainCol {
   display: flex;

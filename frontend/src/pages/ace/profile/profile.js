@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Modal,
-  Form,
-  InputGroup,
-  Button,
-} from "react-bootstrap";
+import { Container, Row, Col, Modal, Form } from "react-bootstrap";
 import styles from "./index.module.css";
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
@@ -17,6 +9,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import SwitchToUser from "../../../components/switchToUser";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import RequestServiceDropdown from "../../../components/customDropdown/requestServiceDropdown";
+import { allServices } from "../../../Data/DataList";
+import CheckboxDropdown from "../../../components/customDropdown/checkboxDropdown";
 
 const AceProfile = () => {
   const [profileModalShow, setProfileModalShow] = useState(false);
@@ -32,7 +27,6 @@ const AceProfile = () => {
   const auth = localStorage.getItem("aauth");
   const [loggedIn, setLoggedIn] = useState();
   const [dummyData, setDummyData] = useState(aceData);
-
   useEffect(() => {
     if (auth === null || auth === "null") {
       navigate("/ace/signin");
@@ -60,6 +54,7 @@ const AceProfile = () => {
         if (response.status === 200) {
           setAceData(response.data.aceData);
           setDummyData(response.data.aceData);
+          console.log(response.data.aceData);
         }
       } catch (error) {
         if (axios.isCancel(error)) {
@@ -82,17 +77,7 @@ const AceProfile = () => {
     const { name, value } = event.target;
 
     // Update state based on the input field name
-    if (name === "categories") {
-      setDummyData((prev) => ({
-        ...prev,
-        categories: value.split(",").map((category) => category.trimStart()),
-      }));
-    } else if (name === "services") {
-      setDummyData((prev) => ({
-        ...prev,
-        services: value.split(",").map((service) => service.trimStart()),
-      }));
-    } else if (name === "serviceAreas") {
+    if (name === "serviceAreas") {
       setDummyData((prev) => ({
         ...prev,
         serviceAreas: value.split(",").map((area) => area.trimStart()),
@@ -103,6 +88,12 @@ const AceProfile = () => {
         [name]: value,
       });
     }
+  };
+  const handleServicesChange = (selectedServices) => {
+    setDummyData((prev) => ({
+      ...prev,
+      services: selectedServices,
+    }));
   };
 
   const handleimagechange = (event) => {
@@ -123,8 +114,6 @@ const AceProfile = () => {
   };
   const handlechanges = async () => {
     var data;
-    console.log("data:", data);
-    console.log("dummyData", dummyData);
     // If there is a new profile photo, upload it
     if (dummyData.profilePhoto) {
       try {
@@ -135,7 +124,7 @@ const AceProfile = () => {
 
         if (response.status === 200) {
           const mediaObject = {
-            path: response.data.filePath.filename,
+            url: response.data.fileUrl,
             type: "image",
           };
 
@@ -169,7 +158,6 @@ const AceProfile = () => {
         })
         .then((response) => {
           if (response.status === 200) {
-            console.log(response.data);
             alert("User data updated successfully");
             fetchData();
           }
@@ -198,9 +186,9 @@ const AceProfile = () => {
             <Col lg={2} className={styles.companyProfilePhoto}>
               <div>
                 {aceData?.profilePhoto &&
-                aceData?.profilePhoto?.path?.length > 0 ? (
+                aceData?.profilePhoto?.url?.length > 0 ? (
                   <img
-                    src={`/images/${aceData.profilePhoto.path}`}
+                    src={`${aceData.profilePhoto.url}`}
                     alt="Selected"
                     width={"350px"}
                     height={"350px"}
@@ -456,7 +444,7 @@ const AceProfile = () => {
             <FaEdit />
           </span>
           <Col lg={8} className={styles.overview}>
-            <div className={styles.detailDiv}>
+            {/* <div className={styles.detailDiv}>
               <div className={styles.detailHeading}>Categories</div>
               <div className={styles.detailData}>
                 {aceData?.categories && aceData?.categories.length !== 0
@@ -467,7 +455,7 @@ const AceProfile = () => {
                     })
                   : "Category 1, Category 2, Category 3, Category 4"}
               </div>
-            </div>
+            </div> */}
             <div className={styles.detailDiv}>
               <div className={styles.detailHeading}>Services</div>
               <div className={styles.detailData}>
@@ -529,10 +517,10 @@ const AceProfile = () => {
       {/* <SwitchToUser /> */}
       <ProfileModal
         show={profileModalShow}
-        onHide={() => setProfileModalShow(false)}
+        onhide={() => setProfileModalShow(false)}
         handlechanges={handlechanges}
-        handleClose={handleClose}
-        handleFormChange={handleFormChange}
+        handleclose={handleClose}
+        handleformchange={handleFormChange}
         handleimagechange={handleimagechange}
         data={dummyData}
       />
@@ -558,20 +546,30 @@ const AceProfile = () => {
         handlechanges={handlechanges}
         handleClose={handleClose}
         handleFormChange={handleFormChange}
+        handleServicesChange={handleServicesChange}
         data={dummyData}
       />
     </div>
   );
 };
 
-function ProfileModal(props) {
+function ProfileModal({
+  show,
+  onhide,
+  handlechanges,
+  handleclose,
+  handleformchange,
+  handleimagechange,
+  data,
+}) {
   const [validated, setValidated] = useState(false);
-  const [formData, setFormData] = useState(props.data);
+  const [formData, setFormData] = useState(data);
   const [credField, setCredField] = useState(false);
 
   return (
     <Modal
-      {...props}
+      show={show}
+      onHide={onhide}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -589,8 +587,8 @@ function ProfileModal(props) {
               <Form.Control
                 type="text"
                 name="companyName"
-                value={props.data?.companyName}
-                onChange={props.handleFormChange}
+                value={data?.companyName}
+                onChange={handleformchange}
                 required
                 placeholder="Company Name"
               />
@@ -603,7 +601,7 @@ function ProfileModal(props) {
               <Form.Control
                 type="file"
                 accept="image/*"
-                onChange={props.handleimagechange}
+                onChange={handleimagechange}
               />
 
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -615,8 +613,8 @@ function ProfileModal(props) {
               <Form.Control
                 type="text"
                 name="location"
-                value={props.data?.location}
-                onChange={props.handleFormChange}
+                value={data?.location}
+                onChange={handleformchange}
                 required
                 placeholder="Location..."
               />
@@ -631,10 +629,10 @@ function ProfileModal(props) {
               <Form.Control
                 type="text"
                 name="companyEmail"
-                value={props.data?.companyEmail}
-                onChange={props.handleFormChange}
+                value={data?.companyEmail}
+                onChange={handleformchange}
                 required
-                // disabled={props.data?.companyEmail ? true : false}
+                // disabled={data?.companyEmail ? true : false}
                 placeholder="Email/Gmail..."
               />
               <Form.Control.Feedback type="invalid">
@@ -648,8 +646,8 @@ function ProfileModal(props) {
               <Form.Control
                 type="number"
                 name="number"
-                value={props.data?.companyNumber}
-                onChange={props.handleFormChange}
+                value={data?.companyNumber}
+                onChange={handleformchange}
                 required
                 disabled
                 placeholder="Number..."
@@ -670,8 +668,8 @@ function ProfileModal(props) {
               <Form.Control
                 type={credField ? "text" : "password"}
                 name="password"
-                value={props.data?.companyPassword}
-                onChange={props.handleFormChange}
+                value={data?.companyPassword}
+                onChange={handleformchange}
                 required
                 placeholder="Password..."
                 disabled
@@ -692,12 +690,12 @@ function ProfileModal(props) {
       <Modal.Footer>
         <CustomButton
           text={"Close"}
-          onClick={() => props.handleClose()}
+          onClick={() => handleclose()}
           width={"auto"}
         />
         <CustomButton
           text={"Save Changes"}
-          onClick={() => props.handlechanges(formData)}
+          onClick={() => handlechanges(formData)}
           width={"auto"}
         />
       </Modal.Footer>
@@ -705,12 +703,21 @@ function ProfileModal(props) {
   );
 }
 
-function DiscriptionModal(props) {
+function DiscriptionModal({
+  show,
+  onHide,
+  handlechanges,
+  handleClose,
+  handleFormChange,
+  data,
+}) {
   const [validated, setValidated] = useState(false);
-  const [formData, setFormData] = useState(props.data);
+  const [formData, setFormData] = useState(data);
+
   return (
     <Modal
-      {...props}
+      show={show}
+      onHide={onHide}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -732,8 +739,8 @@ function DiscriptionModal(props) {
                 style={{ height: "100px" }}
                 type="text"
                 name="brief"
-                value={props.data?.brief}
-                onChange={props.handleFormChange}
+                value={data?.brief}
+                onChange={handleFormChange}
               />
 
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -742,22 +749,31 @@ function DiscriptionModal(props) {
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <CustomButton text={"Close"} onClick={props.onHide} width={"auto"} />
+        <CustomButton text={"Close"} onClick={onHide} width={"auto"} />
         <CustomButton
           text={"Save Changes"}
-          onClick={() => props.handlechanges(formData)}
+          onClick={() => handlechanges(formData)}
           width={"auto"}
         />
       </Modal.Footer>
     </Modal>
   );
 }
-function ProjectsModal(props) {
+function ProjectsModal({
+  show,
+  onHide,
+  handlechanges,
+  handleClose,
+  handleFormChange,
+  data,
+}) {
   const [validated, setValidated] = useState(false);
-  const [formData, setFormData] = useState(props.data);
+  const [formData, setFormData] = useState(data);
+
   return (
     <Modal
-      {...props}
+      show={show}
+      onHide={onHide}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -778,8 +794,8 @@ function ProjectsModal(props) {
                 placeholder="Mon-Sat"
                 defaultValue="Mon-Fri"
                 name="availability"
-                value={props.data?.availability}
-                onChange={props.handleFormChange}
+                value={data?.availability}
+                onChange={handleFormChange}
               />
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
@@ -787,38 +803,38 @@ function ProjectsModal(props) {
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <CustomButton text={"Close"} onClick={props.onHide} width={"auto"} />
+        <CustomButton text={"Close"} onClick={onHide} width={"auto"} />
         <CustomButton
           text={"Save Changes"}
-          onClick={() => props.handlechanges(formData)}
+          onClick={() => handlechanges(formData)}
           width={"auto"}
         />
       </Modal.Footer>
     </Modal>
   );
 }
-function DetailModal(props) {
+function DetailModal({
+  show,
+  onHide,
+  handlechanges,
+  handleClose,
+  handleFormChange,
+  handleServicesChange,
+  data,
+}) {
   const [validated, setValidated] = useState(false);
-  const [formData, setFormData] = useState(props.data);
+  const [formData, setFormData] = useState(data);
+  const AllServices = allServices.map((service) => service.title);
 
-  const handleAddItem = (newItem, item, setItem, newItemState) => {
-    if (newItem.trim() !== "") {
-      setItem([...item, newItem]);
-      newItemState("");
-    }
-  };
-  const onDeleteItem = (index, itemState, setItem) => {
-    const newItems = [...itemState];
-    newItems.splice(index, 1);
-    setItem(newItems);
-  };
   return (
     <Modal
-      {...props}
+      show={show}
+      onHide={onHide}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
+      {" "}
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
           Edit Company Details
@@ -828,29 +844,24 @@ function DetailModal(props) {
         <Form noValidate validated={validated}>
           <Row className="mb-3">
             <Form.Group as={Col} md="12" controlId="validationCustom01">
-              <Form.Label>Categories</Form.Label>
-              <Form.Control
-                required
-                type="text"
-                placeholder="Add category..."
-                value={props.data?.categories}
-                name="categories"
-                onChange={props.handleFormChange}
-              />
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            </Form.Group>
-          </Row>
-          <Row className="mb-3">
-            <Form.Group as={Col} md="12" controlId="validationCustom01">
               <Form.Label>Services</Form.Label>
-              <Form.Control
+              <CheckboxDropdown
+                options={AllServices}
+                onChange={handleServicesChange}
+                required
+                placeholder="Add Services..."
+                name="services"
+                selected={data?.services && data.services}
+              />
+
+              {/* <Form.Control
                 required
                 type="text"
                 placeholder="Add Services..."
-                value={props.data?.services}
+                value={data?.services}
                 name="services"
-                onChange={props.handleFormChange}
-              />
+                onChange={handleFormChange}
+              /> */}
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
           </Row>
@@ -861,9 +872,9 @@ function DetailModal(props) {
                 required
                 type="text"
                 placeholder="Add category..."
-                value={props.data?.serviceAreas}
+                value={data?.serviceAreas}
                 name="serviceAreas"
-                onChange={props.handleFormChange}
+                onChange={handleFormChange}
               />
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
@@ -881,8 +892,8 @@ function DetailModal(props) {
                 placeholder="e.g.2000"
                 required
                 name="yearOfEstablishment"
-                value={props.data?.yearOfEstablishment}
-                onChange={props.handleFormChange}
+                value={data?.yearOfEstablishment}
+                onChange={handleFormChange}
               />
               <Form.Control.Feedback type="invalid">
                 Please provide a valid Location.
@@ -900,8 +911,8 @@ function DetailModal(props) {
                 placeholder="e.g.cash/card/UPI"
                 required
                 name="paymentMethod"
-                value={props.data?.paymentMethod}
-                onChange={props.handleFormChange}
+                value={data?.paymentMethod}
+                onChange={handleFormChange}
               />
               <Form.Control.Feedback type="invalid">
                 Please provide a valid Location.
@@ -919,8 +930,8 @@ function DetailModal(props) {
                 placeholder="e.g.20"
                 required
                 name="totalWorkers"
-                value={props.data?.totalWorkers}
-                onChange={props.handleFormChange}
+                value={data?.totalWorkers}
+                onChange={handleFormChange}
               />
               <Form.Control.Feedback type="invalid">
                 Please provide a valid Location.
@@ -931,8 +942,8 @@ function DetailModal(props) {
               <Form.Select
                 required
                 name="writtenContract"
-                value={props.data?.writtenContract}
-                onChange={props.handleFormChange}
+                value={data?.writtenContract}
+                onChange={handleFormChange}
               >
                 <option value="" disabled>
                   Select Option
@@ -948,10 +959,10 @@ function DetailModal(props) {
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <CustomButton text={"Close"} onClick={props.onHide} width={"auto"} />
+        <CustomButton text={"Close"} onClick={onHide} width={"auto"} />
         <CustomButton
           text={"Save Changes"}
-          onClick={() => props.handlechanges(formData)}
+          onClick={() => handlechanges(formData)}
           width={"auto"}
         />
       </Modal.Footer>

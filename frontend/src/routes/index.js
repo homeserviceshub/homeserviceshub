@@ -20,7 +20,6 @@ import Faq from "../pages/faq";
 import Careers from "../pages/careers";
 import ContactUs from "../pages/contactus";
 import Service from "../pages/services/Service";
-// import ServiceRequested from "../pages/requestAservice";
 import RequestaService from "../pages/requestAservice";
 import NewReview from "../pages/newReview";
 import PrivateRoute from "./privateRoute";
@@ -28,21 +27,23 @@ import AuthCheckRoute from "./authCheckRoute";
 import Verification from "../pages/ace/verification";
 import Plans from "../pages/plans";
 import AceCheckRoute from "./aceCheckRoute";
+import Dashboard from "../pages/dashboard";
 
 export default function AppRoutes() {
   return (
-    <Router basename="/">
+    <Router>
       <Routes>
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/reset-password" element={<ResetPasword />} />
         <Route path="/ace" element={<AceSignUp />} />
         <Route path="/ace/signin" element={<AceSignIn />} />
-        {/* <Route path="/create-new-password" element={<CreateNewPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} /> */}
+        <Route path="/ace/verification" element={<Verification />} />
+
+        <Route path="/api/admin/dashboard/*" element={<Dashboard />} />
 
         <Route element={<Layout />}>
-          <Route exact path="/user/profile" element={<PrivateRoute />}>
+          <Route path="/user/profile" element={<PrivateRoute />}>
             <Route path="/user/profile" element={<Profile />} />
           </Route>
           <Route element={<AuthCheckRoute />}>
@@ -59,6 +60,7 @@ export default function AppRoutes() {
             <Route path="*" element={<PageNotFound />} />
           </Route>
         </Route>
+
         <Route element={<Layout2 />}>
           <Route element={<AceCheckRoute />}>
             <Route path="/ace">
@@ -69,10 +71,8 @@ export default function AppRoutes() {
               <Route path="/ace/plans" element={<Plans />} />
             </Route>
           </Route>
-
           <Route path="*" element={<PageNotFound />} />
         </Route>
-        <Route path="/ace/verification" element={<Verification />} />
       </Routes>
     </Router>
   );

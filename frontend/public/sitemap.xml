@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Public Pages -->
+  <url><loc>https://homeserviceshub.in/</loc></url>
+  <url><loc>https://homeserviceshub.in/aboutus</loc></url>
+  <url><loc>https://homeserviceshub.in/faq</loc></url>
+  <url><loc>https://homeserviceshub.in/contactus</loc></url>
+  <url><loc>https://homeserviceshub.in/careers</loc></url>
+  <url><loc>https://homeserviceshub.in/services</loc></url>
+  <url><loc>https://homeserviceshub.in/services/service</loc></url>
+  <url><loc>https://homeserviceshub.in/signin</loc></url>
+  <url><loc>https://homeserviceshub.in/signup</loc></url>
+  <url><loc>https://homeserviceshub.in/reset-password</loc></url>
+
+  <!-- ACE Routes -->
+  <url><loc>https://homeserviceshub.in/ace</loc></url>
+  <url><loc>https://homeserviceshub.in/ace/signin</loc></url>
+  <url><loc>https://homeserviceshub.in/ace/verification</loc></url>
+  <url><loc>https://homeserviceshub.in/ace/reviews</loc></url>
+  <url><loc>https://homeserviceshub.in/ace/profile</loc></url>
+  <url><loc>https://homeserviceshub.in/ace/gallery</loc></url>
+  <url><loc>https://homeserviceshub.in/ace/request</loc></url>
+  <url><loc>https://homeserviceshub.in/ace/plans</loc></url>
+
+  <!-- Dashboard (Generic entry for now) -->
+  <url><loc>https://homeserviceshub.in/api/admin/dashboard</loc></url>
+
+  <!-- Dynamic Routes: Add manually if you know static parts -->
+  <url><loc>https://homeserviceshub.in/user/profile</loc></url>
+</urlset>

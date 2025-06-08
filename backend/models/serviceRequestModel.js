@@ -14,8 +14,10 @@ const serviceRequestSchema = mongoose.Schema({
   paymentMethod: String, // cash card or upi
   otp: Number, // decided price
   completionDate: Date, // when task is competed then add its data and time
+  cancelledBy: String, // Rejected from customer side
   customerRejectedReason: String, // Rejected from customer side
   clientRejectedReason: String, // Rejected from client side
+  requestedOn: String, // requested on website or direct
 });
 
 module.exports = mongoose.model("servicerequests", serviceRequestSchema); //serviceRequests is the collections name

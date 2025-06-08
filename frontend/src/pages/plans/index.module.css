@@ -6,7 +6,7 @@
 
 @media (max-width: 1999px) and (min-width: 1300px) {
   .planRow {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
