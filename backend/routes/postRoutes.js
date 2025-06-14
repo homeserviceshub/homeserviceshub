@@ -2,14 +2,8 @@ const express = require("express");
 const postRoute = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const {
-  S3Client,
-  PutObjectCommand,
-  GetObjectCommand,
-} = require("@aws-sdk/client-s3");
+const { S3Client } = require("@aws-sdk/client-s3");
 const multerS3 = require("multer-s3");
-const { Upload } = require("@aws-sdk/lib-storage");
-const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const multer = require("multer");
 require("dotenv").config();
 
@@ -26,14 +20,8 @@ postRoute.use(express.json());
 postRoute.use(express.static("public"));
 postRoute.use(bodyParser.urlencoded({ extended: true }));
 
-// Configure AWS SDK (v3)
 const s3Client = new S3Client({
   region: "eu-north-1",
-  // for running on localhost
-  // credentials: {
-  //   accessKeyId: process.env.AWS_ACCESS_KEY,
-  //   secretAccessKey: process.env.AWS_SECRET_KEY,
-  // },
 });
 const upload = multer({
   storage: multerS3({
@@ -61,7 +49,7 @@ const uploadVerify = multer({
       cb(null, `verifydocs/${Date.now()}_${file.originalname}`);
     },
   }),
-  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB limit
+  limits: { fileSize: 50 * 1024 * 1024 }, // limit is 50MB
 });
 
 // AWS S3 Upload Routes
@@ -175,5 +163,16 @@ postRoute.post(
   "/dashboard/getserviceproviders",
   adminController.getServiceProviders
 );
+postRoute.post(
+  "/submitverificationrequest",
+  aceController.submitverificationrequest
+);
+postRoute.post("/verificationrequests", adminController.verificationrequests);
+postRoute.post(
+  "/verificationrequestsdone",
+  adminController.verificationrequestsdone
+);
+postRoute.post("/send-otp", userController.sendOTP);
+postRoute.post("/verify-otp", userController.verifyOTP);
 
 module.exports = postRoute;

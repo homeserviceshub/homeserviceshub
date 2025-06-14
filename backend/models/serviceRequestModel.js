@@ -1,23 +1,23 @@
 const mongoose = require("mongoose");
 
 const serviceRequestSchema = mongoose.Schema({
-  customerID: String, //who requested the service
-  clientID: String, //who gets serive request
-  customerDetails: Object, //details that user has filled in the form(they maybe same or different of user table details)
-  requestDate: Date, //automatically generate data when requeted
-  responsiveness: String, //automatically generate data when requeted
+  customerID: String,
+  clientID: String,
+  customerDetails: Object,
+  requestDate: Date,
+  responsiveness: String,
   status: String,
   selectedService: String,
   accommodation: String, //home or building
-  serviceNeed: String, //when customer needs service time flexible or within a month... etc
-  discription: String, //detail that user added while filling the form
-  paymentMethod: String, // cash card or upi
-  otp: Number, // decided price
-  completionDate: Date, // when task is competed then add its data and time
-  cancelledBy: String, // Rejected from customer side
-  customerRejectedReason: String, // Rejected from customer side
-  clientRejectedReason: String, // Rejected from client side
-  requestedOn: String, // requested on website or direct
+  serviceNeed: String,
+  discription: String,
+  paymentMethod: String,
+  otp: Number,
+  completionDate: Date,
+  cancelledBy: String,
+  customerRejectedReason: String,
+  clientRejectedReason: String,
+  requestedOn: String,
 });
 
-module.exports = mongoose.model("servicerequests", serviceRequestSchema); //serviceRequests is the collections name
+module.exports = mongoose.model("servicerequests", serviceRequestSchema);

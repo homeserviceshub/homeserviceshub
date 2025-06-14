@@ -329,6 +329,40 @@ const createServiceRequest = async (req, res) => {
     res.status(400).send({ success: false, message: error.message });
   }
 };
+const verificationrequests = async (req, res) => {
+  try {
+    const data = await User.find({
+      "aceData.verificationRequest": true,
+    });
+
+    res.status(200).send({ data: data });
+  } catch (error) {
+    res.status(400).send({ success: false, message: error.message });
+  }
+};
+const verificationrequestsdone = async (req, res) => {
+  const { id } = req.body;
+
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    await User.updateOne(
+      { _id: id },
+      { $set: { "aceData.verificationRequest": false } }
+    );
+
+    const data = await User.find({ "aceData.verificationRequest": true });
+
+    res.status(200).send({ data });
+  } catch (error) {
+    res.status(400).send({ success: false, message: error.message });
+  }
+};
 
 module.exports = {
   getUserData,
@@ -340,4 +374,6 @@ module.exports = {
   updateServiceRequest,
   getServiceProviders,
   createServiceRequest,
+  verificationrequests,
+  verificationrequestsdone,
 };

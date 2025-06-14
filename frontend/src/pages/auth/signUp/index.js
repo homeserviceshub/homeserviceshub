@@ -8,6 +8,8 @@ import { CHECKLOGIN } from "../../../redux/actions/actionCheckLogin";
 import axios from "axios";
 
 function Signup() {
+  const [step, setStep] = useState(1); // 1: form, 2: OTP
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [credField, setCredField] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
@@ -19,6 +21,8 @@ function Signup() {
   });
   const [emailPhoneText, setEmailPhoneText] = useState();
   const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState("");
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -26,257 +30,253 @@ function Signup() {
     navigate(-1);
   }
 
-  const handleChange = (key, value) => {
-    console.log(formData);
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [key]: value,
-    }));
-  };
-
-  // Function to validate form data
   function validateFormData() {
     let validationErrors = {};
+    const { username, email, number, password, confirmPassword } = formData;
 
-    if (!formData.username) {
-      validationErrors.username = "Username is required.";
-    }
-
-    if (!formData.email) {
+    if (!username) validationErrors.username = "Username is required.";
+    if (!email) {
       validationErrors.email = "Email is required.";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      validationErrors.email = "Email format is invalid.";
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      validationErrors.email = "Invalid email format.";
     }
-
-    if (!formData.number) {
-      validationErrors.number = "Phone number is required.";
-    }
-
-    if (!formData.password) {
+    if (!number) validationErrors.number = "Phone number is required.";
+    if (!password) {
       validationErrors.password = "Password is required.";
-    } else if (formData.password.length < 8) {
-      validationErrors.password =
-        "Password must be at least 8 characters long.";
+    } else if (password.length < 8) {
+      validationErrors.password = "Password must be at least 8 characters.";
     }
-
-    if (!formData.confirmPassword) {
-      validationErrors.confirmPassword = "Confirm password is required.";
-    } else if (formData.confirmPassword !== formData.password) {
+    if (!confirmPassword) {
+      validationErrors.confirmPassword = "Please confirm password.";
+    } else if (password !== confirmPassword) {
       validationErrors.confirmPassword = "Passwords do not match.";
     }
 
     return validationErrors;
   }
 
-  async function handleSubmit(e) {
+  async function handleFormSubmit(e) {
     e.preventDefault();
-    setEmailPhoneText("");
-    setErrors({});
-    // Validate form data
+    setServerError("");
     const validationErrors = validateFormData();
 
-    // If there are validation errors, set them and do not submit the form
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
+
+    setErrors({});
     setIsSubmitting(true);
 
-    // Make API request to submit the form data
+    try {
+      const response = await axios.post("/api/send-otp", {
+        email: formData.email,
+      });
 
-    axios
-      .post("/api/signup", {
+      // Expect backend to tell if email is already taken
+      if (response.data.success) {
+        setStep(2); // Move to OTP step
+        setServerError("");
+      } else {
+        setServerError(response.data.message || "Could not send OTP.");
+      }
+    } catch (err) {
+      console.error("Send OTP Error:", err);
+      setServerError(
+        err?.response?.data?.message || "Something went wrong sending OTP"
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  function handleOtpChange(value, index) {
+    const updatedOtp = [...otp];
+    updatedOtp[index] = value.slice(-1);
+    setOtp(updatedOtp);
+  }
+
+  async function handleVerifyOtp() {
+    setIsSubmitting(true);
+    const enteredOtp = otp.join("");
+
+    try {
+      const response = await axios.post("/api/verify-otp", {
+        email: formData.email,
+        otp: enteredOtp,
+      });
+
+      if (response.status === 200) {
+        await handleFinalSignup();
+      } else {
+        setServerError("Invalid OTP");
+      }
+    } catch (err) {
+      console.error("OTP Verification Error:", err);
+      setServerError("OTP verification failed");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  async function handleFinalSignup() {
+    try {
+      const response = await axios.post("/api/signup", {
         username: formData.username,
         email: formData.email,
         password: formData.password,
         number: formData.number,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          if (response.data.message != "New user created successfully.") {
-            setEmailPhoneText(response.data.message);
-            setIsSubmitting(false);
-          } else {
-            console.log(response.data);
-            navigate("/", {
-              replace: true,
-            });
-            setEmailPhoneText("");
-            setIsSubmitting(false);
-            localStorage.setItem("auth", response.data.data._id);
-            dispatch(CHECKLOGIN(true));
-          }
-        }
-      })
-      .catch((error) => {
-        console.error("AxiosError:", error);
-        console.log(error);
-        setIsSubmitting(false);
       });
+
+      if (response.data.message === "New user created successfully.") {
+        localStorage.setItem("auth", response.data.data._id);
+        dispatch(CHECKLOGIN(true));
+        navigate("/", { replace: true });
+      } else {
+        setServerError(response.data.message);
+      }
+    } catch (error) {
+      console.error("Signup Error:", error);
+      setServerError("Signup failed");
+    }
   }
-  console.log(emailPhoneText);
+
+  const renderOtpFields = () => (
+    <Row className="my-3 justify-content-center">
+      {otp.map((val, idx) => (
+        <Col xs={2} key={idx}>
+          <input
+            type="text"
+            maxLength={1}
+            value={val}
+            onChange={(e) => handleOtpChange(e.target.value, idx)}
+            className="form-control text-center"
+          />
+        </Col>
+      ))}
+    </Row>
+  );
+
   return (
     <Container fluid className={styles.containerX}>
-      <Row className=" justify-content-center align-items-center h-100">
-        <Col md={4} className={` p-5 ${styles.containerY}`}>
+      <Row className="justify-content-center align-items-center h-100">
+        <Col md={4} className={`p-5 ${styles.containerY}`}>
           <span onClick={handleClose} className={styles.closeBtn}>
             X
           </span>
           <div className="text-center">
-            <img src="/photos/" alt="logox" />
+            <img src="/photos/hshlogo.png" width={100} height={60} alt="logo" />
           </div>
-          <Form onSubmit={handleSubmit} className={styles.formDesign}>
+
+          <Form onSubmit={handleFormSubmit} className={styles.formDesign}>
             <Container className="p-0">
               <Row className="py-3 justify-content-center">
                 <Col md={12}>
-                  <h2>Sign in</h2>
-                </Col>
-                <Col md={12} className="mb-3">
-                  <input
-                    type="text"
-                    className={`form-control ${
-                      errors.username ? "is-invalid" : ""
-                    }`}
-                    placeholder="Username"
-                    value={formData.username}
-                    onChange={({ target: { value } }) =>
-                      setFormData((prevFormData) => ({
-                        ...prevFormData,
-                        username: value,
-                      }))
-                    }
-                    autoComplete="off"
-                  />
-                  {errors.username && (
-                    <div className="invalid-feedback m-0">
-                      {errors.username}
-                    </div>
-                  )}
-                </Col>
-                <Col md={12} className="mb-3">
-                  <input
-                    type="text"
-                    className={`form-control ${
-                      errors.email ? "is-invalid" : ""
-                    }`}
-                    placeholder="Email Address"
-                    value={formData.email}
-                    onChange={({ target: { value } }) =>
-                      setFormData((prevFormData) => ({
-                        ...prevFormData,
-                        email: value,
-                      }))
-                    }
-                    autoComplete="off"
-                  />
-                  {errors.email && (
-                    <div className="invalid-feedback mt-0">{errors.email}</div>
-                  )}
-                  {emailPhoneText === "email already exists" && (
-                    <div className={`mt-0 ${styles.error}`}>
-                      {emailPhoneText}
-                    </div>
-                  )}
-                </Col>
-                <Col md={12} className="mb-3">
-                  <input
-                    type="number"
-                    className={`form-control ${
-                      errors.number ? "is-invalid" : ""
-                    }`}
-                    placeholder="Phone Number"
-                    value={formData.number}
-                    onChange={({ target: { value } }) =>
-                      setFormData((prevFormData) => ({
-                        ...prevFormData,
-                        number: value,
-                      }))
-                    }
-                    autoComplete="off"
-                  />
-                  {errors.number && (
-                    <div className="invalid-feedback mt-0">{errors.number}</div>
-                  )}
-
-                  {emailPhoneText === "Phone number already exists" && (
-                    <div className={`mt-0 ${styles.error}`}>
-                      {emailPhoneText}
-                    </div>
-                  )}
-                </Col>
-                <Col md={12} className="position-relative mb-3">
-                  <input
-                    type={credField ? "text" : "password"}
-                    className={`form-control ${
-                      errors.password ? "is-invalid" : ""
-                    }`}
-                    placeholder="Password"
-                    value={formData.password}
-                    autoComplete="off"
-                    onChange={({ target: { value } }) =>
-                      setFormData((prevFormData) => ({
-                        ...prevFormData,
-                        password: value,
-                      }))
-                    }
-                  />
-                  <span
-                    className={styles.floatingEye}
-                    onClick={() => setCredField(!credField)}
-                  >
-                    {!credField ? <AiFillEyeInvisible /> : <AiFillEye />}
-                  </span>
-                  {errors.password && (
-                    <div className="invalid-feedback mt-0">
-                      {errors.password}
-                    </div>
-                  )}
-                </Col>
-                <Col md={12} className="position-relative mb-3">
-                  <input
-                    type={credField ? "text" : "password"}
-                    className={`form-control ${
-                      errors.confirmPassword ? "is-invalid" : ""
-                    }`}
-                    placeholder="Confirm Password"
-                    value={formData.confirmPassword}
-                    autoComplete="off"
-                    onChange={({ target: { value } }) =>
-                      setFormData((prevFormData) => ({
-                        ...prevFormData,
-                        confirmPassword: value,
-                      }))
-                    }
-                  />
-                  <span
-                    className={styles.floatingEye}
-                    onClick={() => setCredField(!credField)}
-                  >
-                    {!credField ? <AiFillEyeInvisible /> : <AiFillEye />}
-                  </span>
-                  {errors.confirmPassword && (
-                    <div className="invalid-feedback mt-0">
-                      {errors.confirmPassword}
-                    </div>
-                  )}
+                  <h2>Sign Up</h2>
                 </Col>
 
-                <Col md={12} className="text-center">
-                  <Button
-                    type="submit"
-                    className={styles.signInLink}
-                    // disabled={isSubmitting}
-                  >
-                    {isSubmitting ? (
-                      <Spinner
-                        animation="border"
-                        className={styles.signInLoader}
-                      />
-                    ) : (
-                      "Sign Up"
-                    )}
-                  </Button>
-                </Col>
+                {step === 1 && (
+                  <>
+                    {[
+                      "username",
+                      "email",
+                      "number",
+                      "password",
+                      "confirmPassword",
+                    ].map((field, i) => (
+                      <Col md={12} className="mb-3" key={i}>
+                        <input
+                          type={
+                            field === "password" || field === "confirmPassword"
+                              ? credField
+                                ? "text"
+                                : "password"
+                              : field === "number"
+                              ? "number"
+                              : "text"
+                          }
+                          placeholder={
+                            field === "confirmPassword"
+                              ? "Confirm Password"
+                              : field.charAt(0).toUpperCase() + field.slice(1)
+                          }
+                          className={`form-control ${
+                            errors[field] ? "is-invalid" : ""
+                          }`}
+                          value={formData[field]}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              [field]: e.target.value,
+                            })
+                          }
+                        />
+                        {errors[field] && (
+                          <div className="invalid-feedback mt-0">
+                            {errors[field]}
+                          </div>
+                        )}
+                        {serverError && field === "email" && (
+                          <div className="text-danger mt-2 text-center">
+                            {serverError}
+                          </div>
+                        )}
+                        {(field === "password" ||
+                          field === "confirmPassword") && (
+                          <span
+                            className={styles.floatingEye}
+                            onClick={() => setCredField(!credField)}
+                          >
+                            {!credField ? (
+                              <AiFillEyeInvisible />
+                            ) : (
+                              <AiFillEye />
+                            )}
+                          </span>
+                        )}
+                      </Col>
+                    ))}
+
+                    <Col md={12} className="text-center">
+                      <Button
+                        type="submit"
+                        className={styles.signInLink}
+                        disabled={isSubmitting}
+                      >
+                        {isSubmitting ? (
+                          <Spinner animation="border" />
+                        ) : (
+                          "Send OTP"
+                        )}
+                      </Button>
+                    </Col>
+                  </>
+                )}
+
+                {step === 2 && (
+                  <>
+                    {renderOtpFields()}
+                    <Col md={12} className="text-center mt-3">
+                      <Button
+                        onClick={handleVerifyOtp}
+                        className={styles.signInLink}
+                        disabled={isSubmitting}
+                      >
+                        {isSubmitting ? (
+                          <Spinner animation="border" />
+                        ) : (
+                          "Verify OTP"
+                        )}
+                      </Button>
+                    </Col>
+                  </>
+                )}
+
+                {serverError && (
+                  <Col md={12} className="text-danger mt-2 text-center">
+                    {serverError}
+                  </Col>
+                )}
               </Row>
             </Container>
           </Form>

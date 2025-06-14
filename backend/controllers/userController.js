@@ -2,6 +2,7 @@ const usersModel = require("../models/usersModel");
 const bookmarksModel = require("../models/bookmarkModel");
 const { hashPassword, verifyPassword, sendEmail } = require("./utils");
 const jwt = require("jsonwebtoken");
+const Otp = require("../models/otpModel");
 
 const signUp = async (req, res) => {
   try {
@@ -220,7 +221,7 @@ const resetPassword = async (req, res) => {
       expiresIn: "15m",
     });
 
-    const resetLink = `http://localhost:3000/reset-password?token=${token}`;
+    const resetLink = `https://homeserviceshub.in/reset-password?token=${token}`;
     const emailContent = `
     <p>Dear User,</p>
     <p>We received a request to reset your password. Click the link below to reset your password. This link is valid for <b>15 minutes</b>.</p>
@@ -241,6 +242,56 @@ const resetPassword = async (req, res) => {
   }
 };
 
+const sendOTP = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const existingUser = await usersModel.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        message: "Email is already registered. Please login instead.",
+      });
+    }
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    await OtpModel.findOneAndUpdate(
+      { email },
+      { otp, createdAt: new Date() },
+      { upsert: true }
+    );
+    await sendEmail(email, "Your OTP Code", `Your OTP is: <b>${otp}</b>`);
+
+    res.status(200).json({ message: "OTP sent successfully" });
+  } catch (error) {
+    console.error("Error sending OTP:", error);
+    res.status(500).json({ message: "Failed to send OTP" });
+  }
+};
+const verifyOTP = async (req, res) => {
+  const { email, otp } = req.body;
+
+  if (!email || !otp)
+    return res.status(400).json({ message: "Email and OTP are required" });
+
+  try {
+    const record = await Otp.findOne({ email });
+
+    if (!record)
+      return res.status(410).json({ message: "OTP expired or not found" });
+
+    if (record.otp !== otp)
+      return res.status(401).json({ message: "Invalid OTP" });
+
+    // OTP is valid — delete it after use (optional)
+    await Otp.deleteOne({ email });
+
+    res.status(200).json({ message: "OTP verified successfully" });
+  } catch (error) {
+    console.error("OTP verification error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   signUp,
   login,
@@ -250,4 +301,6 @@ module.exports = {
   getUserData,
   updateuser,
   resetPassword,
+  sendOTP,
+  verifyOTP,
 };

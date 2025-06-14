@@ -14,17 +14,34 @@ import Customers from "./Customers";
 import Clients from "./Clients";
 import Reviews from "./Reviews";
 import Subscriptions from "./Subscriptions";
+import VerificationRequest from "./VerificationRequest";
 
 // Dashboard Home with Buttons
+const sections = [
+  { name: "Service Requests", path: "/api/admin/dashboard/servicerequests" },
+  { name: "Customers", path: "/api/admin/dashboard/customers" },
+  { name: "Clients", path: "/api/admin/dashboard/clients" },
+  { name: "Reviews", path: "/api/admin/dashboard/reviews" },
+  { name: "Subscriptions", path: "/api/admin/dashboard/subscriptions" },
+  {
+    name: "VerificationRequest",
+    path: "/api/admin/dashboard/verificationrequest",
+  },
+];
+
 const DashboardHome = () => {
   const navigate = useNavigate();
-  const sections = [
-    { name: "Service Requests", path: "/api/admin/dashboard/servicerequests" },
-    { name: "Customers", path: "/api/admin/dashboard/customers" },
-    { name: "Clients", path: "/api/admin/dashboard/clients" },
-    { name: "Reviews", path: "/api/admin/dashboard/reviews" },
-    { name: "Subscriptions", path: "/api/admin/dashboard/subscriptions" },
-  ];
+  // const sections = [
+  //   { name: "Service Requests", path: "/api/admin/dashboard/servicerequests" },
+  //   { name: "Customers", path: "/api/admin/dashboard/customers" },
+  //   { name: "Clients", path: "/api/admin/dashboard/clients" },
+  //   { name: "Reviews", path: "/api/admin/dashboard/reviews" },
+  //   { name: "Subscriptions", path: "/api/admin/dashboard/subscriptions" },
+  //   {
+  //     name: "VerificationRequest",
+  //     path: "/api/admin/dashboard/verificationrequest",
+  //   },
+  // ];
 
   return (
     <div className={styles.content}>
@@ -85,7 +102,7 @@ const Dashboard = () => {
           <ul className={styles.navList}>
             <li>
               <NavLink
-                to="/dashboard"
+                to="/api/admin/dashboard"
                 end
                 className={({ isActive }) =>
                   isActive ? styles.activeLink : styles.navLink
@@ -94,56 +111,20 @@ const Dashboard = () => {
                 Dashboard
               </NavLink>
             </li>
-            <li>
-              <NavLink
-                to="/dashboard/servicerequests"
-                className={({ isActive }) =>
-                  isActive ? styles.activeLink : styles.navLink
-                }
-              >
-                Service Requests
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/dashboard/customers"
-                className={({ isActive }) =>
-                  isActive ? styles.activeLink : styles.navLink
-                }
-              >
-                Customers
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/dashboard/clients"
-                className={({ isActive }) =>
-                  isActive ? styles.activeLink : styles.navLink
-                }
-              >
-                Clients
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/dashboard/reviews"
-                className={({ isActive }) =>
-                  isActive ? styles.activeLink : styles.navLink
-                }
-              >
-                Reviews
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/dashboard/subscriptions"
-                className={({ isActive }) =>
-                  isActive ? styles.activeLink : styles.navLink
-                }
-              >
-                Subscriptions
-              </NavLink>
-            </li>
+            {sections.map((item, index) => {
+              return (
+                <li>
+                  <NavLink
+                    to={item.path}
+                    className={({ isActive }) =>
+                      isActive ? styles.activeLink : styles.navLink
+                    }
+                  >
+                    {item.name}
+                  </NavLink>
+                </li>
+              );
+            })}
           </ul>
         </nav>
       </aside>
@@ -155,6 +136,10 @@ const Dashboard = () => {
           <Route path="/clients" element={<Clients />} />
           <Route path="/reviews" element={<Reviews />} />
           <Route path="/subscriptions" element={<Subscriptions />} />
+          <Route
+            path="/verificationrequest"
+            element={<VerificationRequest />}
+          />
         </Routes>
       </main>
     </div>

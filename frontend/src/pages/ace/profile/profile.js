@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Container, Row, Col, Modal, Form } from "react-bootstrap";
 import styles from "./index.module.css";
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
@@ -7,9 +7,7 @@ import Help from "../../../components/help";
 import CustomButton from "../../../components/customBtn";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import SwitchToUser from "../../../components/switchToUser";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-import RequestServiceDropdown from "../../../components/customDropdown/requestServiceDropdown";
 import { allServices } from "../../../Data/DataList";
 import CheckboxDropdown from "../../../components/customDropdown/checkboxDropdown";
 
@@ -27,6 +25,7 @@ const AceProfile = () => {
   const auth = localStorage.getItem("aauth");
   const [loggedIn, setLoggedIn] = useState();
   const [dummyData, setDummyData] = useState(aceData);
+  const [verified, setVerified] = useState(false);
   useEffect(() => {
     if (auth === null || auth === "null") {
       navigate("/ace/signin");
@@ -54,6 +53,10 @@ const AceProfile = () => {
         if (response.status === 200) {
           setAceData(response.data.aceData);
           setDummyData(response.data.aceData);
+          if (response.data.aceData?.verification) {
+            setVerified(response.data.aceData.verification);
+          }
+
           console.log(response.data.aceData);
         }
       } catch (error) {
@@ -177,6 +180,17 @@ const AceProfile = () => {
     setDiscriptionModalShow(false);
     setProjectsModalShow(false);
   };
+  const handleVerificationRequest = async () => {
+    const id = localStorage.getItem("aauth");
+    try {
+      const response = await axios.post("/api/submitverificationrequest", {
+        id: id,
+      });
+      if (response.status === 200) setVerified(true);
+    } catch (error) {
+      setVerified(false);
+    }
+  };
 
   return (
     <div className={styles.customContainer}>
@@ -265,7 +279,7 @@ const AceProfile = () => {
                     text="Verify Now"
                     width={"auto"}
                     height={"auto"}
-                    onClick={() => navigate("/ace/verification")}
+                    onClick={() => handleVerificationRequest()}
                   />{" "}
                 </div>
               </div>

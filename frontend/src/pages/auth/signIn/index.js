@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { Form, Container, Row, Col, Button, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -57,12 +57,6 @@ function SignIn() {
         console.error("AxiosError:", error);
         console.log(error);
       });
-
-    // dispatch(
-    //   loginAction(email, password, null, () => {
-    //     setIsSubmitting(false);
-    //   })
-    // );
   }
   return (
     <Container fluid className={styles.containerX}>
@@ -72,7 +66,12 @@ function SignIn() {
             X
           </span>
           <div className="text-center">
-            <img src="/photos/" alt="logox" />
+            <img
+              src="/photos/hshlogo.png"
+              width={100}
+              height={60}
+              alt="logox"
+            />
           </div>
           <Form onSubmit={handleSubmit} className={styles.formDesign}>
             <Container className="p-0">

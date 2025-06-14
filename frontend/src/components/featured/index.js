@@ -51,13 +51,13 @@ export const Featured = ({ heading }) => {
     setIsLoading(true); // Set loading state
     try {
       // Await fetching geolocation data
-      const response = await axios.get("https://ipapi.co/json/");
-      const { country_name } = response.data;
-      setCountry(country_name);
+      // const response = await axios.get("https://ipapi.co/json/");
+      // const { country_name } = response.data;
+      // setCountry(country_name);
 
       // Fetch top Ace data based on the retrieved country
       const topAceResponse = await axios.post("/api/filtertopcountryacedata", {
-        country: country_name,
+        country: "Amritsar",
       });
       // Check the response status
       if (topAceResponse.status === 200) {

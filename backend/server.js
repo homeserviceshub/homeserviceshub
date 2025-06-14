@@ -3,6 +3,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const path = require("path");
+require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 8000;
@@ -10,9 +11,8 @@ const port = process.env.PORT || 8000;
 // Connect to MongoDB
 async function main() {
   try {
-    await mongoose.connect(
-      "mongodb+srv://homeserviceshub1:5ecpQMPZyWi9g0mE@homeservicescluster.0zszq0t.mongodb.net/homeserviceshub?retryWrites=true&w=majority"
-    );
+    await mongoose.connect(process.env.MONGOOSE_CONNECT);
+
     console.log("Database connected");
   } catch (err) {
     console.error("Database connection error:", err);
@@ -22,7 +22,7 @@ main();
 
 // Middleware
 app.use(cors());
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 app.use(express.json());
 app.use("/", express.static("upload"));
 

@@ -600,14 +600,14 @@ const CustomerProfile = () => {
                   <Row
                     className={styles.dynamicRow}
                     key={index}
-                    data-aos="fade-up"
+                    // data-aos="fade-up"
                   >
                     <Col lg={8} className={styles.bookmarkData}>
                       <div className={styles.bookmarkPhoto}>
                         <img
                           src={
-                            item.aceData.profilePhoto
-                              ? `/images/${item.aceData.profilePhoto.path}`
+                            item.aceData.profilePhoto?.url?.length > 0
+                              ? item.aceData.profilePhoto.url
                               : process.env.PUBLIC_URL +
                                 "/icons/default-profile-picture-male-icon.svg"
                           }
@@ -688,7 +688,7 @@ const CustomerProfile = () => {
 
                     <Col lg={8} className={styles.categoryList}>
                       Category:{" "}
-                      {item.aceData.categories.map((cat, catIndex) => (
+                      {item.aceData.services.map((cat, catIndex) => (
                         <span
                           key={catIndex}
                           // onClick={() => handleCategoryClicked(cat)}

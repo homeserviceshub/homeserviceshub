@@ -587,6 +587,28 @@ const updateAceTitle = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+const submitverificationrequest = async (req, res) => {
+  const { id } = req.body;
+
+  try {
+    const user = await usersModel.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    await usersModel.updateOne(
+      { _id: id },
+      {
+        $set: {
+          "aceData.verificationRequest": true,
+        },
+      }
+    );
+    res.status(200).json({ message: "Request Submitted Successfully" });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 
 const updateAceVerification = async (req, res) => {
   const { number, data } = req.body;
@@ -688,4 +710,5 @@ module.exports = {
   updateAceTitle,
   updateAceVerification,
   updateSubscription,
+  submitverificationrequest,
 };
