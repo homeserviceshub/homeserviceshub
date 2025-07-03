@@ -4,6 +4,7 @@ import { FaCheck } from "react-icons/fa6";
 import { Card, CardBody } from "react-bootstrap";
 import styles from "./index.module.css";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 const Plan = ({
   title,
@@ -15,12 +16,7 @@ const Plan = ({
 }) => {
   const navigate = useNavigate();
   const date = new Date(endingDate);
-  const formatted = date
-    .toISOString()
-    .split("T")[0]
-    .split("-")
-    .reverse()
-    .join("/");
+  const formattedDate = moment(endingDate).format("DD/MM/YYYY");
   const handleselected = () => {
     console.log("hello");
     alert(
@@ -31,7 +27,9 @@ const Plan = ({
     <Card className={styles.priceCard}>
       <h5 className={styles.priceCardTitle}>{title}</h5>
       <h2 className={styles.priceCardPrice}>{price}</h2>
-      <p className={styles.priceCardBenifit}>Plan's Ending Date:{formatted}</p>
+      <p className={styles.priceCardBenifit}>
+        Plan's Ending Date:{formattedDate}
+      </p>
       <ul className={` list-unstyled my-4 ${styles.priceCardBenifits}`}>
         {benefits.map((benefit, index) => (
           <li key={index} className={styles.priceCardBenifit}>
