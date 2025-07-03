@@ -28,7 +28,7 @@ const Plan = ({
       <h5 className={styles.priceCardTitle}>{title}</h5>
       <h2 className={styles.priceCardPrice}>{price}</h2>
       <p className={styles.priceCardBenifit}>
-        Plan's Ending Date:{formattedDate}
+        Plan's Ending Date:{selectedPlan === title && formattedDate}
       </p>
       <ul className={` list-unstyled my-4 ${styles.priceCardBenifits}`}>
         {benefits.map((benefit, index) => (
