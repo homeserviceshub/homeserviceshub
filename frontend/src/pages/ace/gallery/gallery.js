@@ -61,38 +61,43 @@ const AceGallery = () => {
   const handleAddImage = async () => {
     if (isLoading) return;
 
+    if (images.length >= 10) {
+      alert("Maximum of 10 photos can be uploaded.");
+      return;
+    }
+
     setIsLoading(true); // Set loading state to true
 
     try {
       const file = fileInputRef.current.files[0];
-      if (!file) return; // No image selected
+      if (!file) return;
 
       const formData = new FormData();
       formData.append("media", file);
       formData.append("id", localStorage.getItem("aauth"));
-      console.log("FormData : ", file);
+
       const response = await axios.post("/api/upload", formData, {
         headers: {
           "Content-Type": file.type,
         },
       });
-      console.log(response);
+
       if (response.status === 200) {
         const mediaObject = {
           path: response.data.fileUrl,
           type: "image",
         };
-        setImages((prevImages) => [
-          ...prevImages,
-          { src: mediaObject, title: "Image Title", editable: false },
-        ]);
 
+        const newImage = {
+          src: mediaObject,
+          title: "Image Title",
+          editable: false,
+        };
+
+        const updatedImages = [...images, newImage];
         const updatedAceData = {
           ...aceData,
-          media: [
-            ...aceData.media,
-            { src: mediaObject, title: "Image Title", editable: false },
-          ],
+          media: updatedImages,
         };
 
         await axios.post("/api/updateaceuser", {
@@ -100,6 +105,7 @@ const AceGallery = () => {
           id: localStorage.getItem("aauth"),
         });
 
+        setImages(updatedImages);
         setAceData(updatedAceData);
 
         alert("New Photo Added Successfully");
@@ -107,9 +113,10 @@ const AceGallery = () => {
     } catch (error) {
       console.error("Error:", error);
     } finally {
-      setIsLoading(false); // Reset loading state
+      setIsLoading(false);
     }
   };
+
   const handleRemoveImage = async () => {
     try {
       const newImages = [...images];

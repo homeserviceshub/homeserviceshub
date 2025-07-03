@@ -7,8 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { planData } from "../../Data/DataList";
 
 const Plans = () => {
-  const [planTime, setPlanTime] = useState("Monthly");
-  const [selectedPlan, setSelectedPlan] = useState("Starter");
+  const [selectedPlan, setSelectedPlan] = useState("Starter Listing");
+  const [endingDate, setEndingDate] = useState();
   const navigate = useNavigate();
   const fetchData = async () => {
     const id = localStorage.getItem("aauth");
@@ -25,6 +25,9 @@ const Plans = () => {
               } else {
                 setSelectedPlan(
                   response.data.aceData.subscriptionPlan.planName
+                );
+                setEndingDate(
+                  response.data.aceData.subscriptionPlan.endingDate
                 );
               }
             }
@@ -45,10 +48,6 @@ const Plans = () => {
   useEffect(() => {
     fetchData();
   }, []);
-  const handlePlanChange = (event) => {
-    setPlanTime(event.target.value);
-    console.log(event.target.value);
-  };
 
   return (
     <Container className="mt-4">
@@ -88,6 +87,7 @@ const Plans = () => {
                 price={item.price}
                 benefits={item.benefits}
                 selectedPlan={selectedPlan}
+                endingDate={endingDate}
               />
             </Col>
           );

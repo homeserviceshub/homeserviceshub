@@ -209,7 +209,14 @@ const acesignup = async (req, res) => {
             "aceData.companyPostalCode": postalCode,
             "aceData.awards": [],
             "aceData.profilePhoto": [],
-            "aceData.subscriptionPlan": {},
+            "aceData.subscriptionPlan": {
+              planName: "Starter Listing",
+              duration: "3 Months",
+              startingDate: new Date(),
+              endingDate: new Date(
+                new Date().setMonth(new Date().getMonth() + 3)
+              ),
+            },
           },
         },
         { new: true }
@@ -252,7 +259,12 @@ const acesignup = async (req, res) => {
         companyPostalCode: postalCode,
         awards: [],
         profilePhoto: [],
-        subscriptionPlan: {},
+        subscriptionPlan: {
+          planName: "Starter Listing",
+          duration: "3 Months",
+          startingDate: new Date(),
+          endingDate: new Date(new Date().setMonth(new Date().getMonth() + 3)),
+        },
       },
     });
 

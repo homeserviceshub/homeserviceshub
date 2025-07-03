@@ -48,7 +48,7 @@ export const planData = [
     benefits: [
       "Business listed under relevant service category",
       "Visibility in local area searches",
-      "Upload limited photos",
+      "Can Only Upload 10 photos",
       "Basic support",
     ],
   },
@@ -59,7 +59,7 @@ export const planData = [
     benefits: [
       "Business listed under relevant service category",
       "Visibility in local area searches",
-      "Upload unlimited photos",
+      "Upload upto 50 photos",
       "24X7 support",
     ],
   },
@@ -71,7 +71,7 @@ export const planData = [
       "Business listed under relevant service category",
       "Boost for a day in your category",
       "Visibility in local area searches",
-      "Upload unlimited photos",
+      "Upload upto 200 photos",
       "24X7 support",
       "Free one time edit/update",
     ],
